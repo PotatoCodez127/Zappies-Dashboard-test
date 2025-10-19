@@ -1,9 +1,9 @@
-# Cool site
+# Complete website functionality
 
 *Automatically synced with your [v0.app](https://v0.app) deployments*
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/jasnburne79-1761s-projects/v0-cool-site)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/0UA8bhPIaQW)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/destatlerj-9110s-projects/v0-complete-website-functionality)
+[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/fIvV8mv0oJ1)
 
 ## Overview
 
@@ -14,13 +14,13 @@ Any changes you make to your deployed app will be automatically pushed to this r
 
 Your project is live at:
 
-**[https://vercel.com/jasnburne79-1761s-projects/v0-cool-site](https://vercel.com/jasnburne79-1761s-projects/v0-cool-site)**
+**[https://vercel.com/destatlerj-9110s-projects/v0-complete-website-functionality](https://vercel.com/destatlerj-9110s-projects/v0-complete-website-functionality)**
 
 ## Build your app
 
 Continue building your app on:
 
-**[https://v0.app/chat/projects/0UA8bhPIaQW](https://v0.app/chat/projects/0UA8bhPIaQW)**
+**[https://v0.app/chat/projects/fIvV8mv0oJ1](https://v0.app/chat/projects/fIvV8mv0oJ1)**
 
 ## How It Works
 

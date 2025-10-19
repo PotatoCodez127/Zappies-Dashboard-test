@@ -1,296 +1,305 @@
+"use client"
+
+import Link from "next/link"
+import { Navigation } from "@/components/navigation"
+import { Background } from "@/components/background"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { ArrowRight, Zap, Shield, Rocket, Users } from "lucide-react"
+import { useLayoutEffect, useRef, useState, useEffect } from "react"
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 
-export default function Home() {
+gsap.registerPlugin(ScrollTrigger)
+
+export default function HomePage() {
+  const scrollContainerRef = useRef(null)
+  const heroLayer1Ref = useRef(null)
+  const heroLayer2Ref = useRef(null)
+  const [spline1Loaded, setSpline1Loaded] = useState(false)
+  const [spline2Loaded, setSpline2Loaded] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(true)
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+
+    checkScreenSize()
+    window.addEventListener("resize", checkScreenSize)
+
+    return () => window.removeEventListener("resize", checkScreenSize)
+  }, [])
+
+  useLayoutEffect(() => {
+    if (!spline1Loaded || !isDesktop) return
+
+    const ctx = gsap.context(() => {
+      gsap.to(heroLayer1Ref.current, {
+        opacity: 0,
+        scrollTrigger: {
+          trigger: scrollContainerRef.current,
+          start: "top top",
+          end: "50% top",
+          scrub: true,
+          scrub: 1.5,
+        },
+      })
+
+      gsap.fromTo(
+        heroLayer2Ref.current,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          scrollTrigger: {
+            trigger: scrollContainerRef.current,
+            start: "25% top",
+            end: "75% top",
+            scrub: 1.5,
+          },
+        },
+      )
+    }, scrollContainerRef)
+
+    return () => ctx.revert()
+  }, [spline1Loaded, isDesktop])
+
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border/40">
-        <div className="container mx-auto px-4 py-4">
-          <nav className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-accent" />
-              <span className="text-xl font-bold">Velocity</span>
-            </div>
-            <div className="hidden md:flex items-center gap-8">
-              <a href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Features
-              </a>
-              <a href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Pricing
-              </a>
-              <a href="#about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                About
-              </a>
-              <Button variant="outline" size="sm">
-                Sign In
-              </Button>
-              <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                Get Started
-              </Button>
-            </div>
-          </nav>
-        </div>
-      </header>
+    <>
+      <Background />
+      <Navigation />
 
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 py-24 md:py-32">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary border border-border mb-8">
-            <Zap className="h-4 w-4 text-accent" />
-            <span className="text-sm text-muted-foreground">Introducing Velocity 2.0</span>
-          </div>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-balance leading-tight">
-            The complete platform to build the web.
-          </h1>
-          <p className="text-xl text-muted-foreground mb-10 text-pretty max-w-2xl mx-auto leading-relaxed">
-            Your team's toolkit to stop configuring and start innovating. Securely build, deploy, and scale the best web
-            experiences.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8">
-              Get a demo
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button size="lg" variant="outline" className="text-base px-8 bg-transparent">
-              Explore the Product
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof */}
-      <section className="border-y border-border/40 bg-card/30">
-        <div className="container mx-auto px-4 py-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <Card className="p-8 bg-card border-border/40">
-              <div className="text-4xl font-bold mb-2">20 days</div>
-              <div className="text-sm text-muted-foreground mb-4">saved on daily builds.</div>
-              <div className="text-lg font-semibold">ACME Corp</div>
-            </Card>
-            <Card className="p-8 bg-card border-border/40">
-              <div className="text-4xl font-bold mb-2">98%</div>
-              <div className="text-sm text-muted-foreground mb-4">faster time to market.</div>
-              <div className="text-lg font-semibold">TechFlow</div>
-            </Card>
-            <Card className="p-8 bg-card border-border/40">
-              <div className="text-4xl font-bold mb-2">300%</div>
-              <div className="text-sm text-muted-foreground mb-4">increase in performance.</div>
-              <div className="text-lg font-semibold">BuildFast</div>
-            </Card>
-            <Card className="p-8 bg-card border-border/40">
-              <div className="text-4xl font-bold mb-2">6x</div>
-              <div className="text-sm text-muted-foreground mb-4">faster to build + deploy.</div>
-              <div className="text-lg font-semibold">DevTeam</div>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="container mx-auto px-4 py-24">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 text-accent mb-4">
-              <Rocket className="h-5 w-5" />
-              <span className="text-sm font-semibold uppercase tracking-wide">Collaboration</span>
+      {!isDesktop ? (
+        // Mobile message
+        <div className="min-h-screen flex items-center justify-center px-6 py-20">
+          <div className="max-w-md text-center">
+            <div className="w-20 h-20 bg-gradient-to-br from-[#C41E3A] to-[#8B1538] rounded-2xl flex items-center justify-center text-4xl mb-6 mx-auto">
+              💻
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-balance">Faster iteration. More innovation.</h2>
-            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              The platform for rapid progress. Let your team focus on shipping features instead of managing
-              infrastructure with automated CI/CD, built-in testing, and integrated collaboration.
+            <h2 className="text-3xl font-bold mb-4 text-[#EDE7C7]">Desktop Experience Required</h2>
+            <p className="text-lg text-[#EDE7C7]/80 mb-8 leading-relaxed">
+              The full 3D interactive experience is optimized for desktop and laptop screens. Please visit us on a
+              larger device to explore our AI solutions.
             </p>
             <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <div className="h-6 w-6 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <div className="h-2 w-2 rounded-full bg-accent" />
+              <Link href="/demo">
+                <Button className="w-full px-7 py-6 text-lg bg-gradient-to-r from-[#C41E3A] to-[#8B1538] text-[#EDE7C7] rounded-full font-semibold hover:scale-105 transition-all">
+                  Book a Demo
+                </Button>
+              </Link>
+              <Link href="/solutions">
+                <Button
+                  variant="outline"
+                  className="w-full px-7 py-6 text-lg border-2 border-[#C41E3A] text-[#EDE7C7] rounded-full font-semibold hover:bg-[#C41E3A]/10 transition-all bg-transparent"
+                >
+                  View Solutions
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      ) : (
+        // Desktop hero section with 3D
+        <div ref={scrollContainerRef} className="relative h-[200vh]">
+          {/* HERO LAYER 1 - Sticky */}
+          <div
+            ref={heroLayer1Ref}
+            className="sticky top-0 h-screen w-full flex flex-col items-center justify-center text-center px-[5%]"
+          >
+            {!spline1Loaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-[#200E01]">
+                <div className="relative">
+                  <div className="w-16 h-16 border-4 border-[#C41E3A]/20 border-t-[#C41E3A] rounded-full animate-spin" />
+                  <div className="mt-4 text-[#C41E3A] text-sm font-medium">Loading 3D Experience...</div>
                 </div>
-                <div>
-                  <div className="font-semibold mb-1">Instant Previews</div>
-                  <div className="text-sm text-muted-foreground">
-                    See changes live with automatic preview deployments for every commit.
+              </div>
+            )}
+            <iframe
+              src="https://my.spline.design/backlightbgeffect-YSsXWXAvzv6OHHfhLGRkXUWB/"
+              className={`absolute inset-0 w-full h-full border-none transition-opacity duration-500 ${
+                spline1Loaded ? "opacity-100" : "opacity-0"
+              }`}
+              style={{ willChange: "transform, opacity" }}
+              title="3D Robot Intro"
+              loading="eager"
+              onLoad={() => {
+                console.log("[v0] Spline 1 loaded")
+                setSpline1Loaded(true)
+              }}
+            />
+            {spline1Loaded && (
+              <>
+                <h2 className="relative z-10 text-3xl font-bold text-[#EDE7C7]/80 mt-auto mb-8 animate-pulse">
+                  The Future of Building is Here
+                </h2>
+                <p className="relative z-10 text-[#EDE7C7]/50 mb-8">Scroll Down to Begin</p>
+              </>
+            )}
+          </div>
+
+          {/* HERO LAYER 2 */}
+          <div ref={heroLayer2Ref} className="absolute top-[100vh] left-0 w-full h-screen opacity-0">
+            <section className="h-full flex items-center px-[5%]">
+              <div className="max-w-[1400px] mx-auto w-full grid md:grid-cols-2 gap-16 items-center">
+                <div className="z-10">
+                  <div className="inline-block px-5 py-2 bg-[#C41E3A]/20 border border-[#C41E3A] rounded-full text-sm mb-5">
+                    🚀 Exclusive AI for Premium Builders
+                  </div>
+                  <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-5 bg-gradient-to-r from-[#EDE7C7] via-[#C41E3A] to-[#EDE7C7] bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradientShift_3s_linear_infinite] text-balance">
+                    Custom AI Agents Built Specifically to Scale Your Business
+                  </h1>
+                  <p className="text-xl text-[#EDE7C7]/80 mb-10 leading-relaxed">
+                    Transform your custom home building operations with exclusive AI agents designed for South Africa's
+                    most prestigious builders. Automate client management, streamline project workflows, and scale
+                    intelligently.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-5">
+                    <Link href="/demo">
+                      <Button className="px-7 py-6 text-lg bg-gradient-to-r from-[#C41E3A] to-[#8B1538] text-[#EDE7C7] rounded-full font-semibold hover:scale-105 hover:shadow-lg hover:shadow-[#C41E3A]/30 transition-all">
+                        Start Your AI Journey
+                      </Button>
+                    </Link>
+                    <a
+                      href="#features"
+                      className="px-7 py-3 bg-transparent text-[#EDE7C7] border-2 border-[#C41E3A] rounded-full text-base font-semibold inline-flex items-center gap-2 hover:bg-[#C41E3A] transition-all"
+                    >
+                      Watch Demo
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+
+                <div className="relative h-[600px] rounded-3xl overflow-hidden">
+                  <div className="w-full h-full relative">
+                    {!spline2Loaded && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-[#200E01]/50 backdrop-blur-sm rounded-3xl">
+                        <div className="relative">
+                          <div className="w-12 h-12 border-4 border-[#C41E3A]/20 border-t-[#C41E3A] rounded-full animate-spin" />
+                        </div>
+                      </div>
+                    )}
+                    <iframe
+                      src="https://my.spline.design/rememberallrobot-KN0U2SzDI6zRo19AnbsQyykP/"
+                      className={`w-full h-full border-none transition-opacity duration-500 ${
+                        spline2Loaded ? "opacity-100" : "opacity-0"
+                      }`}
+                      style={{ willChange: "transform, opacity" }}
+                      title="3D Robot"
+                      loading="eager"
+                      onLoad={() => {
+                        console.log("[v0] Spline 2 loaded")
+                        setSpline2Loaded(true)
+                      }}
+                    />
                   </div>
                 </div>
               </div>
-              <div className="flex items-start gap-3">
-                <div className="h-6 w-6 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <div className="h-2 w-2 rounded-full bg-accent" />
+            </section>
+          </div>
+        </div>
+      )}
+
+      <div className="relative z-10 bg-[#200E01]">
+        {/* Features Section */}
+        <section id="features" className="py-20 md:py-32 px-[5%] bg-gradient-to-b from-[#200E01] to-[#1a0a01]">
+          <div className="max-w-[1400px] mx-auto">
+            <div className="text-center mb-12 md:mb-20">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-5 bg-gradient-to-r from-[#EDE7C7] to-[#C41E3A] bg-clip-text text-transparent">
+                Engineered for Excellence
+              </h2>
+              <p className="text-lg md:text-xl text-[#EDE7C7]/70 max-w-2xl mx-auto px-4">
+                Purpose-built AI solutions tailored to the unique needs of South Africa's custom home builders
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6 md:gap-10">
+              <div className="p-6 md:p-10 bg-[#8B1538]/10 backdrop-blur-md border border-[#C41E3A]/20 rounded-3xl transition-all hover:-translate-y-3 hover:border-[#C41E3A] relative overflow-hidden group">
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#C41E3A] to-transparent opacity-0 group-hover:opacity-10 transition-opacity" />
+                <div className="w-16 h-16 bg-gradient-to-br from-[#C41E3A] to-[#8B1538] rounded-2xl flex items-center justify-center text-2xl mb-5">
+                  🏗️
                 </div>
-                <div>
-                  <div className="font-semibold mb-1">Team Collaboration</div>
-                  <div className="text-sm text-muted-foreground">
-                    Share feedback and iterate faster with built-in commenting and reviews.
-                  </div>
-                </div>
+                <h3 className="text-2xl font-bold mb-4">Project Intelligence</h3>
+                <p className="text-[#EDE7C7]/80 leading-relaxed">
+                  AI-powered project management that tracks timelines, budgets, and resources in real-time. Predict
+                  delays before they happen and optimize workflows automatically.
+                </p>
               </div>
-              <div className="flex items-start gap-3">
-                <div className="h-6 w-6 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <div className="h-2 w-2 rounded-full bg-accent" />
+
+              <div className="p-6 md:p-10 bg-[#8B1538]/10 backdrop-blur-md border border-[#C41E3A]/20 rounded-3xl transition-all hover:-translate-y-3 hover:border-[#C41E3A] relative overflow-hidden group">
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#C41E3A] to-transparent opacity-0 group-hover:opacity-10 transition-opacity" />
+                <div className="w-16 h-16 bg-gradient-to-br from-[#C41E3A] to-[#8B1538] rounded-2xl flex items-center justify-center text-2xl mb-5">
+                  🤝
                 </div>
-                <div>
-                  <div className="font-semibold mb-1">Zero Configuration</div>
-                  <div className="text-sm text-muted-foreground">
-                    Deploy in seconds with automatic framework detection and optimization.
-                  </div>
+                <h3 className="text-2xl font-bold mb-4">Client Experience AI</h3>
+                <p className="text-[#EDE7C7]/80 leading-relaxed">
+                  Deliver exceptional client experiences with AI that handles inquiries, provides updates, and maintains
+                  personalized communication at scale.
+                </p>
+              </div>
+
+              <div className="p-6 md:p-10 bg-[#8B1538]/10 backdrop-blur-md border border-[#C41E3A]/20 rounded-3xl transition-all hover:-translate-y-3 hover:border-[#C41E3A] relative overflow-hidden group">
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#C41E3A] to-transparent opacity-0 group-hover:opacity-10 transition-opacity" />
+                <div className="w-16 h-16 bg-gradient-to-br from-[#C41E3A] to-[#8B1538] rounded-2xl flex items-center justify-center text-2xl mb-5">
+                  📊
                 </div>
+                <h3 className="text-2xl font-bold mb-4">Market Intelligence</h3>
+                <p className="text-[#EDE7C7]/80 leading-relaxed">
+                  Stay ahead with AI-driven insights on market trends, material costs, and competitive positioning
+                  specific to the South African luxury home market.
+                </p>
               </div>
             </div>
           </div>
-          <Card className="p-8 bg-card border-border/40">
-            <div className="aspect-video bg-secondary rounded-lg flex items-center justify-center">
-              <img
-                src="/modern-dashboard-interface-with-code-editor-and-pr.jpg"
-                alt="Platform interface"
-                className="w-full h-full object-cover rounded-lg"
-              />
-            </div>
-          </Card>
-        </div>
-      </section>
+        </section>
 
-      {/* Second Feature */}
-      <section className="container mx-auto px-4 py-24">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          <Card className="p-8 bg-card border-border/40 order-2 md:order-1">
-            <div className="aspect-video bg-secondary rounded-lg flex items-center justify-center">
-              <img
-                src="/analytics-dashboard-with-performance-metrics-and-g.jpg"
-                alt="Analytics dashboard"
-                className="w-full h-full object-cover rounded-lg"
-              />
+        {/* Stats Section */}
+        <section className="py-12 md:py-20 px-[5%] bg-[#C41E3A]/5 border-y border-[#C41E3A]/20">
+          <div className="max-w-[1200px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 text-center">
+            <div>
+              <div className="text-5xl font-extrabold bg-gradient-to-r from-[#C41E3A] to-[#EDE7C7] bg-clip-text text-transparent mb-3">
+                87%
+              </div>
+              <div className="text-lg text-[#EDE7C7]/80">Time Saved on Admin</div>
             </div>
-          </Card>
-          <div className="order-1 md:order-2">
-            <div className="inline-flex items-center gap-2 text-accent mb-4">
-              <Shield className="h-5 w-5" />
-              <span className="text-sm font-semibold uppercase tracking-wide">Performance</span>
+            <div>
+              <div className="text-5xl font-extrabold bg-gradient-to-r from-[#C41E3A] to-[#EDE7C7] bg-clip-text text-transparent mb-3">
+                3.5x
+              </div>
+              <div className="text-lg text-[#EDE7C7]/80">Faster Client Response</div>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-balance">Make teamwork seamless.</h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Tools for your team and stakeholders to share feedback and iterate faster. Built-in analytics, monitoring,
-              and collaboration features that scale with your team.
+            <div>
+              <div className="text-5xl font-extrabold bg-gradient-to-r from-[#C41E3A] to-[#EDE7C7] bg-clip-text text-transparent mb-3">
+                R2.4M
+              </div>
+              <div className="text-lg text-[#EDE7C7]/80">Average Cost Saved</div>
+            </div>
+            <div>
+              <div className="text-5xl font-extrabold bg-gradient-to-r from-[#C41E3A] to-[#EDE7C7] bg-clip-text text-transparent mb-3">
+                24/7
+              </div>
+              <div className="text-lg text-[#EDE7C7]/80">AI Availability</div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-20 md:py-32 px-[5%] text-center bg-[radial-gradient(circle_at_center,rgba(196,30,58,0.1)_0%,transparent_70%)]">
+          <div className="max-w-3xl mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 bg-gradient-to-r from-[#EDE7C7] to-[#C41E3A] bg-clip-text text-transparent">
+              Ready to Transform Your Building Business?
+            </h2>
+            <p className="text-lg md:text-xl text-[#EDE7C7]/80 mb-10">
+              Join South Africa's leading custom home builders who are already leveraging AI to scale smarter, build
+              faster, and deliver exceptional results.
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="container mx-auto px-4 py-24">
-        <Card className="p-12 md:p-16 bg-card border-border/40 text-center">
-          <div className="max-w-2xl mx-auto">
-            <Users className="h-12 w-12 text-accent mx-auto mb-6" />
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">Ready to accelerate your workflow?</h2>
-            <p className="text-lg text-muted-foreground mb-8 text-pretty">
-              Join thousands of teams building the future of the web with Velocity.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 text-base px-8">
-                Start Building Free
-                <ArrowRight className="ml-2 h-5 w-5" />
+            <Link href="/demo">
+              <Button className="px-8 md:px-10 py-5 md:py-6 text-base md:text-lg bg-gradient-to-r from-[#C41E3A] to-[#8B1538] text-[#EDE7C7] rounded-full font-semibold hover:scale-105 hover:shadow-lg hover:shadow-[#C41E3A]/30 transition-all">
+                Schedule Your Exclusive Demo
               </Button>
-              <Button size="lg" variant="outline" className="text-base px-8 bg-transparent">
-                Talk to Sales
-              </Button>
-            </div>
+            </Link>
           </div>
-        </Card>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-border/40 mt-24">
-        <div className="container mx-auto px-4 py-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="font-semibold mb-4">Product</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Features
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Pricing
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Changelog
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    About
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Blog
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Careers
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Resources</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Documentation
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Support
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Community
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Legal</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Privacy
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Terms
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-foreground transition-colors">
-                    Security
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="pt-8 border-t border-border/40 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className="h-6 w-6 rounded bg-accent" />
-              <span className="font-semibold">Velocity</span>
-            </div>
-            <p className="text-sm text-muted-foreground">© 2025 Velocity. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
+        </section>
+      </div>
+    </>
   )
 }

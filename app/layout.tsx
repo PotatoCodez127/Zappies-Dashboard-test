@@ -1,15 +1,19 @@
-import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import './globals.css'
-
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+import type React from "react"
+import type { Metadata } from "next"
+import { GeistSans } from "geist/font/sans"
+import { GeistMono } from "geist/font/mono"
+import { Analytics } from "@vercel/analytics/next"
+import "./globals.css"
+import { Suspense } from "react"
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: "Zappies AI - Custom AI Agents for Premium Home Builders",
+  description:
+    "Transform your custom home building operations with exclusive AI agents designed for South Africa's most prestigious builders.",
+  generator: "v0.app",
+  icons: {
+    icon: '/favicon.png', // Or '/favicon.png'
+  },
 }
 
 export default function RootLayout({
@@ -19,8 +23,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`font-sans antialiased`}>
-        {children}
+      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
+        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
         <Analytics />
       </body>
     </html>
