@@ -20,6 +20,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     redirect("/auth/login")
   }
 
+  // ... (user/company fetching logic remains the same) ...
   const { data: companyUser, error: companyUserError } = await supabase
     .from("company_users")
     .select("company_id")
@@ -49,23 +50,24 @@ export default async function DashboardLayout({ children }: { children: React.Re
       </div>
     )
   }
+  // ... (end user/company fetching logic) ...
+
 
   return (
     <CompanyProvider company={company}>
-      <div className="flex h-screen bg-background overflow-hidden relative">
+      <div className="flex h-screen bg-background overflow-hidden relative"> {/* Outer div has bg-background */}
         <div
           className="absolute inset-0 pointer-events-none z-0"
           style={{
-            // --- MODIFICATION START ---
             background: "radial-gradient(ellipse at center, rgba(192,0,192,0.08) 0%, transparent 60%)",
-            // WAS: background: "radial-gradient(ellipse at center, rgba(192,0,192,0.15) 0%, transparent 70%)",
-            // --- MODIFICATION END ---
           }}
         />
         <DashboardSidebar />
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10">
           <DashboardHeader user={user} />
-          <main className="flex-1 overflow-y-auto">
+          {/* --- MODIFICATION START --- */}
+          <main className="flex-1 overflow-y-auto bg-background"> {/* <<< ADDED bg-background HERE */}
+          {/* --- MODIFICATION END --- */}
             <div className="p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto w-full">{children}</div>
           </main>
         </div>
