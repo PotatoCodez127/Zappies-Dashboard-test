@@ -1,3 +1,4 @@
+/* v0-cool-site/app/dashboard/conversations/page.tsx */
 "use client"
 
 import { useState, useEffect } from "react"
@@ -5,12 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Search, MessageSquare, MoreVertical, AlertTriangle, RefreshCw } from "lucide-react" // Removed Send icon
+import { Search, MessageSquare, MoreVertical, AlertTriangle, RefreshCw } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useCompanySupabase } from "@/lib/supabase/company-client"
 import { useToast } from "@/hooks/use-toast"
 import Link from "next/link"
-import { ScrollArea } from "@/components/ui/scroll-area" // Use ScrollArea for better scrolling
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface Message {
   type: "human" | "ai"
@@ -36,25 +37,25 @@ export default function ConversationsPage() {
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
-  // Removed messageInput state
   const [isLoading, setIsLoading] = useState(true)
 
+  // ... (fetchConversations and useEffect remain the same as previous correct version) ...
   const fetchConversations = async () => {
     if (!companySupabase) {
-      setIsLoading(false)
-      console.log("Conversations: Company Supabase client not available.")
-      return
+      setIsLoading(false);
+      console.log("Conversations: Company Supabase client not available.");
+      return;
     }
-    console.log("Conversations: Fetching data...")
-    setIsLoading(true)
+    console.log("Conversations: Fetching data...");
+    setIsLoading(true);
     const { data, error } = await companySupabase
       .from("conversation_history")
       .select("conversation_id, history, status, created_at")
-      .order("created_at", { ascending: false }) // Fetch latest first
+      .order("created_at", { ascending: false }); // Fetch latest first
 
     if (error) {
-      toast({ title: "Error", description: "Failed to fetch conversations.", variant: "destructive" })
-      console.error(error)
+      toast({ title: "Error", description: "Failed to fetch conversations.", variant: "destructive" });
+      console.error(error);
     } else {
       const formattedConversations = (data || []).map(
         (conv: any): Conversation => ({
@@ -63,46 +64,50 @@ export default function ConversationsPage() {
           lastMessage: conv.history?.[conv.history.length - 1]?.data?.content || "No messages",
           lastMessageTime: new Date(conv.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         }),
-      )
-      setConversations(formattedConversations)
+      );
+      setConversations(formattedConversations);
       // Select the first conversation by default if none is selected or the selected one is gone
       if (
         formattedConversations.length > 0 &&
         (!selectedConversation ||
           !formattedConversations.find((c) => c.conversation_id === selectedConversation.conversation_id))
       ) {
-        setSelectedConversation(formattedConversations[0])
+        setSelectedConversation(formattedConversations[0]);
       } else if (formattedConversations.length === 0) {
-        setSelectedConversation(null) // Clear selection if no conversations
+        setSelectedConversation(null); // Clear selection if no conversations
       }
-      console.log("Conversations: Data fetched successfully.", formattedConversations)
+      console.log("Conversations: Data fetched successfully.", formattedConversations);
     }
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    fetchConversations()
+    fetchConversations();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [companySupabase]) // Re-fetch only when the client changes
+  }, [companySupabase]); // Re-fetch only when the client changes
 
   const filteredConversations = conversations.filter((conv) =>
     conv.customerName.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
-  // Removed handleSendMessage function
+  // --- RENDER LOGIC ---
 
-  // Render message if Supabase is not connected
+  // DB Not Connected Message
   if (!companySupabase && !isLoading) {
     return (
-      <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
+      // Card uses theme styles
+      <Card>
         <CardContent className="pt-6">
           <div className="text-center py-12">
-            <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-[#EDE7C7] tracking-tight">Database Not Connected</h3>
-            <p className="text-[#EDE7C7]/60 mt-2 max-w-md mx-auto">
+             {/* Use theme destructive color */}
+            <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
+             {/* Use theme text colors */}
+            <h3 className="text-xl font-bold text-foreground tracking-tight">Database Not Connected</h3>
+            <p className="text-muted-foreground mt-2 max-w-md mx-auto">
               Please go to the settings page to connect your bot's database.
             </p>
-            <Button asChild className="mt-6 bg-[#EDE7C7] text-[#0A0A0A] hover:bg-[#EDE7C7]/90">
+             {/* Button uses default light theme */}
+            <Button asChild className="mt-6">
               <Link href="/dashboard/settings">Go to Settings</Link>
             </Button>
           </div>
@@ -115,31 +120,37 @@ export default function ConversationsPage() {
     <div className="space-y-4 sm:space-y-6 h-full flex flex-col">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4 flex-shrink-0">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#EDE7C7] tracking-tight">Conversations</h1>
-          <p className="text-sm text-[#EDE7C7]/70 mt-1.5">View your chatbot conversations.</p>
+           {/* Use theme text colors */}
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">Conversations</h1>
+          <p className="text-sm text-muted-foreground mt-1.5">View your chatbot conversations.</p>
         </div>
+         {/* Button uses outline variant with theme colors */}
         <Button
           variant="outline"
           size="icon"
           onClick={fetchConversations}
           disabled={isLoading}
-          className="border-[#2A2A2A] text-[#EDE7C7]/60 hover:text-[#EDE7C7] hover:bg-[#2A2A2A]/50 bg-transparent transition-all duration-200 self-start sm:self-auto flex-shrink-0"
+          className="transition-all duration-200 self-start sm:self-auto flex-shrink-0" // Removed hardcoded colors
         >
           <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
         </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0">
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-1 flex flex-col overflow-hidden transition-all duration-200 hover:border-[#EDE7C7]/20 h-[400px] lg:h-full">
+         {/* Card uses theme styles */}
+        <Card className="lg:col-span-1 flex flex-col overflow-hidden h-[400px] lg:h-full">
           <CardHeader className="flex-shrink-0 pb-4">
-            <CardTitle className="text-xl font-semibold text-[#EDE7C7]">Chats</CardTitle>
+             {/* CardTitle uses theme color */}
+            <CardTitle className="text-xl font-semibold text-foreground">Chats</CardTitle>
             <div className="relative mt-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#EDE7C7]/40" />
+               {/* Icon uses muted color */}
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60" />
+               {/* Input uses theme styles */}
               <Input
                 placeholder="Search conversations..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 bg-[#0A0A0A] border-[#2A2A2A] text-[#EDE7C7] h-10 text-sm"
+                className="pl-9 h-10 text-sm" // Removed hardcoded colors
               />
             </div>
           </CardHeader>
@@ -147,34 +158,43 @@ export default function ConversationsPage() {
             <ScrollArea className="h-full">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full min-h-[200px]">
-                  <p className="text-base text-[#EDE7C7]/60">Loading...</p>
+                   {/* Use muted text color */}
+                  <p className="text-base text-muted-foreground">Loading...</p>
                 </div>
               ) : filteredConversations.length === 0 ? (
                 <div className="flex items-center justify-center h-full min-h-[200px]">
                   <div className="text-center px-4">
-                    <MessageSquare className="h-12 w-12 text-[#EDE7C7]/20 mx-auto mb-3" />
-                    <p className="text-base text-[#EDE7C7]/60">No conversations found.</p>
+                     {/* Icon uses muted color */}
+                    <MessageSquare className="h-12 w-12 text-muted-foreground/30 mx-auto mb-3" />
+                    {/* Use muted text color */}
+                    <p className="text-base text-muted-foreground">No conversations found.</p>
                   </div>
                 </div>
               ) : (
                 <div className="space-y-1 px-4 pb-4">
                   {filteredConversations.map((conv) => (
+                     // Use accent background on hover/select
                     <button
                       key={conv.conversation_id}
                       onClick={() => setSelectedConversation(conv)}
-                      className={`w-full p-4 flex items-start gap-3 hover:bg-[#2A2A2A]/50 transition-colors rounded-lg ${selectedConversation?.conversation_id === conv.conversation_id ? "bg-[#2A2A2A]/50" : ""}`}
+                      className={`w-full p-4 flex items-start gap-3 hover:bg-accent transition-colors rounded-lg ${selectedConversation?.conversation_id === conv.conversation_id ? "bg-accent" : ""}`}
                     >
+                       {/* Avatar uses theme styles */}
                       <Avatar className="h-11 w-11 flex-shrink-0">
-                        <AvatarFallback className="bg-[#EDE7C7]/10 text-[#EDE7C7] text-sm font-medium">
+                         {/* Fallback uses muted background, foreground text */}
+                        <AvatarFallback className="text-sm font-medium">
                           {conv.customerName.substring(5, 7)}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 text-left overflow-hidden min-w-0">
                         <div className="flex items-center justify-between mb-1.5 gap-2">
-                          <p className="text-sm font-semibold text-[#EDE7C7] truncate">{conv.customerName}</p>
-                          <span className="text-xs text-[#EDE7C7]/40 flex-shrink-0">{conv.lastMessageTime}</span>
+                           {/* Use foreground text */}
+                          <p className="text-sm font-semibold text-foreground truncate">{conv.customerName}</p>
+                          {/* Use muted text color */}
+                          <span className="text-xs text-muted-foreground flex-shrink-0">{conv.lastMessageTime}</span>
                         </div>
-                        <p className="text-sm text-[#EDE7C7]/60 truncate leading-relaxed">{conv.lastMessage}</p>
+                        {/* Use muted text color */}
+                        <p className="text-sm text-muted-foreground truncate leading-relaxed">{conv.lastMessage}</p>
                       </div>
                     </button>
                   ))}
@@ -184,32 +204,38 @@ export default function ConversationsPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col overflow-hidden transition-all duration-200 hover:border-[#EDE7C7]/20 h-[500px] lg:h-full">
+         {/* Card uses theme styles */}
+        <Card className="lg:col-span-2 flex flex-col overflow-hidden h-[500px] lg:h-full">
           {selectedConversation ? (
             <>
-              <CardHeader className="border-b border-[#2A2A2A] flex-shrink-0 pb-4">
+               {/* Header uses theme border */}
+              <CardHeader className="border-b border-border flex-shrink-0 pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
+                     {/* Avatar uses theme styles */}
                     <Avatar className="h-11 w-11">
-                      <AvatarFallback className="bg-[#EDE7C7]/10 text-[#EDE7C7] text-sm font-medium">
+                      <AvatarFallback className="text-sm font-medium">
                         {selectedConversation.customerName.substring(5, 7)}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <CardTitle className="text-lg font-semibold text-[#EDE7C7]">
+                      {/* CardTitle uses theme color */}
+                      <CardTitle className="text-lg font-semibold text-foreground">
                         {selectedConversation.customerName}
                       </CardTitle>
+                       {/* Badge uses theme variants */}
                       <Badge
-                        variant="outline"
-                        className={`mt-1.5 text-xs ${selectedConversation.status === "active" ? "border-green-500/50 text-green-500" : selectedConversation.status === "handover" ? "border-orange-500/50 text-orange-500" : "border-gray-500/50 text-gray-500"}`} // Adjusted handover color
+                        variant={ selectedConversation.status === "active" ? "success" : selectedConversation.status === "handover" ? "warning" : "outline" }
+                        className="mt-1.5 text-xs"
                       >
                         {selectedConversation.status}
                       </Badge>
                     </div>
                   </div>
-                  {/* Keep MoreVertical button for future actions */}
+                  {/* Button uses ghost variant */}
                   <Button variant="ghost" size="icon">
-                    <MoreVertical className="h-5 w-5 text-[#EDE7C7]/60" />
+                     {/* Icon uses muted color */}
+                    <MoreVertical className="h-5 w-5 text-muted-foreground" />
                   </Button>
                 </div>
               </CardHeader>
@@ -219,7 +245,11 @@ export default function ConversationsPage() {
                     {selectedConversation.history?.map((message, index) => (
                       <div key={index} className={`flex ${message.type === "human" ? "justify-start" : "justify-end"}`}>
                         <div
-                          className={`max-w-[75%] rounded-lg px-4 py-3 ${message.type === "human" ? "bg-[#2A2A2A] text-[#EDE7C7]" : "bg-[#EDE7C7] text-[#0A0A0A]"}`}
+                          className={`max-w-[75%] rounded-lg px-4 py-3 ${
+                            message.type === "human"
+                              ? "bg-accent text-accent-foreground" // Human uses dark gray bg, light text
+                              : "bg-foreground text-background" // AI uses light bg, dark text
+                          }`}
                         >
                           <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.data.content}</p>
                         </div>
@@ -228,13 +258,15 @@ export default function ConversationsPage() {
                   </div>
                 </ScrollArea>
               </CardContent>
-              {/* Removed the message input and send button section */}
+              {/* Message input removed */}
             </>
           ) : (
             <div className="flex items-center justify-center h-full">
               <div className="text-center px-4">
-                <MessageSquare className="h-16 w-16 text-[#EDE7C7]/20 mx-auto mb-4" />
-                <p className="text-base text-[#EDE7C7]/60">
+                 {/* Icon uses muted color */}
+                <MessageSquare className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
+                {/* Use muted text color */}
+                <p className="text-base text-muted-foreground">
                   {isLoading ? "Loading..." : "Select a conversation to view messages."}
                 </p>
               </div>
