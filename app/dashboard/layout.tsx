@@ -1,4 +1,3 @@
-/* v0-cool-site/app/dashboard/layout.tsx */
 import type React from "react"
 import { createClient } from "@/lib/supabase/server"
 import { cookies } from "next/headers"
@@ -52,13 +51,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <CompanyProvider company={company}>
-      {/* Ensure the main container uses the pure black background */}
       <div className="flex h-screen bg-background overflow-hidden relative">
-        {/* Large atmospheric purple glow */}
         <div
-          className="absolute inset-0 pointer-events-none z-0 opacity-50 blur-3xl" // Added blur for softness
+          className="absolute inset-0 pointer-events-none z-0"
           style={{
-            background: "radial-gradient(ellipse at 50% 30%, rgba(192,0,192,0.15) 0%, transparent 70%)", // Centered glow
+            background: "radial-gradient(ellipse at center, rgba(192,0,192,0.15) 0%, transparent 70%)",
           }}
         />
         <DashboardSidebar />
