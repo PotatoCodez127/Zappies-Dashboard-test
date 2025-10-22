@@ -143,11 +143,11 @@ export default function CallsPage() {
         <CardContent className="pt-6">
           <div className="text-center py-12">
             <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-[#EDE7C7] tracking-tight">Database Not Connected</h3>
-            <p className="text-[#EDE7C7]/60 mt-2 max-w-md mx-auto">
+            <h3 className="text-xl font-bold text-[#ede7c7] tracking-tight">Database Not Connected</h3>
+            <p className="text-[#ede7c7]/60 mt-2 max-w-md mx-auto">
               Please go to the settings page to connect your bot's database.
             </p>
-            <Button asChild className="mt-6 bg-[#EDE7C7] text-[#0A0A0A] hover:bg-[#EDE7C7]/90">
+            <Button asChild className="mt-6 bg-[#ede7c7] text-[#0A0A0A] hover:bg-[#ede7c7]/90">
               <Link href="/dashboard/settings">Go to Settings</Link>
             </Button>
           </div>
@@ -159,22 +159,22 @@ export default function CallsPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-[#EDE7C7] tracking-tight">Voice Calls</h2>
-        <p className="text-sm text-[#EDE7C7]/60 mt-1.5">Review your bot's call history log.</p>
+        <h2 className="text-2xl sm:text-3xl font-bold text-[#ede7c7] tracking-tight">Voice Calls</h2>
+        <p className="text-sm text-[#ede7c7]/60 mt-1.5">Review your bot's call history log.</p>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#EDE7C7]/40" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#ede7c7]/40" />
           <Input
             placeholder="Search by name, email, phone, company..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 bg-[#1A1A1A] border-[#2A2A2A] text-[#EDE7C7] h-10 text-sm"
+            className="pl-9 bg-[#1A1A1A] border-[#2A2A2A] text-[#ede7c7] h-10 text-sm"
           />
         </div>
         <Select value={filterOption} onValueChange={setFilterOption}>
-          <SelectTrigger className="w-full sm:w-[220px] bg-[#1A1A1A] border-[#2A2A2A] text-[#EDE7C7] h-10 text-sm">
+          <SelectTrigger className="w-full sm:w-[220px] bg-[#1A1A1A] border-[#2A2A2A] text-[#ede7c7] h-10 text-sm">
             {" "}
             <SelectValue placeholder="Filter call results" />{" "}
           </SelectTrigger>
@@ -189,29 +189,29 @@ export default function CallsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Call Logs List */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col h-[500px] lg:h-[600px] transition-all duration-200 hover:border-[#EDE7C7]/20">
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col h-[500px] lg:h-[600px] transition-all duration-200 hover:border-[#ede7c7]/20">
           <CardHeader>
             {" "}
-            <CardTitle className="text-[#EDE7C7]">Call History ({filteredCalls.length})</CardTitle>{" "}
+            <CardTitle className="text-[#ede7c7]">Call History ({filteredCalls.length})</CardTitle>{" "}
           </CardHeader>
           <CardContent className="p-0 flex-1">
             <ScrollArea className="h-full">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full min-h-[200px]">
-                  <p className="text-base text-[#EDE7C7]/60">Loading calls...</p>
+                  <p className="text-base text-[#ede7c7]/60">Loading calls...</p>
                 </div>
               ) : callHistory.length === 0 ? (
                 <div className="flex items-center justify-center h-full min-h-[200px]">
                   <div className="text-center px-4">
-                    <Phone className="h-12 w-12 text-[#EDE7C7]/20 mx-auto mb-3" />
-                    <p className="text-base text-[#EDE7C7]/60">No call history found.</p>
+                    <Phone className="h-12 w-12 text-[#ede7c7]/20 mx-auto mb-3" />
+                    <p className="text-base text-[#ede7c7]/60">No call history found.</p>
                   </div>
                 </div>
               ) : filteredCalls.length === 0 ? (
                 <div className="flex items-center justify-center h-full min-h-[200px]">
                   <div className="text-center px-4">
-                    <Search className="h-12 w-12 text-[#EDE7C7]/20 mx-auto mb-3" />
-                    <p className="text-base text-[#EDE7C7]/60">No calls match your current filters.</p>
+                    <Search className="h-12 w-12 text-[#ede7c7]/20 mx-auto mb-3" />
+                    <p className="text-base text-[#ede7c7]/60">No calls match your current filters.</p>
                   </div>
                 </div>
               ) : (
@@ -220,12 +220,12 @@ export default function CallsPage() {
                     <button
                       key={call.id}
                       onClick={() => setSelectedCall(call)}
-                      className={`w-full p-4 rounded-lg border text-left transition-colors ${selectedCall?.id === call.id ? "border-[#EDE7C7]/30 bg-[#2A2A2A]/50" : "border-[#2A2A2A] hover:border-[#EDE7C7]/20 hover:bg-[#2A2A2A]/30"}`}
+                      className={`w-full p-4 rounded-lg border text-left transition-colors ${selectedCall?.id === call.id ? "border-[#ede7c7]/30 bg-[#2A2A2A]/50" : "border-[#2A2A2A] hover:border-[#ede7c7]/20 hover:bg-[#2A2A2A]/30"}`}
                     >
                       <div className="flex items-start gap-4">
                         <Avatar className="h-10 w-10 flex-shrink-0">
                           {" "}
-                          <AvatarFallback className="bg-[#EDE7C7]/10 text-[#EDE7C7]">
+                          <AvatarFallback className="bg-[#ede7c7]/10 text-[#ede7c7]">
                             {" "}
                             {call.full_name
                               ? call.full_name
@@ -238,10 +238,10 @@ export default function CallsPage() {
                         <div className="flex-1 overflow-hidden">
                           <div className="flex items-center justify-between mb-1 flex-wrap gap-2">
                             {" "}
-                            <p className="font-medium text-[#EDE7C7] truncate">{call.full_name || "Unknown Caller"}</p>{" "}
+                            <p className="font-medium text-[#ede7c7] truncate">{call.full_name || "Unknown Caller"}</p>{" "}
                             {getOutcomeBadge(call)}{" "}
                           </div>
-                          <p className="text-sm text-[#EDE7C7]/60 mb-2 truncate">
+                          <p className="text-sm text-[#ede7c7]/60 mb-2 truncate">
                             {call.client_number || call.email || "No contact info"}
                           </p>
                           <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
@@ -269,10 +269,10 @@ export default function CallsPage() {
         </Card>
 
         {/* Call Details Panel */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] flex flex-col h-[500px] lg:h-[600px] transition-all duration-200 hover:border-[#EDE7C7]/20">
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] flex flex-col h-[500px] lg:h-[600px] transition-all duration-200 hover:border-[#ede7c7]/20">
           <CardHeader>
             {" "}
-            <CardTitle className="text-[#EDE7C7]">Call Details</CardTitle>{" "}
+            <CardTitle className="text-[#ede7c7]">Call Details</CardTitle>{" "}
           </CardHeader>
           <CardContent className="flex-1 overflow-y-auto">
             {selectedCall ? (
@@ -280,7 +280,7 @@ export default function CallsPage() {
                 <div className="flex items-center gap-3">
                   <Avatar className="h-14 w-14">
                     {" "}
-                    <AvatarFallback className="bg-[#EDE7C7]/10 text-[#EDE7C7] text-lg">
+                    <AvatarFallback className="bg-[#ede7c7]/10 text-[#ede7c7] text-lg">
                       {" "}
                       {selectedCall.full_name
                         ? selectedCall.full_name
@@ -292,9 +292,9 @@ export default function CallsPage() {
                   </Avatar>
                   <div>
                     {" "}
-                    <p className="font-medium text-[#EDE7C7] text-base">{selectedCall.full_name || "Unknown Caller"}</p>{" "}
-                    <p className="text-[#EDE7C7]/60">{selectedCall.client_number || "No phone"}</p>{" "}
-                    <p className="text-[#EDE7C7]/60">{selectedCall.email || "No email"}</p>{" "}
+                    <p className="font-medium text-[#ede7c7] text-base">{selectedCall.full_name || "Unknown Caller"}</p>{" "}
+                    <p className="text-[#ede7c7]/60">{selectedCall.client_number || "No phone"}</p>{" "}
+                    <p className="text-[#ede7c7]/60">{selectedCall.email || "No email"}</p>{" "}
                   </div>
                 </div>
                 <div className="space-y-3 border-t border-[#2A2A2A] pt-4">
@@ -369,7 +369,7 @@ export default function CallsPage() {
                     value={currentNotes}
                     onChange={(e) => setCurrentNotes(e.target.value)}
                     placeholder="Add temporary notes about this call..."
-                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#EDE7C7]"
+                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#ede7c7]"
                     rows={3}
                   />
                   <p className="text-xs text-muted-foreground mt-1">Notes are for temporary reference only.</p>
@@ -378,8 +378,8 @@ export default function CallsPage() {
             ) : (
               <div className="flex items-center justify-center h-full min-h-[200px]">
                 <div className="text-center px-4">
-                  <Phone className="h-12 w-12 text-[#EDE7C7]/20 mx-auto mb-3" />
-                  <p className="text-base text-[#EDE7C7]/60">Select a call to view details</p>
+                  <Phone className="h-12 w-12 text-[#ede7c7]/20 mx-auto mb-3" />
+                  <p className="text-base text-[#ede7c7]/60">Select a call to view details</p>
                 </div>
               </div>
             )}

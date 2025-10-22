@@ -17,10 +17,10 @@ export default function SolutionsPage() {
             <div className="inline-block px-5 py-2 bg-[#8B0000]/20 border border-[#8B0000] rounded-full text-sm mb-5">
               AI-Powered Solutions
             </div>
-            <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6 bg-gradient-to-r from-[#EDE7C7] via-[#8B0000] to-[#EDE7C7] bg-clip-text text-transparent text-balance">
+            <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6 bg-gradient-to-r from-[#ede7c7] via-[#8B0000] to-[#ede7c7] bg-clip-text text-transparent text-balance">
               Tailored AI Solutions for Every Stage of Your Build
             </h1>
-            <p className="text-xl text-[#EDE7C7]/80 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-[#ede7c7]/80 max-w-3xl mx-auto leading-relaxed">
               From initial client contact to project completion, our AI agents work seamlessly across your entire
               operation to deliver measurable results.
             </p>
@@ -33,12 +33,12 @@ export default function SolutionsPage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#8B0000] to-[#5B0202] rounded-2xl flex items-center justify-center text-3xl mb-4">
                   💬
                 </div>
-                <CardTitle className="text-2xl text-[#EDE7C7]">Lead Qualification AI</CardTitle>
-                <CardDescription className="text-[#EDE7C7]/70">
+                <CardTitle className="text-2xl text-[#ede7c7]">Lead Qualification AI</CardTitle>
+                <CardDescription className="text-[#ede7c7]/70">
                   Automatically qualify and nurture leads 24/7
                 </CardDescription>
               </CardHeader>
-              <CardContent className="text-[#EDE7C7]/80 space-y-3">
+              <CardContent className="text-[#ede7c7]/80 space-y-3">
                 <p>
                   Our AI agents engage with potential clients instantly, asking the right questions to understand their
                   needs, budget, and timeline.
@@ -57,12 +57,12 @@ export default function SolutionsPage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#8B0000] to-[#5B0202] rounded-2xl flex items-center justify-center text-3xl mb-4">
                   📋
                 </div>
-                <CardTitle className="text-2xl text-[#EDE7C7]">Project Management AI</CardTitle>
-                <CardDescription className="text-[#EDE7C7]/70">
+                <CardTitle className="text-2xl text-[#ede7c7]">Project Management AI</CardTitle>
+                <CardDescription className="text-[#ede7c7]/70">
                   Intelligent project tracking and optimization
                 </CardDescription>
               </CardHeader>
-              <CardContent className="text-[#EDE7C7]/80 space-y-3">
+              <CardContent className="text-[#ede7c7]/80 space-y-3">
                 <p>
                   Keep projects on track with AI that monitors progress, predicts delays, and suggests optimizations in
                   real-time.
@@ -81,12 +81,12 @@ export default function SolutionsPage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#8B0000] to-[#5B0202] rounded-2xl flex items-center justify-center text-3xl mb-4">
                   👥
                 </div>
-                <CardTitle className="text-2xl text-[#EDE7C7]">Client Communication AI</CardTitle>
-                <CardDescription className="text-[#EDE7C7]/70">
+                <CardTitle className="text-2xl text-[#ede7c7]">Client Communication AI</CardTitle>
+                <CardDescription className="text-[#ede7c7]/70">
                   Personalized updates and support at scale
                 </CardDescription>
               </CardHeader>
-              <CardContent className="text-[#EDE7C7]/80 space-y-3">
+              <CardContent className="text-[#ede7c7]/80 space-y-3">
                 <p>
                   Maintain exceptional client relationships with AI that provides personalized updates and answers
                   questions instantly.
@@ -105,10 +105,10 @@ export default function SolutionsPage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#8B0000] to-[#5B0202] rounded-2xl flex items-center justify-center text-3xl mb-4">
                   💰
                 </div>
-                <CardTitle className="text-2xl text-[#EDE7C7]">Cost Estimation AI</CardTitle>
-                <CardDescription className="text-[#EDE7C7]/70">Accurate quotes powered by market data</CardDescription>
+                <CardTitle className="text-2xl text-[#ede7c7]">Cost Estimation AI</CardTitle>
+                <CardDescription className="text-[#ede7c7]/70">Accurate quotes powered by market data</CardDescription>
               </CardHeader>
-              <CardContent className="text-[#EDE7C7]/80 space-y-3">
+              <CardContent className="text-[#ede7c7]/80 space-y-3">
                 <p>
                   Generate accurate cost estimates instantly using AI trained on South African market data and your
                   historical projects.
@@ -127,10 +127,10 @@ export default function SolutionsPage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#8B0000] to-[#5B0202] rounded-2xl flex items-center justify-center text-3xl mb-4">
                   📊
                 </div>
-                <CardTitle className="text-2xl text-[#EDE7C7]">Analytics & Insights AI</CardTitle>
-                <CardDescription className="text-[#EDE7C7]/70">Data-driven decisions for growth</CardDescription>
+                <CardTitle className="text-2xl text-[#ede7c7]">Analytics & Insights AI</CardTitle>
+                <CardDescription className="text-[#ede7c7]/70">Data-driven decisions for growth</CardDescription>
               </CardHeader>
-              <CardContent className="text-[#EDE7C7]/80 space-y-3">
+              <CardContent className="text-[#ede7c7]/80 space-y-3">
                 <p>
                   Unlock business insights with AI that analyzes your operations and identifies opportunities for
                   improvement.
@@ -149,10 +149,10 @@ export default function SolutionsPage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#8B0000] to-[#5B0202] rounded-2xl flex items-center justify-center text-3xl mb-4">
                   🔧
                 </div>
-                <CardTitle className="text-2xl text-[#EDE7C7]">Vendor Management AI</CardTitle>
-                <CardDescription className="text-[#EDE7C7]/70">Streamlined supplier coordination</CardDescription>
+                <CardTitle className="text-2xl text-[#ede7c7]">Vendor Management AI</CardTitle>
+                <CardDescription className="text-[#ede7c7]/70">Streamlined supplier coordination</CardDescription>
               </CardHeader>
-              <CardContent className="text-[#EDE7C7]/80 space-y-3">
+              <CardContent className="text-[#ede7c7]/80 space-y-3">
                 <p>
                   Coordinate with suppliers and subcontractors efficiently using AI that manages orders, schedules, and
                   communications.
@@ -169,42 +169,42 @@ export default function SolutionsPage() {
 
           {/* Integration Section */}
           <div className="bg-[#5B0202]/10 backdrop-blur-md border border-[#8B0000]/20 rounded-3xl p-12 mb-20">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center bg-gradient-to-r from-[#EDE7C7] to-[#8B0000] bg-clip-text text-transparent">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center bg-gradient-to-r from-[#ede7c7] to-[#8B0000] bg-clip-text text-transparent">
               Seamless Integration with Your Existing Tools
             </h2>
-            <p className="text-xl text-[#EDE7C7]/80 text-center mb-10 max-w-3xl mx-auto">
+            <p className="text-xl text-[#ede7c7]/80 text-center mb-10 max-w-3xl mx-auto">
               Our AI agents integrate with the tools you already use, ensuring a smooth transition and immediate value.
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               <div className="p-6 bg-[#8B0000]/10 rounded-2xl">
                 <div className="text-4xl mb-3">📧</div>
-                <div className="text-[#EDE7C7] font-semibold">Email</div>
+                <div className="text-[#ede7c7] font-semibold">Email</div>
               </div>
               <div className="p-6 bg-[#8B0000]/10 rounded-2xl">
                 <div className="text-4xl mb-3">💬</div>
-                <div className="text-[#EDE7C7] font-semibold">WhatsApp</div>
+                <div className="text-[#ede7c7] font-semibold">WhatsApp</div>
               </div>
               <div className="p-6 bg-[#8B0000]/10 rounded-2xl">
                 <div className="text-4xl mb-3">📱</div>
-                <div className="text-[#EDE7C7] font-semibold">CRM Systems</div>
+                <div className="text-[#ede7c7] font-semibold">CRM Systems</div>
               </div>
               <div className="p-6 bg-[#8B0000]/10 rounded-2xl">
                 <div className="text-4xl mb-3">📊</div>
-                <div className="text-[#EDE7C7] font-semibold">Project Tools</div>
+                <div className="text-[#ede7c7] font-semibold">Project Tools</div>
               </div>
             </div>
           </div>
 
           {/* CTA Section */}
           <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-[#EDE7C7] to-[#8B0000] bg-clip-text text-transparent">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-[#ede7c7] to-[#8B0000] bg-clip-text text-transparent">
               Ready to See These Solutions in Action?
             </h2>
-            <p className="text-xl text-[#EDE7C7]/80 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-[#ede7c7]/80 mb-8 max-w-2xl mx-auto">
               Book a personalized demo to discover how our AI solutions can transform your building business.
             </p>
             <Link href="/demo">
-              <Button className="px-10 py-6 text-lg bg-gradient-to-r from-[#8B0000] to-[#5B0202] text-[#EDE7C7] rounded-full font-semibold hover:scale-105 hover:shadow-lg hover:shadow-[#8B0000]/30 transition-all">
+              <Button className="px-10 py-6 text-lg bg-gradient-to-r from-[#8B0000] to-[#5B0202] text-[#ede7c7] rounded-full font-semibold hover:scale-105 hover:shadow-lg hover:shadow-[#8B0000]/30 transition-all">
                 Schedule Your Demo
               </Button>
             </Link>

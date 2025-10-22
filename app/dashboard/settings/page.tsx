@@ -21,8 +21,8 @@ export default async function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold text-[#EDE7C7]">Settings</h2>
-        <p className="text-[#EDE7C7]/60 mt-2">Manage your account and company settings.</p>
+        <h2 className="text-3xl font-bold text-[#ede7c7]">Settings</h2>
+        <p className="text-[#ede7c7]/60 mt-2">Manage your account and company settings.</p>
       </div>
 
       <ProfileSettings user={user} profile={profile} />
