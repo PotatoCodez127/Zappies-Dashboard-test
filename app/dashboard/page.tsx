@@ -267,13 +267,15 @@ export default function DashboardPage() {
               ) : (
                 <LineChart data={chartData} margin={{ top: 5, right: 10, bottom: 5, left: 0 }}>
                   <defs>
+                     {/* Updated gradient for "Total Booked" to use primary purple */}
                     <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                       <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.6} />
-                       <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
+                       <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.6} /> {/* WAS #8884d8 */}
+                       <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} /> {/* WAS #8884d8 */}
                     </linearGradient>
+                    {/* Updated gradient for "Confirmed" to use bright teal */}
                     <linearGradient id="colorConfirmed" x1="0" y1="0" x2="0" y2="1">
-                       <stop offset="5%" stopColor="#00e0c6" stopOpacity={0.6} />
-                       <stop offset="95%" stopColor="#00e0c6" stopOpacity={0} />
+                       <stop offset="5%" stopColor="#00e0c6" stopOpacity={0.6} /> {/* WAS #82ca9d */}
+                       <stop offset="95%" stopColor="#00e0c6" stopOpacity={0} /> {/* WAS #82ca9d */}
                     </linearGradient>
                   </defs>
                   <CartesianGrid stroke="#2A2A2A" strokeDasharray="5 5" vertical={false} />
@@ -296,28 +298,30 @@ export default function DashboardPage() {
                     width={30}
                   />
                   <Tooltip
-                    content={<CustomTooltip />}
-                    cursor={{ stroke: "var(--primary)", strokeWidth: 1.5, strokeDasharray: "3 3" }}
+                    content={<CustomTooltip />} // Keep custom tooltip
+                    cursor={{ stroke: "var(--primary)", strokeWidth: 1.5, strokeDasharray: "3 3" }} // Use primary for cursor
                   />
                   <Legend wrapperStyle={{ color: "var(--dashboard-text-color)", fontSize: "12px", paddingTop: "10px" }} />
+                  {/* Area fills using updated gradients */}
                   <Area type="monotone" dataKey="total" stroke="none" fillOpacity={0.2} fill="url(#colorTotal)" />
                   <Area type="monotone" dataKey="confirmed" stroke="none" fillOpacity={0.2} fill="url(#colorConfirmed)" />
+                  {/* Lines using updated colors and activeDot */}
                   <Line
                     type="monotone"
                     dataKey="total"
                     name="Total Booked"
-                    stroke="var(--primary)"
+                    stroke="var(--primary)" // Use primary purple
                     dot={false}
-                    activeDot={{ r: 6, strokeWidth: 0, fill: 'var(--primary)' }}
+                    activeDot={{ r: 6, strokeWidth: 0, fill: 'var(--primary)' }} // Updated activeDot
                     strokeWidth={2}
                   />
                   <Line
                     type="monotone"
                     dataKey="confirmed"
                     name="Confirmed"
-                    stroke="#00e0c6"
+                    stroke="#00e0c6" // Use bright teal
                     dot={false}
-                    activeDot={{ r: 6, strokeWidth: 0, fill: '#00e0c6' }}
+                    activeDot={{ r: 6, strokeWidth: 0, fill: '#00e0c6' }} // Updated activeDot
                     strokeWidth={2}
                   />
                 </LineChart>
