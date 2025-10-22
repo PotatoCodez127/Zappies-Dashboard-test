@@ -46,41 +46,41 @@
 }
 
 .dark {
-  /* Updated to ambient dark red theme with deep blacks and muted red accents */
-  --background: oklch(0.05 0 0); /* Very deep black #080808 */
-  --foreground: oklch(0.95 0.01 106); /* Cream white #EDE7C7 for high contrast */
-  --card: oklch(0.12 0 0); /* Dark gray #181818 for cards */
-  --card-foreground: oklch(0.95 0.01 106);
-  --popover: oklch(0.12 0 0);
-  --popover-foreground: oklch(0.95 0.01 106);
-  --primary: oklch(0.45 0.18 25); /* Ambient dark red - less saturated, darker */
-  --primary-foreground: oklch(0.95 0.01 106); /* Cream white for contrast */
-  --secondary: oklch(0.18 0 0); /* Dark gray */
-  --secondary-foreground: oklch(0.95 0.01 106);
-  --muted: oklch(0.18 0 0);
-  --muted-foreground: oklch(0.7 0.01 106); /* Subtle light gray #A0A0A0 */
-  --accent: oklch(0.18 0 0); /* Match input for subtle hover states */
-  --accent-foreground: oklch(0.95 0.01 106);
-  --destructive: oklch(0.5 0.22 25); /* Slightly brighter red for warnings */
-  --destructive-foreground: oklch(0.95 0.01 106);
-  --border: oklch(0.15 0 0); /* Very subtle dark gray #202020 */
-  --input: oklch(0.18 0 0);
-  --ring: oklch(0.45 0.18 25); /* Ambient red for focus rings */
-  /* Updated chart colors to complement ambient red theme */
-  --chart-1: oklch(0.45 0.18 25); /* Ambient red for primary data */
-  --chart-2: oklch(0.5 0.12 15); /* Desaturated warm tone */
-  --chart-3: oklch(0.55 0.08 30); /* Muted orange-red */
-  --chart-4: oklch(0.4 0.1 10); /* Deep muted red-brown */
-  --chart-5: oklch(0.6 0.06 0); /* Desaturated gray */
-  /* Updated sidebar colors to align with ambient red palette */
-  --sidebar: oklch(0.08 0 0); /* Slightly lighter than main background */
-  --sidebar-foreground: oklch(0.95 0.01 106);
-  --sidebar-primary: oklch(0.45 0.18 25); /* Ambient red */
-  --sidebar-primary-foreground: oklch(0.95 0.01 106);
-  --sidebar-accent: oklch(0.18 0 0);
-  --sidebar-accent-foreground: oklch(0.95 0.01 106);
-  --sidebar-border: oklch(0.15 0 0);
-  --sidebar-ring: oklch(0.45 0.18 25);
+  /* Galaxy-like futuristic theme with deep space colors, electric cyan and vibrant purple */
+  --background: oklch(0.12 0.05 260); /* Deep Indigo/Navy #10102c */
+  --foreground: oklch(0.96 0.01 190); /* Bright light cyan #e0f8ff */
+  --card: oklch(0.18 0.04 265); /* Dark Purple/Blue #1a1a3a */
+  --card-foreground: oklch(0.96 0.01 190);
+  --popover: oklch(0.18 0.04 265);
+  --popover-foreground: oklch(0.96 0.01 190);
+  --primary: oklch(0.8 0.15 190); /* Electric Cyan #00f0ff */
+  --primary-foreground: oklch(0.1 0 0); /* Dark for contrast #101010 */
+  --secondary: oklch(0.6 0.25 300); /* Vibrant Purple/Magenta #c000c0 */
+  --secondary-foreground: oklch(0.96 0.01 190);
+  --muted: oklch(0.15 0.04 265); /* Slightly darker than card */
+  --muted-foreground: oklch(0.7 0.02 240); /* Subtle light gray/blue #a0b0c0 */
+  --accent: oklch(0.15 0.04 265); /* Match muted for subtle hover */
+  --accent-foreground: oklch(0.96 0.01 190);
+  --destructive: oklch(0.65 0.2 40); /* Functional red/orange #ff6000 */
+  --destructive-foreground: oklch(0.96 0.01 190);
+  --border: oklch(0.15 0.05 260); /* Very subtle dark blue/purple #202040 */
+  --input: oklch(0.18 0.04 265);
+  --ring: oklch(0.8 0.15 190); /* Electric Cyan for focus rings */
+  /* Updated chart colors with cyan, purple, and complementary space tones */
+  --chart-1: oklch(0.8 0.15 190); /* Electric Cyan */
+  --chart-2: oklch(0.6 0.25 300); /* Vibrant Purple */
+  --chart-3: oklch(0.5 0.12 250); /* Desaturated Blue */
+  --chart-4: oklch(0.55 0.18 280); /* Medium Purple */
+  --chart-5: oklch(0.45 0.08 240); /* Desaturated Gray-Blue */
+  /* Updated sidebar colors to align with galaxy palette */
+  --sidebar: oklch(0.12 0.05 260); /* Match background */
+  --sidebar-foreground: oklch(0.96 0.01 190);
+  --sidebar-primary: oklch(0.8 0.15 190); /* Electric Cyan */
+  --sidebar-primary-foreground: oklch(0.1 0 0);
+  --sidebar-accent: oklch(0.15 0.04 265);
+  --sidebar-accent-foreground: oklch(0.96 0.01 190);
+  --sidebar-border: oklch(0.15 0.05 260);
+  --sidebar-ring: oklch(0.8 0.15 190);
 }
 
 @theme inline {
@@ -199,14 +199,14 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Added red glow effect keyframe animation */
-@keyframes redGlow {
+/* Removed old red glow animation, added new nebula glow animation */
+@keyframes nebulaGlow {
   0%,
   100% {
-    box-shadow: 0 0 20px rgba(255, 17, 0, 0.15), 0 0 40px rgba(255, 17, 0, 0.1);
+    box-shadow: 0 0 40px 8px rgba(0, 240, 255, 0.15), 0 0 60px 12px rgba(192, 0, 192, 0.1);
   }
   50% {
-    box-shadow: 0 0 30px rgba(255, 17, 0, 0.25), 0 0 60px rgba(255, 17, 0, 0.15);
+    box-shadow: 0 0 50px 10px rgba(0, 240, 255, 0.25), 0 0 70px 15px rgba(192, 0, 192, 0.15);
   }
 }
 
@@ -222,24 +222,24 @@ html {
   }
 }
 
-/* Removed old scrollbar styling, adding new red-themed scrollbar */
+/* Updated scrollbar styling for galaxy theme with cyan accent */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #10102c;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2a2a2a;
+  background: #202040;
   border-radius: 4px;
   transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff1100;
+  background: #00f0ff;
 }
 
 /* Smooth transitions for all interactive elements */

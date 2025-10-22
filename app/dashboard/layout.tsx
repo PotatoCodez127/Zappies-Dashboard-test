@@ -28,7 +28,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   if (companyUserError || !companyUser) {
     console.error("Dashboard Layout Error: Could not find company link for user.", companyUserError)
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0A0A0A] text-[#EDE7C7] p-4">
+      <div className="flex min-h-screen items-center justify-center bg-background text-foreground p-4">
         <p className="text-center">Error: Could not verify your company membership. Please contact support.</p>
       </div>
     )
@@ -43,7 +43,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   if (companyError || !company) {
     console.error("Dashboard Layout Error: Could not fetch company details.", companyError)
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0A0A0A] text-[#EDE7C7] p-4">
+      <div className="flex min-h-screen items-center justify-center bg-background text-foreground p-4">
         <p className="text-center">Error: Could not load company data. Please check permissions and contact support.</p>
       </div>
     )
@@ -51,7 +51,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <CompanyProvider company={company}>
-      <div className="flex h-screen bg-[#0A0A0A] overflow-hidden">
+      <div className="flex h-screen bg-gradient-to-br from-[#10102c] via-[#0a051d] to-[#1a0a2e] overflow-hidden">
         <DashboardSidebar />
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
           <DashboardHeader user={user} />
