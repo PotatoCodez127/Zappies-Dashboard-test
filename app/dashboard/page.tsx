@@ -204,16 +204,19 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6 sm:space-y-8">
-      <div>
+      {/* Added animation wrapper */}
+      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
         <h2 className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)] tracking-tight">Overview</h2>
         <p className="text-sm sm:text-base text-muted-foreground mt-2">Here's your bot's performance summary.</p>
       </div>
 
       <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-        {statCards.map((stat) => (
+        {statCards.map((stat, index) => (
           <Card
             key={stat.title}
-            className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20"
+            // Add staggered delay using style prop for a nice effect
+            style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'backwards' }}
+            className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" // Added animation classes
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2 min-h-[72px]">
               <CardTitle className="text-sm font-medium text-muted-foreground leading-snug">{stat.title}</CardTitle>
@@ -231,7 +234,10 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20">
+      <Card
+        className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out"
+        style={{ animationDelay: '500ms', animationFillMode: 'backwards' }} // Delay chart slightly more
+       >
         <CardHeader>
           <CardTitle className="text-lg sm:text-xl text-[var(--dashboard-text-color)] flex items-center gap-2">
             <LineChartIcon className="h-5 w-5 flex-shrink-0" />
@@ -327,8 +333,13 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Render Recent Activity */}
-      <RecentActivity />
+      {/* Added animation wrapper for Recent Activity */}
+       <div
+          className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out"
+          style={{ animationDelay: '600ms', animationFillMode: 'backwards' }} // Delay activity card
+        >
+          <RecentActivity />
+       </div>
     </div>
   )
 }
