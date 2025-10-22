@@ -119,27 +119,27 @@ export function ProfileSettings({ user, profile }: ProfileSettingsProps) {
     <form onSubmit={handleUpdate} className="grid gap-6">
       <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
         <CardHeader>
-          <CardTitle className="text-[#ede7c7]">Company & Database Settings</CardTitle>
-          <CardDescription className="text-[#ede7c7]/60">Manage your company details and connect your bot's database.</CardDescription>
+          <CardTitle className="text-[#a83232]">Company & Database Settings</CardTitle>
+          <CardDescription className="text-[#a83232]/60">Manage your company details and connect your bot's database.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="companyName" className="text-[#ede7c7]/80">Company Name</Label>
-            <Input id="companyName" type="text" value={companyName || ''} onChange={(e) => setCompanyName(e.target.value)} placeholder="Your Company Name" className="bg-[#0A0A0A] border-[#2A2A2A] text-[#ede7c7]" />
+            <Label htmlFor="companyName" className="text-[#a83232]/80">Company Name</Label>
+            <Input id="companyName" type="text" value={companyName || ''} onChange={(e) => setCompanyName(e.target.value)} placeholder="Your Company Name" className="bg-[#0A0A0A] border-[#2A2A2A] text-[#a83232]" />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="supabaseUrl" className="text-[#ede7c7]/80">Supabase URL(,)(,)</Label>
-            <Input id="supabaseUrl" type="url" value={supabaseUrl || ''} onChange={(e) => setSupabaseUrl(e.target.value)} placeholder="https://<your-project-ref>.supabase.co" className="bg-[#0A0A0A] border-[#2A2A2A] text-[#ede7c7]" />
+            <Label htmlFor="supabaseUrl" className="text-[#a83232]/80">Supabase URL(,)(,)</Label>
+            <Input id="supabaseUrl" type="url" value={supabaseUrl || ''} onChange={(e) => setSupabaseUrl(e.target.value)} placeholder="https://<your-project-ref>.supabase.co" className="bg-[#0A0A0A] border-[#2A2A2A] text-[#a83232]" />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="supabaseAnonKey" className="text-[#ede7c7]/80">Supabase Anon Key</Label>
-            <Input id="supabaseAnonKey" type="text" value={supabaseAnonKey || ''} onChange={(e) => setSupabaseAnonKey(e.target.value)} placeholder="Enter your Supabase anon (public) key" className="bg-[#0A0A0A] border-[#2A2A2A] text-[#ede7c7]" />
+            <Label htmlFor="supabaseAnonKey" className="text-[#a83232]/80">Supabase Anon Key</Label>
+            <Input id="supabaseAnonKey" type="text" value={supabaseAnonKey || ''} onChange={(e) => setSupabaseAnonKey(e.target.value)} placeholder="Enter your Supabase anon (public) key" className="bg-[#0A0A0A] border-[#2A2A2A] text-[#a83232]" />
           </div>
         </CardContent>
       </Card>
       
       <div className="flex justify-end">
-        <Button type="submit" disabled={isUpdating} className="bg-[#ede7c7] text-[#0A0A0A] hover:bg-[#ede7c7]/90">
+        <Button type="submit" disabled={isUpdating} className="bg-[#a83232] text-[#0A0A0A] hover:bg-[#a83232]/90">
           {isUpdating ? "Saving..." : "Save Settings"}
         </Button>
       </div>

@@ -116,7 +116,7 @@ export function RecentActivity() {
   return (
     <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-[#ede7c7]">Recent Activity</CardTitle>
+        <CardTitle className="text-[#a83232]">Recent Activity</CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -132,7 +132,7 @@ export function RecentActivity() {
             ))}
           </div>
         ) : !companySupabase ? (
-          <div className="text-center py-6 text-sm text-[#ede7c7]/60">
+          <div className="text-center py-6 text-sm text-[#a83232]/60">
             Connect database in settings to view activity.
           </div>
         ) : activities.length === 0 ? (

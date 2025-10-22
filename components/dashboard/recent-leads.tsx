@@ -26,17 +26,17 @@ export function RecentLeads({ leads }: RecentLeadsProps) {
       case "converted":
         return "bg-green-500/10 text-green-500 border-green-500/20"
       default:
-        return "bg-[#ede7c7]/10 text-[#ede7c7] border-[#ede7c7]/20"
+        return "bg-[#a83232]/10 text-[#a83232] border-[#a83232]/20"
     }
   }
 
   return (
     <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-[#ede7c7]">Recent Leads</CardTitle>
+        <CardTitle className="text-[#a83232]">Recent Leads</CardTitle>
         <Link
           href="/dashboard/leads"
-          className="text-sm text-[#ede7c7]/60 hover:text-[#ede7c7] flex items-center gap-1"
+          className="text-sm text-[#a83232]/60 hover:text-[#a83232] flex items-center gap-1"
         >
           View all
           <ArrowRight className="h-4 w-4" />
@@ -44,7 +44,7 @@ export function RecentLeads({ leads }: RecentLeadsProps) {
       </CardHeader>
       <CardContent>
         {leads.length === 0 ? (
-          <p className="text-[#ede7c7]/60 text-sm">No leads yet. They'll appear here once submitted.</p>
+          <p className="text-[#a83232]/60 text-sm">No leads yet. They'll appear here once submitted.</p>
         ) : (
           <div className="space-y-4">
             {leads.map((lead) => (
@@ -53,9 +53,9 @@ export function RecentLeads({ leads }: RecentLeadsProps) {
                 className="flex items-center justify-between py-3 border-b border-[#2A2A2A] last:border-0"
               >
                 <div className="space-y-1">
-                  <p className="text-sm font-medium text-[#ede7c7]">{lead.name}</p>
-                  <p className="text-xs text-[#ede7c7]/60">{lead.email}</p>
-                  {lead.company && <p className="text-xs text-[#ede7c7]/40">{lead.company}</p>}
+                  <p className="text-sm font-medium text-[#a83232]">{lead.name}</p>
+                  <p className="text-xs text-[#a83232]/60">{lead.email}</p>
+                  {lead.company && <p className="text-xs text-[#a83232]/40">{lead.company}</p>}
                 </div>
                 <Badge className={getStatusColor(lead.status)}>{lead.status}</Badge>
               </div>

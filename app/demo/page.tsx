@@ -99,10 +99,10 @@ export default function DemoPage() {
             <div className="inline-block px-5 py-2 bg-[#8B0000]/20 border border-[#8B0000] rounded-full text-sm mb-5">
               Schedule Your Demo
             </div>
-            <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6 bg-gradient-to-r from-[#ede7c7] via-[#8B0000] to-[#ede7c7] bg-clip-text text-transparent text-balance">
+            <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6 bg-gradient-to-r from-[#a83232] via-[#8B0000] to-[#a83232] bg-clip-text text-transparent text-balance">
               See Zappies AI in Action
             </h1>
-            <p className="text-xl text-[#ede7c7]/80 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-[#a83232]/80 max-w-3xl mx-auto leading-relaxed">
               Book a personalized demo and discover how our AI agents can transform your custom home building business.
             </p>
           </div>
@@ -111,15 +111,15 @@ export default function DemoPage() {
             {/* Form */}
             <Card className="bg-[#5B0202]/10 backdrop-blur-md border-[#8B0000]/20">
               <CardHeader>
-                <CardTitle className="text-2xl text-[#ede7c7]">Request Your Demo</CardTitle>
-                <CardDescription className="text-[#ede7c7]/70">
+                <CardTitle className="text-2xl text-[#a83232]">Request Your Demo</CardTitle>
+                <CardDescription className="text-[#a83232]/70">
                   Fill out the form below and we'll be in touch within 24 hours
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-[#ede7c7]">
+                    <Label htmlFor="name" className="text-[#a83232]">
                       Full Name *
                     </Label>
                     <Input
@@ -127,13 +127,13 @@ export default function DemoPage() {
                       required
                       value={formData.name}
                       onChange={(e) => handleChange("name", e.target.value)}
-                      className="bg-[#200E01]/50 border-[#8B0000]/30 text-[#ede7c7] placeholder:text-[#ede7c7]/40"
+                      className="bg-[#200E01]/50 border-[#8B0000]/30 text-[#a83232] placeholder:text-[#a83232]/40"
                       placeholder="John Smith"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-[#ede7c7]">
+                    <Label htmlFor="email" className="text-[#a83232]">
                       Email Address *
                     </Label>
                     <Input
@@ -142,13 +142,13 @@ export default function DemoPage() {
                       required
                       value={formData.email}
                       onChange={(e) => handleChange("email", e.target.value)}
-                      className="bg-[#200E01]/50 border-[#8B0000]/30 text-[#ede7c7] placeholder:text-[#ede7c7]/40"
+                      className="bg-[#200E01]/50 border-[#8B0000]/30 text-[#a83232] placeholder:text-[#a83232]/40"
                       placeholder="john@example.com"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="phone" className="text-[#ede7c7]">
+                    <Label htmlFor="phone" className="text-[#a83232]">
                       Phone Number *
                     </Label>
                     <Input
@@ -157,13 +157,13 @@ export default function DemoPage() {
                       required
                       value={formData.phone}
                       onChange={(e) => handleChange("phone", e.target.value)}
-                      className="bg-[#200E01]/50 border-[#8B0000]/30 text-[#ede7c7] placeholder:text-[#ede7c7]/40"
+                      className="bg-[#200E01]/50 border-[#8B0000]/30 text-[#a83232] placeholder:text-[#a83232]/40"
                       placeholder="+27 XX XXX XXXX"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="company" className="text-[#ede7c7]">
+                    <Label htmlFor="company" className="text-[#a83232]">
                       Company Name *
                     </Label>
                     <Input
@@ -171,13 +171,13 @@ export default function DemoPage() {
                       required
                       value={formData.company}
                       onChange={(e) => handleChange("company", e.target.value)}
-                      className="bg-[#200E01]/50 border-[#8B0000]/30 text-[#ede7c7] placeholder:text-[#ede7c7]/40"
+                      className="bg-[#200E01]/50 border-[#8B0000]/30 text-[#a83232] placeholder:text-[#a83232]/40"
                       placeholder="Your Building Company"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="projects" className="text-[#ede7c7]">
+                    <Label htmlFor="projects" className="text-[#a83232]">
                       Projects Per Year *
                     </Label>
                     <Select
@@ -185,20 +185,20 @@ export default function DemoPage() {
                       onValueChange={(value) => handleChange("projectsPerYear", value)}
                       required
                     >
-                      <SelectTrigger className="bg-[#200E01]/50 border-[#8B0000]/30 text-[#ede7c7]">
+                      <SelectTrigger className="bg-[#200E01]/50 border-[#8B0000]/30 text-[#a83232]">
                         <SelectValue placeholder="Select range" />
                       </SelectTrigger>
                       <SelectContent className="bg-[#200E01] border-[#8B0000]/30">
-                        <SelectItem value="1-5" className="text-[#ede7c7]">
+                        <SelectItem value="1-5" className="text-[#a83232]">
                           1-5 projects
                         </SelectItem>
-                        <SelectItem value="6-15" className="text-[#ede7c7]">
+                        <SelectItem value="6-15" className="text-[#a83232]">
                           6-15 projects
                         </SelectItem>
-                        <SelectItem value="16-30" className="text-[#ede7c7]">
+                        <SelectItem value="16-30" className="text-[#a83232]">
                           16-30 projects
                         </SelectItem>
-                        <SelectItem value="30+" className="text-[#ede7c7]">
+                        <SelectItem value="30+" className="text-[#a83232]">
                           30+ projects
                         </SelectItem>
                       </SelectContent>
@@ -206,7 +206,7 @@ export default function DemoPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="interest" className="text-[#ede7c7]">
+                    <Label htmlFor="interest" className="text-[#a83232]">
                       Primary Interest *
                     </Label>
                     <Select
@@ -214,23 +214,23 @@ export default function DemoPage() {
                       onValueChange={(value) => handleChange("interest", value)}
                       required
                     >
-                      <SelectTrigger className="bg-[#200E01]/50 border-[#8B0000]/30 text-[#ede7c7]">
+                      <SelectTrigger className="bg-[#200E01]/50 border-[#8B0000]/30 text-[#a83232]">
                         <SelectValue placeholder="Select your main interest" />
                       </SelectTrigger>
                       <SelectContent className="bg-[#200E01] border-[#8B0000]/30">
-                        <SelectItem value="lead-qualification" className="text-[#ede7c7]">
+                        <SelectItem value="lead-qualification" className="text-[#a83232]">
                           Lead Qualification
                         </SelectItem>
-                        <SelectItem value="project-management" className="text-[#ede7c7]">
+                        <SelectItem value="project-management" className="text-[#a83232]">
                           Project Management
                         </SelectItem>
-                        <SelectItem value="client-communication" className="text-[#ede7c7]">
+                        <SelectItem value="client-communication" className="text-[#a83232]">
                           Client Communication
                         </SelectItem>
-                        <SelectItem value="cost-estimation" className="text-[#ede7c7]">
+                        <SelectItem value="cost-estimation" className="text-[#a83232]">
                           Cost Estimation
                         </SelectItem>
-                        <SelectItem value="all" className="text-[#ede7c7]">
+                        <SelectItem value="all" className="text-[#a83232]">
                           All Solutions
                         </SelectItem>
                       </SelectContent>
@@ -238,14 +238,14 @@ export default function DemoPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="message" className="text-[#ede7c7]">
+                    <Label htmlFor="message" className="text-[#a83232]">
                       Additional Information
                     </Label>
                     <Textarea
                       id="message"
                       value={formData.message}
                       onChange={(e) => handleChange("message", e.target.value)}
-                      className="bg-[#200E01]/50 border-[#8B0000]/30 text-[#ede7c7] placeholder:text-[#ede7c7]/40 min-h-[100px]"
+                      className="bg-[#200E01]/50 border-[#8B0000]/30 text-[#a83232] placeholder:text-[#a83232]/40 min-h-[100px]"
                       placeholder="Tell us about your specific needs or challenges..."
                     />
                   </div>
@@ -253,7 +253,7 @@ export default function DemoPage() {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-6 text-lg bg-gradient-to-r from-[#8B0000] to-[#5B0202] text-[#ede7c7] rounded-full font-semibold hover:scale-105 hover:shadow-lg hover:shadow-[#8B0000]/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-6 text-lg bg-gradient-to-r from-[#8B0000] to-[#5B0202] text-[#a83232] rounded-full font-semibold hover:scale-105 hover:shadow-lg hover:shadow-[#8B0000]/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? "Submitting..." : "Schedule Demo"}
                   </Button>
@@ -265,15 +265,15 @@ export default function DemoPage() {
             <div className="space-y-8">
               <Card className="bg-[#5B0202]/10 backdrop-blur-md border-[#8B0000]/20">
                 <CardHeader>
-                  <CardTitle className="text-2xl text-[#ede7c7]">What to Expect</CardTitle>
+                  <CardTitle className="text-2xl text-[#a83232]">What to Expect</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4 text-[#ede7c7]/80">
+                <CardContent className="space-y-4 text-[#a83232]/80">
                   <div className="flex gap-4">
                     <div className="w-10 h-10 bg-gradient-to-br from-[#8B0000] to-[#5B0202] rounded-full flex items-center justify-center flex-shrink-0 text-xl">
                       1
                     </div>
                     <div>
-                      <h3 className="font-semibold text-[#ede7c7] mb-1">Personalized Consultation</h3>
+                      <h3 className="font-semibold text-[#a83232] mb-1">Personalized Consultation</h3>
                       <p>We'll discuss your specific business needs and challenges</p>
                     </div>
                   </div>
@@ -282,7 +282,7 @@ export default function DemoPage() {
                       2
                     </div>
                     <div>
-                      <h3 className="font-semibold text-[#ede7c7] mb-1">Live Demo</h3>
+                      <h3 className="font-semibold text-[#a83232] mb-1">Live Demo</h3>
                       <p>See our AI agents in action with real-world scenarios</p>
                     </div>
                   </div>
@@ -291,7 +291,7 @@ export default function DemoPage() {
                       3
                     </div>
                     <div>
-                      <h3 className="font-semibold text-[#ede7c7] mb-1">Custom Recommendations</h3>
+                      <h3 className="font-semibold text-[#a83232] mb-1">Custom Recommendations</h3>
                       <p>Get tailored suggestions for your business</p>
                     </div>
                   </div>
@@ -300,7 +300,7 @@ export default function DemoPage() {
                       4
                     </div>
                     <div>
-                      <h3 className="font-semibold text-[#ede7c7] mb-1">ROI Analysis</h3>
+                      <h3 className="font-semibold text-[#a83232] mb-1">ROI Analysis</h3>
                       <p>Understand the potential impact on your bottom line</p>
                     </div>
                   </div>
@@ -309,34 +309,34 @@ export default function DemoPage() {
 
               <Card className="bg-[#5B0202]/10 backdrop-blur-md border-[#8B0000]/20">
                 <CardHeader>
-                  <CardTitle className="text-2xl text-[#ede7c7]">Demo Details</CardTitle>
+                  <CardTitle className="text-2xl text-[#a83232]">Demo Details</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3 text-[#ede7c7]/80">
+                <CardContent className="space-y-3 text-[#a83232]/80">
                   <div className="flex items-center gap-3">
                     <div className="text-2xl">⏱️</div>
                     <div>
-                      <div className="font-semibold text-[#ede7c7]">Duration</div>
+                      <div className="font-semibold text-[#a83232]">Duration</div>
                       <div>45-60 minutes</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="text-2xl">💻</div>
                     <div>
-                      <div className="font-semibold text-[#ede7c7]">Format</div>
+                      <div className="font-semibold text-[#a83232]">Format</div>
                       <div>Virtual meeting (Zoom/Teams)</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="text-2xl">🎯</div>
                     <div>
-                      <div className="font-semibold text-[#ede7c7]">Focus</div>
+                      <div className="font-semibold text-[#a83232]">Focus</div>
                       <div>Your specific business needs</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="text-2xl">💰</div>
                     <div>
-                      <div className="font-semibold text-[#ede7c7]">Cost</div>
+                      <div className="font-semibold text-[#a83232]">Cost</div>
                       <div>Completely free, no obligation</div>
                     </div>
                   </div>
@@ -346,8 +346,8 @@ export default function DemoPage() {
               <Card className="bg-gradient-to-br from-[#8B0000]/20 to-[#5B0202]/10 backdrop-blur-md border-[#8B0000]/30">
                 <CardContent className="p-6 text-center">
                   <div className="text-4xl mb-3">📞</div>
-                  <h3 className="text-xl font-bold text-[#ede7c7] mb-2">Prefer to Talk Now?</h3>
-                  <p className="text-[#ede7c7]/80 mb-4">Call us directly for immediate assistance</p>
+                  <h3 className="text-xl font-bold text-[#a83232] mb-2">Prefer to Talk Now?</h3>
+                  <p className="text-[#a83232]/80 mb-4">Call us directly for immediate assistance</p>
                   <a
                     href="tel:+27123456789"
                     className="text-2xl font-bold text-[#8B0000] hover:text-[#8B0000]/80 transition-colors"
