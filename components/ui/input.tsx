@@ -9,13 +9,13 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
       type={type}
       data-slot="input"
       className={cn(
-        // Use input background (dark gray), standard foreground text (light gray), muted placeholder (medium gray)
-        'file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground bg-input text-foreground',
-        // Use subtle border color (purple/20), focus border uses primary purple
+        // Use input background, standard foreground text, muted placeholder
+        'file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground bg-input',
+        // Use subtle border color from variable, purple ring on focus
         'border-border focus-visible:border-primary',
         // Base styles
         'flex h-9 w-full min-w-0 rounded-md border px-3 py-1 text-base shadow-xs transition-[border-color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
-        // Focus ring styles (purple)
+        // Focus ring styles
         'focus-visible:ring-[3px] focus-visible:ring-ring/50',
         // Invalid styles
         'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',

@@ -11,15 +11,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         // Default: Light background, dark text (as per Shipable)
-        default: "bg-foreground text-background shadow-xs hover:bg-foreground/90", // CORRECTED Shipable style
+        default: "bg-foreground text-background shadow-xs hover:bg-foreground/90",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
+          "bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40", // Keep destructive clear
         // Outline: Dark background, purple border, light text
         outline:
           "border border-primary/60 bg-card shadow-xs hover:bg-accent hover:text-accent-foreground hover:border-primary",
-        // Secondary: Use dark gray background
+        // Secondary: Could be a muted purple or dark gray
         secondary: "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
-        // Ghost: Transparent background, light text, dark gray hover bg
+        // Ghost: Transparent background, light text, purple hover bg
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
