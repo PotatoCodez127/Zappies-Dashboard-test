@@ -45,12 +45,15 @@ interface DashboardStats {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload as DailyMeetingData
+    // Use parseISO to handle the 'yyyy-MM-dd' format correctly
     const formattedDate = data.fullDate ? format(parseISO(data.fullDate), "MMM d, yyyy") : label
     return (
       <div className="bg-[#1A1A1A] p-3 border border-[#2A2A2A] rounded-md shadow-lg text-xs">
         <p className="label text-[var(--dashboard-text-color)]/80">{`${formattedDate}`}</p>
-        <p className="intro text-[#a7a2ff]">{`Total Booked : ${data.total}`}</p>
-        <p className="intro text-[#82ca9d]">{`Confirmed : ${data.confirmed}`}</p>
+        {/* Use CSS variable for primary color in tooltip */}
+        <p className="intro" style={{ color: 'var(--primary)' }}>{`Total Booked : ${data.total}`}</p>
+        {/* Use the teal color directly */}
+        <p className="intro" style={{ color: '#00e0c6' }}>{`Confirmed : ${data.confirmed}`}</p>
       </div>
     )
   }
@@ -204,19 +207,19 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6 sm:space-y-8">
-      {/* Added animation wrapper */}
+      {/* Animated Title/Description */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
         <h2 className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)] tracking-tight">Overview</h2>
         <p className="text-sm sm:text-base text-muted-foreground mt-2">Here's your bot's performance summary.</p>
       </div>
 
+      {/* Animated Stat Cards */}
       <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {statCards.map((stat, index) => (
           <Card
             key={stat.title}
-            // Add staggered delay using style prop for a nice effect
             style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'backwards' }}
-            className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" // Added animation classes
+            className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out"
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2 min-h-[72px]">
               <CardTitle className="text-sm font-medium text-muted-foreground leading-snug">{stat.title}</CardTitle>
@@ -234,12 +237,13 @@ export default function DashboardPage() {
         ))}
       </div>
 
+      {/* Animated Chart Card */}
       <Card
         className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out"
-        style={{ animationDelay: '500ms', animationFillMode: 'backwards' }} // Delay chart slightly more
+        style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}
        >
         <CardHeader>
-          <CardTitle className="text-lg sm:text-xl text-[var(--dashboard-text-color)] flex items-center gap-2">
+           <CardTitle className="text-lg sm:text-xl text-[var(--dashboard-text-color)] flex items-center gap-2">
             <LineChartIcon className="h-5 w-5 flex-shrink-0" />
             <span className="truncate">
               Daily Meetings Overview {chartDaysCount > 0 ? `(Last ${chartDaysCount} Days)` : ""}
@@ -257,23 +261,20 @@ export default function DashboardPage() {
               height={window.innerWidth < 640 ? 250 : window.innerWidth < 1024 ? 300 : 350}
             >
               {!chartData || chartData.length === 0 ? (
-                <div className="flex items-center justify-center h-full text-[var(--dashboard-text-color)]/60 text-sm">
+                 <div className="flex items-center justify-center h-full text-[var(--dashboard-text-color)]/60 text-sm">
                   No meeting data available yet.
                 </div>
               ) : (
                 <LineChart data={chartData} margin={{ top: 5, right: 10, bottom: 5, left: 0 }}>
                   <defs>
-                    {" "}
                     <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                      {" "}
-                      <stop offset="5%" stopColor="#8884d8" stopOpacity={0.6} />{" "}
-                      <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />{" "}
-                    </linearGradient>{" "}
+                       <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.6} />
+                       <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
+                    </linearGradient>
                     <linearGradient id="colorConfirmed" x1="0" y1="0" x2="0" y2="1">
-                      {" "}
-                      <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.6} />{" "}
-                      <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />{" "}
-                    </linearGradient>{" "}
+                       <stop offset="5%" stopColor="#00e0c6" stopOpacity={0.6} />
+                       <stop offset="95%" stopColor="#00e0c6" stopOpacity={0} />
+                    </linearGradient>
                   </defs>
                   <CartesianGrid stroke="#2A2A2A" strokeDasharray="5 5" vertical={false} />
                   <XAxis
@@ -294,36 +295,29 @@ export default function DashboardPage() {
                     tick={{ fill: "var(--dashboard-text-color)" }}
                     width={30}
                   />
-                  {/* Use CustomTooltip component */}
                   <Tooltip
                     content={<CustomTooltip />}
-                    cursor={{ stroke: "#8B0000", strokeWidth: 1.5, strokeDasharray: "3 3" }}
+                    cursor={{ stroke: "var(--primary)", strokeWidth: 1.5, strokeDasharray: "3 3" }}
                   />
                   <Legend wrapperStyle={{ color: "var(--dashboard-text-color)", fontSize: "12px", paddingTop: "10px" }} />
                   <Area type="monotone" dataKey="total" stroke="none" fillOpacity={0.2} fill="url(#colorTotal)" />
-                  <Area
-                    type="monotone"
-                    dataKey="confirmed"
-                    stroke="none"
-                    fillOpacity={0.2}
-                    fill="url(#colorConfirmed)"
-                  />
+                  <Area type="monotone" dataKey="confirmed" stroke="none" fillOpacity={0.2} fill="url(#colorConfirmed)" />
                   <Line
                     type="monotone"
                     dataKey="total"
                     name="Total Booked"
-                    stroke="#a7a2ff"
+                    stroke="var(--primary)"
                     dot={false}
-                    activeDot={{ r: 5, strokeWidth: 0 }}
+                    activeDot={{ r: 6, strokeWidth: 0, fill: 'var(--primary)' }}
                     strokeWidth={2}
                   />
                   <Line
                     type="monotone"
                     dataKey="confirmed"
                     name="Confirmed"
-                    stroke="#82ca9d"
+                    stroke="#00e0c6"
                     dot={false}
-                    activeDot={{ r: 5, strokeWidth: 0 }}
+                    activeDot={{ r: 6, strokeWidth: 0, fill: '#00e0c6' }}
                     strokeWidth={2}
                   />
                 </LineChart>
@@ -333,10 +327,10 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Added animation wrapper for Recent Activity */}
+      {/* Animated Recent Activity */}
        <div
           className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out"
-          style={{ animationDelay: '600ms', animationFillMode: 'backwards' }} // Delay activity card
+          style={{ animationDelay: '600ms', animationFillMode: 'backwards' }}
         >
           <RecentActivity />
        </div>
