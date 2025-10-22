@@ -55,19 +55,25 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <CompanyProvider company={company}>
-      <div className="flex h-screen bg-background overflow-hidden relative"> {/* Outer div has bg-background */}
+      {/* Outer div still has bg-background */}
+      <div className="flex h-screen bg-background overflow-hidden relative">
+        {/* --- MODIFICATION START --- */}
+        {/* Reintroduce gradient with much lower opacity and potentially smaller spread */}
         <div
           className="absolute inset-0 pointer-events-none z-0"
           style={{
-            background: "radial-gradient(ellipse at center, rgba(192,0,192,0.08) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse at center, rgba(192,0,192,0.04) 0%, transparent 50%)",
+            // WAS (commented out): background: "radial-gradient(ellipse at center, rgba(192,0,192,0.08) 0%, transparent 60%)",
           }}
         />
+        {/* --- MODIFICATION END --- */}
+
         <DashboardSidebar />
+        {/* This div correctly uses z-10 */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10">
           <DashboardHeader user={user} />
-          {/* --- MODIFICATION START --- */}
-          <main className="flex-1 overflow-y-auto bg-background"> {/* <<< ADDED bg-background HERE */}
-          {/* --- MODIFICATION END --- */}
+          {/* Main element still has bg-background */}
+          <main className="flex-1 overflow-y-auto bg-background">
             <div className="p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto w-full">{children}</div>
           </main>
         </div>
