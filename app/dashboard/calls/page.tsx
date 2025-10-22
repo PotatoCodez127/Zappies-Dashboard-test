@@ -8,12 +8,13 @@ import { Button } from "@/components/ui/button"
 import { Search, Phone, Clock, AlertTriangle, PhoneIncoming } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
+import { Label } from "@/components/ui/label" // <<<--- ADDED IMPORT
+import { Textarea } from "@/components/ui/textarea" // <<<--- ADDED IMPORT (for notes)
 import { useCompanySupabase } from "@/lib/supabase/company-client"
 import { useToast } from "@/hooks/use-toast"
 import { format, parseISO } from "date-fns"
 import Link from "next/link"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { ScrollArea } from "@/components/ui/scroll-area" // Added ScrollArea
 
 // Interface matching the 'call_history' table schema
 interface CallHistoryEntry {
@@ -38,9 +39,9 @@ export default function CallsPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [filterOption, setFilterOption] = useState("all")
   const [selectedCall, setSelectedCall] = useState<CallHistoryEntry | null>(null)
+  const [currentNotes, setCurrentNotes] = useState<string>("") // State for temporary notes
 
   useEffect(() => {
-    // ... (fetchCallHistory function remains the same) ...
     async function fetchCallHistory() {
       if (!companySupabase) {
         setIsLoading(false)
@@ -79,7 +80,7 @@ export default function CallsPage() {
     fetchCallHistory()
   }, [companySupabase, toast])
 
-  // ... (filter logic and helper functions remain the same) ...
+  // Filter logic
   const filteredCalls = callHistory.filter((call) => {
     const searchLower = searchQuery.toLowerCase()
     const matchesSearch =
@@ -97,6 +98,7 @@ export default function CallsPage() {
     return matchesSearch && matchesFilter
   })
 
+  // Helper to format duration
   const formatDuration = (seconds: number | null): string => {
     if (seconds === null || seconds === undefined) return "--"
     const minutes = Math.floor(seconds / 60)
@@ -104,6 +106,7 @@ export default function CallsPage() {
     return `${minutes}m ${remainingSeconds}s`
   }
 
+  // Badge for call outcome in the list
   const getOutcomeBadge = (call: CallHistoryEntry) => {
     if (call.resulted_in_meeting === true) {
       return (
@@ -135,7 +138,6 @@ export default function CallsPage() {
 
   // --- RENDER LOGIC ---
   if (!companySupabase && !isLoading) {
-    // ... (Database not connected message) ...
     return (
       <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
         <CardContent className="pt-6">
@@ -157,23 +159,22 @@ export default function CallsPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-[#EDE7C7]">Voice Calls</h2>
-        <p className="text-sm sm:text-base text-[#EDE7C7]/60 mt-2">Review your bot's call history log.</p>
+        <h2 className="text-2xl sm:text-3xl font-bold text-[#EDE7C7] tracking-tight">Voice Calls</h2>
+        <p className="text-sm text-[#EDE7C7]/60 mt-1.5">Review your bot's call history log.</p>
       </div>
 
-      {/* Search and Filter */}
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#EDE7C7]/40" />
           <Input
             placeholder="Search by name, email, phone, company..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 bg-[#1A1A1A] border-[#2A2A2A] text-[#EDE7C7] h-11 text-sm"
+            className="pl-9 bg-[#1A1A1A] border-[#2A2A2A] text-[#EDE7C7] h-10 text-sm"
           />
         </div>
         <Select value={filterOption} onValueChange={setFilterOption}>
-          <SelectTrigger className="w-full sm:w-[220px] bg-[#1A1A1A] border-[#2A2A2A] text-[#EDE7C7] h-11">
+          <SelectTrigger className="w-full sm:w-[220px] bg-[#1A1A1A] border-[#2A2A2A] text-[#EDE7C7] h-10 text-sm">
             {" "}
             <SelectValue placeholder="Filter call results" />{" "}
           </SelectTrigger>
@@ -188,30 +189,43 @@ export default function CallsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Call Logs List */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 transition-all duration-200 hover:border-[#EDE7C7]/20 flex flex-col h-[500px] lg:h-auto">
-          <CardHeader className="flex-shrink-0">
-            <CardTitle className="text-lg sm:text-xl text-[#EDE7C7]">Call History ({filteredCalls.length})</CardTitle>
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col h-[500px] lg:h-[600px] transition-all duration-200 hover:border-[#EDE7C7]/20">
+          <CardHeader>
+            {" "}
+            <CardTitle className="text-[#EDE7C7]">Call History ({filteredCalls.length})</CardTitle>{" "}
           </CardHeader>
-          <CardContent className="flex-1 overflow-hidden p-0">
-            <ScrollArea className="h-full px-6 pb-6">
+          <CardContent className="p-0 flex-1">
+            <ScrollArea className="h-full">
               {isLoading ? (
-                <div className="text-center py-12 text-sm sm:text-base text-[#EDE7C7]/60">Loading calls...</div>
+                <div className="flex items-center justify-center h-full min-h-[200px]">
+                  <p className="text-base text-[#EDE7C7]/60">Loading calls...</p>
+                </div>
               ) : callHistory.length === 0 ? (
-                <p className="text-[#EDE7C7]/60 text-sm text-center py-8">No call history found.</p>
+                <div className="flex items-center justify-center h-full min-h-[200px]">
+                  <div className="text-center px-4">
+                    <Phone className="h-12 w-12 text-[#EDE7C7]/20 mx-auto mb-3" />
+                    <p className="text-base text-[#EDE7C7]/60">No call history found.</p>
+                  </div>
+                </div>
               ) : filteredCalls.length === 0 ? (
-                <p className="text-[#EDE7C7]/60 text-sm text-center py-8">No calls match your current filters.</p>
+                <div className="flex items-center justify-center h-full min-h-[200px]">
+                  <div className="text-center px-4">
+                    <Search className="h-12 w-12 text-[#EDE7C7]/20 mx-auto mb-3" />
+                    <p className="text-base text-[#EDE7C7]/60">No calls match your current filters.</p>
+                  </div>
+                </div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-3 p-6 pt-0">
                   {filteredCalls.map((call) => (
                     <button
                       key={call.id}
                       onClick={() => setSelectedCall(call)}
-                      className={`w-full p-3 sm:p-4 rounded-lg border text-left transition-all duration-200 ${selectedCall?.id === call.id ? "border-[#EDE7C7]/30 bg-[#2A2A2A]/50" : "border-[#2A2A2A] hover:border-[#EDE7C7]/20 hover:bg-[#2A2A2A]/30"}`}
+                      className={`w-full p-4 rounded-lg border text-left transition-colors ${selectedCall?.id === call.id ? "border-[#EDE7C7]/30 bg-[#2A2A2A]/50" : "border-[#2A2A2A] hover:border-[#EDE7C7]/20 hover:bg-[#2A2A2A]/30"}`}
                     >
-                      <div className="flex items-start gap-3 sm:gap-4">
+                      <div className="flex items-start gap-4">
                         <Avatar className="h-10 w-10 flex-shrink-0">
                           {" "}
-                          <AvatarFallback className="bg-[#EDE7C7]/10 text-[#EDE7C7] text-sm">
+                          <AvatarFallback className="bg-[#EDE7C7]/10 text-[#EDE7C7]">
                             {" "}
                             {call.full_name
                               ? call.full_name
@@ -221,18 +235,16 @@ export default function CallsPage() {
                               : "??"}{" "}
                           </AvatarFallback>{" "}
                         </Avatar>
-                        <div className="flex-1 overflow-hidden min-w-0">
+                        <div className="flex-1 overflow-hidden">
                           <div className="flex items-center justify-between mb-1 flex-wrap gap-2">
                             {" "}
-                            <p className="font-medium text-sm sm:text-base text-[#EDE7C7] truncate">
-                              {call.full_name || "Unknown Caller"}
-                            </p>{" "}
+                            <p className="font-medium text-[#EDE7C7] truncate">{call.full_name || "Unknown Caller"}</p>{" "}
                             {getOutcomeBadge(call)}{" "}
                           </div>
-                          <p className="text-xs sm:text-sm text-[#EDE7C7]/60 mb-2 truncate">
+                          <p className="text-sm text-[#EDE7C7]/60 mb-2 truncate">
                             {call.client_number || call.email || "No contact info"}
                           </p>
-                          <div className="flex items-center gap-3 sm:gap-4 text-xs text-[#EDE7C7]/40 flex-wrap">
+                          <div className="flex items-center gap-4 text-xs text-[#EDE7C7]/40 flex-wrap">
                             {" "}
                             <div className="flex items-center gap-1">
                               {" "}
@@ -244,10 +256,7 @@ export default function CallsPage() {
                                 {formatDuration(call.call_duration_seconds)}
                               </span>{" "}
                             </div>{" "}
-                            <span className="hidden sm:inline">
-                              {format(parseISO(call.created_at), "MMM d, h:mm a")}
-                            </span>{" "}
-                            <span className="sm:hidden">{format(parseISO(call.created_at), "MMM d")}</span>{" "}
+                            <span>{format(parseISO(call.created_at), "MMM d, h:mm a")}</span>{" "}
                           </div>
                         </div>
                       </div>
@@ -260,117 +269,120 @@ export default function CallsPage() {
         </Card>
 
         {/* Call Details Panel */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[#EDE7C7]/20 flex flex-col h-[500px] lg:h-auto">
-          <CardHeader className="flex-shrink-0">
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] flex flex-col h-[500px] lg:h-[600px] transition-all duration-200 hover:border-[#EDE7C7]/20">
+          <CardHeader>
             {" "}
-            <CardTitle className="text-lg sm:text-xl text-[#EDE7C7]">Call Details</CardTitle>{" "}
+            <CardTitle className="text-[#EDE7C7]">Call Details</CardTitle>{" "}
           </CardHeader>
-          <CardContent className="flex-1 overflow-hidden">
-            <ScrollArea className="h-full pr-4">
-              {selectedCall ? (
-                <div className="space-y-4 sm:space-y-6 text-sm">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-12 w-12 sm:h-14 sm:w-14">
+          <CardContent className="flex-1 overflow-y-auto">
+            {selectedCall ? (
+              <div className="space-y-6 text-sm">
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-14 w-14">
+                    {" "}
+                    <AvatarFallback className="bg-[#EDE7C7]/10 text-[#EDE7C7] text-lg">
                       {" "}
-                      <AvatarFallback className="bg-[#EDE7C7]/10 text-[#EDE7C7] text-base sm:text-lg">
-                        {" "}
-                        {selectedCall.full_name
-                          ? selectedCall.full_name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")
-                          : "??"}{" "}
-                      </AvatarFallback>{" "}
-                    </Avatar>
-                    <div className="overflow-hidden">
-                      {" "}
-                      <p className="font-medium text-[#EDE7C7] text-sm sm:text-base truncate">
-                        {selectedCall.full_name || "Unknown Caller"}
-                      </p>{" "}
-                      <p className="text-xs sm:text-sm text-[#EDE7C7]/60 truncate">
-                        {selectedCall.client_number || "No phone"}
-                      </p>{" "}
-                      <p className="text-xs sm:text-sm text-[#EDE7C7]/60 truncate">
-                        {selectedCall.email || "No email"}
-                      </p>{" "}
-                    </div>
+                      {selectedCall.full_name
+                        ? selectedCall.full_name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                        : "??"}{" "}
+                    </AvatarFallback>{" "}
+                  </Avatar>
+                  <div>
+                    {" "}
+                    <p className="font-medium text-[#EDE7C7] text-base">{selectedCall.full_name || "Unknown Caller"}</p>{" "}
+                    <p className="text-[#EDE7C7]/60">{selectedCall.client_number || "No phone"}</p>{" "}
+                    <p className="text-[#EDE7C7]/60">{selectedCall.email || "No email"}</p>{" "}
                   </div>
-                  <div className="space-y-3 border-t border-[#2A2A2A] pt-4">
-                    <div className="flex justify-between gap-2">
+                </div>
+                <div className="space-y-3 border-t border-[#2A2A2A] pt-4">
+                  <div className="flex justify-between">
+                    {" "}
+                    <span className="text-[#EDE7C7]/60">Call Time</span>{" "}
+                    <span className="text-[#EDE7C7] text-right">
+                      {format(parseISO(selectedCall.created_at), "MMM d, yyyy h:mm a")}
+                    </span>{" "}
+                  </div>
+                  {selectedCall.call_duration_seconds !== null && (
+                    <div className="flex justify-between">
                       {" "}
-                      <span className="text-[#EDE7C7]/60 text-xs sm:text-sm">Call Time</span>{" "}
-                      <span className="text-[#EDE7C7] text-xs sm:text-sm text-right">
-                        {format(parseISO(selectedCall.created_at), "MMM d, yyyy h:mm a")}
+                      <span className="text-[#EDE7C7]/60">Duration</span>{" "}
+                      <span className="text-[#EDE7C7]">{formatDuration(selectedCall.call_duration_seconds)}</span>{" "}
+                    </div>
+                  )}
+                  {selectedCall.company_name && (
+                    <div className="flex justify-between">
+                      {" "}
+                      <span className="text-[#EDE7C7]/60">Company</span>{" "}
+                      <span className="text-[#EDE7C7] text-right">{selectedCall.company_name}</span>{" "}
+                    </div>
+                  )}
+                  {selectedCall.monthly_budget !== null && (
+                    <div className="flex justify-between">
+                      {" "}
+                      <span className="text-[#EDE7C7]/60">Budget</span>{" "}
+                      <span className="text-[#EDE7C7]">
+                        R {selectedCall.monthly_budget.toLocaleString("en-ZA")}
                       </span>{" "}
                     </div>
-                    {selectedCall.call_duration_seconds !== null && (
-                      <div className="flex justify-between gap-2">
-                        {" "}
-                        <span className="text-[#EDE7C7]/60 text-xs sm:text-sm">Duration</span>{" "}
-                        <span className="text-[#EDE7C7] text-xs sm:text-sm">
-                          {formatDuration(selectedCall.call_duration_seconds)}
-                        </span>{" "}
-                      </div>
-                    )}
-                    {selectedCall.company_name && (
-                      <div className="flex justify-between gap-2">
-                        {" "}
-                        <span className="text-[#EDE7C7]/60 text-xs sm:text-sm">Company</span>{" "}
-                        <span className="text-[#EDE7C7] text-xs sm:text-sm text-right truncate">
-                          {selectedCall.company_name}
-                        </span>{" "}
-                      </div>
-                    )}
-                    {selectedCall.monthly_budget !== null && (
-                      <div className="flex justify-between gap-2">
-                        {" "}
-                        <span className="text-[#EDE7C7]/60 text-xs sm:text-sm">Budget</span>{" "}
-                        <span className="text-[#EDE7C7] text-xs sm:text-sm">
-                          R {selectedCall.monthly_budget.toLocaleString("en-ZA")}
-                        </span>{" "}
-                      </div>
-                    )}
+                  )}
+                </div>
+                {selectedCall.goal && (
+                  <div className="border-t border-[#2A2A2A] pt-4">
+                    {" "}
+                    <Label className="text-[#EDE7C7]/80 block mb-2 font-medium">Call Goal</Label>{" "}
+                    <p className="text-[#EDE7C7] bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap">
+                      {selectedCall.goal}
+                    </p>{" "}
                   </div>
-                  {selectedCall.goal && (
-                    <div className="border-t border-[#2A2A2A] pt-4">
+                )}
+                <div className="border-t border-[#2A2A2A] pt-4 space-y-2">
+                  <Label className="text-[#EDE7C7]/80 block font-medium">Call Outcome</Label>
+                  <p
+                    className={`font-medium ${selectedCall.resulted_in_meeting ? "text-green-500" : selectedCall.disqualification_reason ? "text-red-500" : "text-yellow-500"}`}
+                  >
+                    {" "}
+                    {selectedCall.resulted_in_meeting
+                      ? "Meeting Booked"
+                      : selectedCall.disqualification_reason
+                        ? "Disqualified"
+                        : "No Meeting Booked"}{" "}
+                  </p>
+                  {selectedCall.disqualification_reason && (
+                    <div>
                       {" "}
-                      <Label className="text-[#EDE7C7]/80 block mb-2 font-medium text-xs sm:text-sm">Call Goal</Label>{" "}
-                      <p className="text-[#EDE7C7] text-xs sm:text-sm bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap break-words">
-                        {selectedCall.goal}
+                      <Label className="text-[#EDE7C7]/60 text-xs">Reason:</Label>{" "}
+                      <p className="text-[#EDE7C7] mt-1 text-sm bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap">
+                        {selectedCall.disqualification_reason}
                       </p>{" "}
                     </div>
                   )}
-                  <div className="border-t border-[#2A2A2A] pt-4 space-y-2">
-                    <Label className="text-[#EDE7C7]/80 block font-medium text-xs sm:text-sm">Call Outcome</Label>
-                    <p
-                      className={`font-medium text-sm ${selectedCall.resulted_in_meeting ? "text-green-500" : selectedCall.disqualification_reason ? "text-red-500" : "text-yellow-500"}`}
-                    >
-                      {" "}
-                      {selectedCall.resulted_in_meeting
-                        ? "Meeting Booked"
-                        : selectedCall.disqualification_reason
-                          ? "Disqualified"
-                          : "No Meeting Booked"}{" "}
-                    </p>
-                    {selectedCall.disqualification_reason && (
-                      <div>
-                        {" "}
-                        <Label className="text-[#EDE7C7]/60 text-xs">Reason:</Label>{" "}
-                        <p className="text-[#EDE7C7] mt-1 text-xs sm:text-sm bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap break-words">
-                          {selectedCall.disqualification_reason}
-                        </p>{" "}
-                      </div>
-                    )}
-                  </div>
                 </div>
-              ) : (
-                <div className="text-center py-12">
-                  {" "}
-                  <Phone className="h-12 w-12 text-[#EDE7C7]/20 mx-auto mb-3" />{" "}
-                  <p className="text-sm text-[#EDE7C7]/60">Select a call to view details</p>{" "}
+                <div className="border-t border-[#2A2A2A] pt-4">
+                  <Label htmlFor="callNotes" className="text-[#EDE7C7]/80 block mb-2 font-medium">
+                    Notes (Not Saved)
+                  </Label>
+                  <Textarea
+                    id="callNotes"
+                    value={currentNotes}
+                    onChange={(e) => setCurrentNotes(e.target.value)}
+                    placeholder="Add temporary notes about this call..."
+                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#EDE7C7]"
+                    rows={3}
+                  />
+                  <p className="text-xs text-[#EDE7C7]/50 mt-1">Notes are for temporary reference only.</p>
                 </div>
-              )}
-            </ScrollArea>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center h-full min-h-[200px]">
+                <div className="text-center px-4">
+                  <Phone className="h-12 w-12 text-[#EDE7C7]/20 mx-auto mb-3" />
+                  <p className="text-base text-[#EDE7C7]/60">Select a call to view details</p>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

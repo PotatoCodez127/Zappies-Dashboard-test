@@ -1,83 +1,16 @@
-"use client"
-
 import type React from "react"
-import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/server"
+import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { DashboardSidebar } from "@/components/dashboard/sidebar"
 import { DashboardHeader } from "@/components/dashboard/header"
 import { CompanyProvider } from "@/components/dashboard/company-provider"
 import { Toaster } from "@/components/ui/toaster"
-import { Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-
-function DashboardLayoutClient({
-  children,
-  user,
-  company,
-}: {
-  children: React.ReactNode
-  user: any
-  company: any
-}) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setMobileMenuOpen(false)
-      }
-    }
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
-
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = "unset"
-    }
-    return () => {
-      document.body.style.overflow = "unset"
-    }
-  }, [mobileMenuOpen])
-
-  return (
-    <CompanyProvider company={company}>
-      <div className="flex h-screen bg-[#0A0A0A] overflow-hidden">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="lg:hidden fixed top-4 left-4 z-50 text-[#EDE7C7] hover:bg-[#2A2A2A]"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </Button>
-
-        {mobileMenuOpen && (
-          <div
-            className="lg:hidden fixed inset-0 bg-black/60 z-40 animate-in fade-in duration-200"
-            onClick={() => setMobileMenuOpen(false)}
-          />
-        )}
-
-        <DashboardSidebar mobileMenuOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
-
-        <div className="flex-1 flex flex-col overflow-hidden w-full lg:w-auto">
-          <DashboardHeader user={user} />
-          <main className="flex-1 overflow-y-auto bg-[#0A0A0A] p-4 sm:p-6 md:p-8 lg:p-10 scroll-smooth">
-            <div className="max-w-[1600px] mx-auto w-full">{children}</div>
-          </main>
-        </div>
-      </div>
-      <Toaster />
-    </CompanyProvider>
-  )
-}
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient()
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -117,8 +50,17 @@ export default async function DashboardLayout({ children }: { children: React.Re
   }
 
   return (
-    <DashboardLayoutClient user={user} company={company}>
-      {children}
-    </DashboardLayoutClient>
+    <CompanyProvider company={company}>
+      <div className="flex h-screen bg-[#0A0A0A] overflow-hidden">
+        <DashboardSidebar />
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+          <DashboardHeader user={user} />
+          <main className="flex-1 overflow-y-auto">
+            <div className="p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto w-full">{children}</div>
+          </main>
+        </div>
+      </div>
+      <Toaster />
+    </CompanyProvider>
   )
 }

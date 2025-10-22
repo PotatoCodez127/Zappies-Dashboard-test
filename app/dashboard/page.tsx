@@ -15,16 +15,16 @@ import { useCompanySupabase } from "@/lib/supabase/company-client"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Line, CartesianGrid, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, Area } from "recharts"
-import { differenceInDays, format, eachDayOfInterval, startOfDay } from "date-fns"
-// --- Ensure this import line exists and is uncommented ---
+import { LineChart, Line, CartesianGrid, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, Area } from "recharts"
+import { differenceInDays, format, eachDayOfInterval, startOfDay, parseISO } from "date-fns" // Added parseISO
+// --- ENSURE THIS IMPORT IS PRESENT AND CORRECT ---
 import { RecentActivity } from "@/components/dashboard/recent-activity"
-// --- End ensure import line ---
+// --- END IMPORT CHECK ---
 
 // Interface for daily chart data
 interface DailyMeetingData {
-  day: string // Formatted day (e.g., "19 Oct")
-  fullDate: string // YYYY-MM-DD for sorting/keys
+  day: string
+  fullDate: string
   total: number
   confirmed: number
 }
@@ -39,6 +39,22 @@ interface DashboardStats {
   meetingsTrend: number | null
   confirmedTrend: number | null
   pendingTrend: number | null
+}
+
+// Custom Tooltip Component for better stability
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload as DailyMeetingData
+    const formattedDate = data.fullDate ? format(parseISO(data.fullDate), "MMM d, yyyy") : label
+    return (
+      <div className="bg-[#1A1A1A] p-3 border border-[#2A2A2A] rounded-md shadow-lg text-xs">
+        <p className="label text-[#EDE7C7]/80">{`${formattedDate}`}</p>
+        <p className="intro text-[#a7a2ff]">{`Total Booked : ${data.total}`}</p>
+        <p className="intro text-[#82ca9d]">{`Confirmed : ${data.confirmed}`}</p>
+      </div>
+    )
+  }
+  return null
 }
 
 export default function DashboardPage() {
@@ -97,31 +113,42 @@ export default function DashboardPage() {
 
         if (meetings.length > 0) {
           const dailyData: { [key: string]: { total: number; confirmed: number } } = {}
-          const firstMeetingDate = startOfDay(new Date(meetings[0].created_at))
-          const today = startOfDay(new Date())
-          const daysCount = differenceInDays(today, firstMeetingDate) + 1
-          setChartDaysCount(daysCount)
+          // Ensure the first date is valid before proceeding
+          const firstValidMeeting = meetings.find((m) => m.created_at && !isNaN(new Date(m.created_at).getTime()))
+          if (!firstValidMeeting) {
+            console.warn("Overview: No valid meeting dates found for chart.")
+            setChartData([])
+            setChartDaysCount(0)
+            // Skip chart processing if no valid dates
+          } else {
+            const firstMeetingDate = startOfDay(new Date(firstValidMeeting.created_at))
+            const today = startOfDay(new Date())
+            const daysCount = differenceInDays(today, firstMeetingDate) + 1
+            setChartDaysCount(daysCount)
 
-          meetings.forEach((meeting) => {
-            const date = startOfDay(new Date(meeting.created_at))
-            if (isNaN(date.getTime())) return
-            const dayKey = format(date, "yyyy-MM-dd")
-            if (!dailyData[dayKey]) dailyData[dayKey] = { total: 0, confirmed: 0 }
-            dailyData[dayKey].total += 1
-            if (meeting.status === "confirmed") dailyData[dayKey].confirmed += 1
-          })
+            meetings.forEach((meeting) => {
+              const date = startOfDay(new Date(meeting.created_at))
+              if (isNaN(date.getTime())) return
+              const dayKey = format(date, "yyyy-MM-dd")
+              if (!dailyData[dayKey]) dailyData[dayKey] = { total: 0, confirmed: 0 }
+              dailyData[dayKey].total += 1
+              if (meeting.status === "confirmed") dailyData[dayKey].confirmed += 1
+            })
 
-          const allDaysInterval = eachDayOfInterval({ start: firstMeetingDate, end: today })
-          const finalChartData: DailyMeetingData[] = allDaysInterval.map((date) => {
-            const dayKey = format(date, "yyyy-MM-dd")
-            const displayDay = format(date, "d MMM")
-            const data = dailyData[dayKey] || { total: 0, confirmed: 0 }
-            return { day: displayDay, fullDate: dayKey, total: data.total, confirmed: data.confirmed }
-          })
-          setChartData(finalChartData) // No need to sort, eachDayOfInterval is chronological
+            const allDaysInterval = eachDayOfInterval({ start: firstMeetingDate, end: today })
+            const finalChartData: DailyMeetingData[] = allDaysInterval.map((date) => {
+              const dayKey = format(date, "yyyy-MM-dd")
+              const displayDay = format(date, "d MMM")
+              const data = dailyData[dayKey] || { total: 0, confirmed: 0 }
+              return { day: displayDay, fullDate: dayKey, total: data.total, confirmed: data.confirmed }
+            })
+            setChartData(finalChartData)
+            console.log(`Overview: Processed chart data for ${daysCount} days.`)
+          }
         } else {
           setChartData([])
           setChartDaysCount(0)
+          console.log("Overview: No meeting data found.")
         }
       } catch (error) {
         console.error("Error fetching dashboard data:", error)
@@ -130,10 +157,9 @@ export default function DashboardPage() {
       }
     }
     fetchStatsAndChartData()
-  }, [companySupabase])
+  }, [companySupabase]) // Re-run effect if company client changes
 
   const renderTrend = (trendValue: number | null) => {
-    // ... (trend rendering logic)
     if (trendValue === null || trendValue === 0) return <span className="text-xs text-[#EDE7C7]/50">--</span>
     const isPositive = trendValue > 0
     return (
@@ -147,7 +173,7 @@ export default function DashboardPage() {
 
   if (!companySupabase && !isLoading) {
     return (
-      /* ... Database not connected message ... */ <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
+      <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
         <CardContent className="pt-6">
           <div className="text-center py-12">
             <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
@@ -179,27 +205,27 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6 sm:space-y-8">
       <div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-[#EDE7C7]">Overview</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold text-[#EDE7C7] tracking-tight">Overview</h2>
         <p className="text-sm sm:text-base text-[#EDE7C7]/60 mt-2">Here's your bot's performance summary.</p>
       </div>
 
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {statCards.map((stat) => (
           <Card
             key={stat.title}
             className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[#EDE7C7]/20"
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2 min-h-[72px]">
-              <CardTitle className="text-sm font-medium text-[#EDE7C7]/80">{stat.title}</CardTitle>
+              <CardTitle className="text-sm font-medium text-[#EDE7C7]/80 leading-snug">{stat.title}</CardTitle>
               <stat.icon className="h-4 w-4 text-[#EDE7C7]/60 flex-shrink-0" />
             </CardHeader>
             <CardContent className="pt-0">
               {isLoading ? (
                 <div className="h-8 w-1/2 bg-[#2A2A2A] rounded-md animate-pulse mb-1" />
               ) : (
-                <div className="text-2xl font-bold text-[#EDE7C7] leading-none">{stat.value}</div>
+                <div className="text-2xl sm:text-3xl font-bold text-[#EDE7C7] leading-none">{stat.value}</div>
               )}
-              <div className="h-4 mt-1">{!isLoading && renderTrend(stat.trend)}</div>
+              <div className="h-4 mt-2">{!isLoading && renderTrend(stat.trend)}</div>
             </CardContent>
           </Card>
         ))}
@@ -207,97 +233,101 @@ export default function DashboardPage() {
 
       <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[#EDE7C7]/20">
         <CardHeader>
-          <CardTitle className="text-lg sm:text-xl text-[#EDE7C7] flex items-center gap-2 flex-wrap">
+          <CardTitle className="text-lg sm:text-xl text-[#EDE7C7] flex items-center gap-2">
             <LineChartIcon className="h-5 w-5 flex-shrink-0" />
-            <span>Daily Meetings Overview {chartDaysCount > 0 ? `(Last ${chartDaysCount} Days)` : ""}</span>
+            <span className="truncate">
+              Daily Meetings Overview {chartDaysCount > 0 ? `(Last ${chartDaysCount} Days)` : ""}
+            </span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="pl-0 sm:pl-2">
+        <CardContent className="pl-2 pr-4">
           {isLoading ? (
-            <div className="h-[250px] sm:h-[300px] w-full bg-[#2A2A2A] rounded-md animate-pulse flex items-center justify-center text-[#EDE7C7]/60 text-sm">
+            <div className="h-[250px] sm:h-[300px] lg:h-[350px] w-full bg-[#2A2A2A] rounded-md animate-pulse flex items-center justify-center text-[#EDE7C7]/60 text-sm">
               Loading chart data...
             </div>
           ) : (
-            <ResponsiveContainer width="100%" height={300}>
-              <defs>
-                {" "}
-                <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                  {" "}
-                  <stop offset="5%" stopColor="#8884d8" stopOpacity={0.6} />{" "}
-                  <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />{" "}
-                </linearGradient>{" "}
-                <linearGradient id="colorConfirmed" x1="0" y1="0" x2="0" y2="1">
-                  {" "}
-                  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.6} />{" "}
-                  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />{" "}
-                </linearGradient>{" "}
-              </defs>
-              <CartesianGrid stroke="#2A2A2A" strokeDasharray="5 5" vertical={false} />
-              <XAxis
-                dataKey="day"
-                stroke="#EDE7C7"
-                fontSize={10}
-                tickLine={false}
-                axisLine={false}
-                interval={chartDaysCount > 60 ? Math.floor(chartDaysCount / 15) : chartDaysCount > 30 ? 4 : 1}
-                tick={{ fill: "#EDE7C7" }}
-              />
-              <YAxis
-                stroke="#EDE7C7"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-                allowDecimals={false}
-                tick={{ fill: "#EDE7C7" }}
-                width={30}
-              />
-              <Tooltip
-                cursor={{ stroke: "#8B0000", strokeWidth: 1.5, strokeDasharray: "3 3" }}
-                contentStyle={{
-                  backgroundColor: "rgba(26, 26, 26, 0.9)",
-                  border: "1px solid #2A2A2A",
-                  color: "#EDE7C7",
-                  borderRadius: "0.5rem",
-                  boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                }}
-                labelFormatter={(label, payload) => {
-                  const dataPoint = payload?.[0]?.payload as DailyMeetingData | undefined
-                  return dataPoint
-                    ? new Date(dataPoint.fullDate + "T00:00:00").toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })
-                    : label
-                }}
-                itemStyle={{ color: "#EDE7C7" }}
-              />
-              <Legend wrapperStyle={{ color: "#EDE7C7", fontSize: "12px", paddingTop: "10px" }} />
-              <Area type="monotone" dataKey="total" stroke="none" fillOpacity={0.2} fill="url(#colorTotal)" />
-              <Area type="monotone" dataKey="confirmed" stroke="none" fillOpacity={0.2} fill="url(#colorConfirmed)" />
-              <Line
-                type="monotone"
-                dataKey="total"
-                name="Total Booked"
-                stroke="#a7a2ff"
-                dot={false}
-                activeDot={{ r: 5, strokeWidth: 0 }}
-                strokeWidth={2}
-              />
-              <Line
-                type="monotone"
-                dataKey="confirmed"
-                name="Confirmed"
-                stroke="#82ca9d"
-                dot={false}
-                activeDot={{ r: 5, strokeWidth: 0 }}
-                strokeWidth={2}
-              />
+            <ResponsiveContainer
+              width="100%"
+              height={window.innerWidth < 640 ? 250 : window.innerWidth < 1024 ? 300 : 350}
+            >
+              {!chartData || chartData.length === 0 ? (
+                <div className="flex items-center justify-center h-full text-[#EDE7C7]/60 text-sm">
+                  No meeting data available yet.
+                </div>
+              ) : (
+                <LineChart data={chartData} margin={{ top: 5, right: 10, bottom: 5, left: 0 }}>
+                  <defs>
+                    {" "}
+                    <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
+                      {" "}
+                      <stop offset="5%" stopColor="#8884d8" stopOpacity={0.6} />{" "}
+                      <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />{" "}
+                    </linearGradient>{" "}
+                    <linearGradient id="colorConfirmed" x1="0" y1="0" x2="0" y2="1">
+                      {" "}
+                      <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.6} />{" "}
+                      <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />{" "}
+                    </linearGradient>{" "}
+                  </defs>
+                  <CartesianGrid stroke="#2A2A2A" strokeDasharray="5 5" vertical={false} />
+                  <XAxis
+                    dataKey="day"
+                    stroke="#EDE7C7"
+                    fontSize={10}
+                    tickLine={false}
+                    axisLine={false}
+                    interval={chartDaysCount > 60 ? Math.floor(chartDaysCount / 15) : chartDaysCount > 30 ? 4 : 1}
+                    tick={{ fill: "#EDE7C7" }}
+                  />
+                  <YAxis
+                    stroke="#EDE7C7"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                    allowDecimals={false}
+                    tick={{ fill: "#EDE7C7" }}
+                    width={30}
+                  />
+                  {/* Use CustomTooltip component */}
+                  <Tooltip
+                    content={<CustomTooltip />}
+                    cursor={{ stroke: "#8B0000", strokeWidth: 1.5, strokeDasharray: "3 3" }}
+                  />
+                  <Legend wrapperStyle={{ color: "#EDE7C7", fontSize: "12px", paddingTop: "10px" }} />
+                  <Area type="monotone" dataKey="total" stroke="none" fillOpacity={0.2} fill="url(#colorTotal)" />
+                  <Area
+                    type="monotone"
+                    dataKey="confirmed"
+                    stroke="none"
+                    fillOpacity={0.2}
+                    fill="url(#colorConfirmed)"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="total"
+                    name="Total Booked"
+                    stroke="#a7a2ff"
+                    dot={false}
+                    activeDot={{ r: 5, strokeWidth: 0 }}
+                    strokeWidth={2}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="confirmed"
+                    name="Confirmed"
+                    stroke="#82ca9d"
+                    dot={false}
+                    activeDot={{ r: 5, strokeWidth: 0 }}
+                    strokeWidth={2}
+                  />
+                </LineChart>
+              )}
             </ResponsiveContainer>
           )}
         </CardContent>
       </Card>
 
+      {/* Render Recent Activity */}
       <RecentActivity />
     </div>
   )
