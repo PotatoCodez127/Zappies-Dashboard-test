@@ -1,4 +1,3 @@
-/* v0-cool-site/components/dashboard/profile-settings.tsx */
 "use client"
 
 import type React from "react"
@@ -19,7 +18,7 @@ interface ProfileSettingsProps {
   }
   profile: {
     full_name: string | null
-    company: string | null // This might be redundant if using CompanyProvider?
+    company: string | null
   } | null
 }
 
@@ -27,74 +26,120 @@ export function ProfileSettings({ user, profile }: ProfileSettingsProps) {
   const companyInfo = useCompany()
   const router = useRouter()
   const { toast } = useToast()
-
+  
   const [companyName, setCompanyName] = useState("")
   const [supabaseUrl, setSupabaseUrl] = useState("")
   const [supabaseAnonKey, setSupabaseAnonKey] = useState("")
-
+  
   const [isUpdating, setIsUpdating] = useState(false)
 
+  // This useEffect ensures the form state is populated when companyInfo becomes available
   useEffect(() => {
     if (companyInfo) {
+      console.log("LOG: CompanyProvider data loaded:", companyInfo);
       setCompanyName(companyInfo.name || "");
       setSupabaseUrl(companyInfo.supabase_url || "");
       setSupabaseAnonKey(companyInfo.supabase_anon_key || "");
+    } else {
+      console.log("LOG: CompanyProvider data is currently null.");
     }
   }, [companyInfo]);
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsUpdating(true)
+    
+    console.log("--- SAVE BUTTON CLICKED ---");
+    
+    // --- LOG 1: Check the data from the provider ---
+    console.log("LOG 1: Data from useCompany() hook:", companyInfo);
 
     if (!companyInfo || !companyInfo.id) {
-      toast({ title: "Frontend Error", description: "Could not find company info.", variant: "destructive", });
-      setIsUpdating(false); return;
+      console.error("ERROR at LOG 1: Company Info or ID is missing. Aborting update.");
+      toast({
+        title: "Frontend Error",
+        description: "Could not find company information. Please refresh and try again.",
+        variant: "destructive",
+      })
+      setIsUpdating(false)
+      return;
     }
 
     const supabase = createClient()
+    console.log("LOG 2: Main Supabase client created.");
+
     try {
-      const updates = { name: companyName, supabase_url: supabaseUrl, supabase_anon_key: supabaseAnonKey, updated_at: new Date().toISOString() };
-      const { data, error } = await supabase.from("companies").update(updates).eq("id", companyInfo.id).select();
-      if (error) throw error;
-      toast({ title: "Success!", description: "Settings updated." });
-      router.refresh();
+      const updates = {
+        name: companyName,
+        supabase_url: supabaseUrl,
+        supabase_anon_key: supabaseAnonKey,
+        updated_at: new Date().toISOString(),
+      };
+      // --- LOG 3: Log the exact data being sent to the database ---
+      console.log("LOG 3: Sending update to 'companies' table with data:", updates);
+      console.log(`Query: .eq("id", "${companyInfo.id}")`);
+
+      const { data, error } = await supabase
+        .from("companies")
+        .update(updates)
+        .eq("id", companyInfo.id)
+        .select() // IMPORTANT: Add .select() to get back data or a more detailed error
+        
+      if (error) {
+        // This will now throw the specific error from Supabase if one occurs
+        throw error
+      }
+
+      console.log("LOG 4: Supabase update successful. Response data:", data);
+
+      toast({
+        title: "Success!",
+        description: "Your settings have been updated successfully.",
+      })
+      router.refresh()
+
     } catch (error) {
-      const err = error as any;
-      toast({ title: "Update Failed", description: err.message || "An unknown database error occurred.", variant: "destructive", });
-    } finally { setIsUpdating(false); }
+      // --- LOG 5: This is the most important log. It will show the exact backend error ---
+      console.error("--- CATCH BLOCK: An error occurred during the update ---", error);
+      
+      const err = error as any; 
+      
+      toast({
+        title: "Update Failed",
+        description: err.message || `Error code: ${err.code}` || "An unknown database error occurred. Check the console for details.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsUpdating(false)
+      console.log("--- UPDATE PROCESS FINISHED ---");
+    }
   }
 
   return (
     <form onSubmit={handleUpdate} className="grid gap-6">
-       {/* Card uses theme styling */}
-      <Card>
+      <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
         <CardHeader>
-           {/* Use theme variables */}
-          <CardTitle className="text-foreground">Company & Database Settings</CardTitle>
-          <CardDescription className="text-muted-foreground">Manage details and connect your bot's database.</CardDescription>
+          <CardTitle className="text-[#EDE7C7]">Company & Database Settings</CardTitle>
+          <CardDescription className="text-[#EDE7C7]/60">Manage your company details and connect your bot's database.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-             {/* Label uses theme styling */}
-            <Label htmlFor="companyName">Company Name</Label>
-             {/* Input uses theme styling */}
-            <Input id="companyName" type="text" value={companyName || ''} onChange={(e) => setCompanyName(e.target.value)} placeholder="Your Company Name" />
+            <Label htmlFor="companyName" className="text-[#EDE7C7]/80">Company Name</Label>
+            <Input id="companyName" type="text" value={companyName || ''} onChange={(e) => setCompanyName(e.target.value)} placeholder="Your Company Name" className="bg-[#0A0A0A] border-[#2A2A2A] text-[#EDE7C7]" />
           </div>
           <div className="space-y-2">
-            {/* Fix typo here */}
-            <Label htmlFor="supabaseUrl">Supabase URL</Label>
-            <Input id="supabaseUrl" type="url" value={supabaseUrl || ''} onChange={(e) => setSupabaseUrl(e.target.value)} placeholder="https://<your-project-ref>.supabase.co" />
+            <Label htmlFor="supabaseUrl" className="text-[#EDE7C7]/80">Supabase URL(,)(,)</Label>
+            <Input id="supabaseUrl" type="url" value={supabaseUrl || ''} onChange={(e) => setSupabaseUrl(e.target.value)} placeholder="https://<your-project-ref>.supabase.co" className="bg-[#0A0A0A] border-[#2A2A2A] text-[#EDE7C7]" />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="supabaseAnonKey">Supabase Anon Key</Label>
-            <Input id="supabaseAnonKey" type="text" value={supabaseAnonKey || ''} onChange={(e) => setSupabaseAnonKey(e.target.value)} placeholder="Enter your Supabase anon (public) key" />
+            <Label htmlFor="supabaseAnonKey" className="text-[#EDE7C7]/80">Supabase Anon Key</Label>
+            <Input id="supabaseAnonKey" type="text" value={supabaseAnonKey || ''} onChange={(e) => setSupabaseAnonKey(e.target.value)} placeholder="Enter your Supabase anon (public) key" className="bg-[#0A0A0A] border-[#2A2A2A] text-[#EDE7C7]" />
           </div>
         </CardContent>
       </Card>
-
+      
       <div className="flex justify-end">
-         {/* Button uses default theme variant */}
-        <Button type="submit" disabled={isUpdating}>
+        <Button type="submit" disabled={isUpdating} className="bg-[#EDE7C7] text-[#0A0A0A] hover:bg-[#EDE7C7]/90">
           {isUpdating ? "Saving..." : "Save Settings"}
         </Button>
       </div>
