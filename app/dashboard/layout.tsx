@@ -56,12 +56,17 @@ export default async function DashboardLayout({ children }: { children: React.Re
   return (
     <CompanyProvider company={company}>
       <div className="flex h-screen bg-background overflow-hidden relative"> {/* Outer div has bg-background */}
+        {/* --- MODIFICATION START --- */}
+        {/*
         <div
           className="absolute inset-0 pointer-events-none z-0"
           style={{
             background: "radial-gradient(ellipse at center, rgba(192,0,192,0.08) 0%, transparent 60%)",
           }}
         />
+        */}
+        {/* --- The gradient div above is now commented out/removed --- */}
+        {/* --- MODIFICATION END --- */}
         <DashboardSidebar />
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10">
           <DashboardHeader user={user} />
