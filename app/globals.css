@@ -79,6 +79,10 @@
   /* ... other sidebar colors ... */
 }
 
+body {
+    @apply bg-background;
+  }
+  
 @theme inline {
   /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
   --color-background: var(--background);
