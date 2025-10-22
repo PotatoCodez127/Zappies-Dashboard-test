@@ -60,7 +60,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <div
           className="absolute inset-0 pointer-events-none z-0"
           style={{
-            background: "radial-gradient(ellipse at center, rgba(192,0,192,0.6) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse at center, rgba(192,0,192,0.6) 0%, transparent 100%)",
           }}
         />
 
