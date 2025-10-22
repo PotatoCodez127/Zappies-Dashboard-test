@@ -42,7 +42,8 @@ export function DashboardSidebar({ mobileMenuOpen, onClose }: DashboardSidebarPr
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
                   isActive
-                    ? "bg-[#EDE7C7]/10 text-[#EDE7C7] shadow-sm"
+                    ? /* Updated active state to use red accent with glow */
+                      "bg-primary/10 text-primary shadow-[0_0_15px_rgba(255,17,0,0.2)] border border-primary/20"
                     : "text-[#EDE7C7]/60 hover:bg-[#EDE7C7]/5 hover:text-[#EDE7C7]",
                 )}
               >
@@ -89,7 +90,8 @@ export function DashboardSidebar({ mobileMenuOpen, onClose }: DashboardSidebarPr
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
                   isActive
-                    ? "bg-[#EDE7C7]/10 text-[#EDE7C7] shadow-sm"
+                    ? /* Updated active state to use red accent with glow */
+                      "bg-primary/10 text-primary shadow-[0_0_15px_rgba(255,17,0,0.2)] border border-primary/20"
                     : "text-[#EDE7C7]/60 hover:bg-[#EDE7C7]/5 hover:text-[#EDE7C7]",
                 )}
               >
