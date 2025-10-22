@@ -1,3 +1,4 @@
+// File: app/dashboard/layout.tsx
 import type React from "react"
 import { createClient } from "@/lib/supabase/server"
 import { cookies } from "next/headers"
@@ -55,7 +56,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <div
           className="absolute inset-0 pointer-events-none z-0"
           style={{
-            background: "radial-gradient(ellipse at center, rgba(192,0,192,0.15) 0%, transparent 70%)",
+            // --- MODIFICATION START ---
+            background: "radial-gradient(ellipse at center, rgba(192,0,192,0.08) 0%, transparent 60%)",
+            // WAS: background: "radial-gradient(ellipse at center, rgba(192,0,192,0.15) 0%, transparent 70%)",
+            // --- MODIFICATION END ---
           }}
         />
         <DashboardSidebar />
