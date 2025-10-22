@@ -42,8 +42,8 @@ export function DashboardSidebar({ mobileMenuOpen, onClose }: DashboardSidebarPr
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
                   isActive
-                    ? // Updated active state with cyan background and glow effect
-                      "bg-primary/10 text-primary shadow-[0_0_15px_rgba(0,240,255,0.2)] border border-primary/30"
+                    ? // Updated active state with purple background and glow effect
+                      "bg-primary/10 text-foreground shadow-[0_0_15px_rgba(192,0,192,0.3)] border border-primary/50"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground",
                 )}
               >
@@ -90,8 +90,8 @@ export function DashboardSidebar({ mobileMenuOpen, onClose }: DashboardSidebarPr
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
                   isActive
-                    ? // Updated active state with cyan background and glow effect
-                      "bg-primary/10 text-primary shadow-[0_0_15px_rgba(0,240,255,0.2)] border border-primary/30"
+                    ? // Updated active state with purple background and glow effect
+                      "bg-primary/10 text-foreground shadow-[0_0_15px_rgba(192,0,192,0.3)] border border-primary/50"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground",
                 )}
               >

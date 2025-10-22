@@ -51,9 +51,15 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <CompanyProvider company={company}>
-      <div className="flex h-screen bg-gradient-to-br from-[#10102c] via-[#0a051d] to-[#1a0a2e] overflow-hidden">
+      <div className="flex h-screen bg-background overflow-hidden relative">
+        <div
+          className="absolute inset-0 pointer-events-none z-0"
+          style={{
+            background: "radial-gradient(ellipse at center, rgba(192,0,192,0.15) 0%, transparent 70%)",
+          }}
+        />
         <DashboardSidebar />
-        <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10">
           <DashboardHeader user={user} />
           <main className="flex-1 overflow-y-auto">
             <div className="p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto w-full">{children}</div>
