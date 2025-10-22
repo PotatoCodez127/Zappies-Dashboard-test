@@ -8,8 +8,10 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="card"
       className={cn(
         "text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-card relative overflow-hidden",
-        "border border-primary/80 shadow-[0_0_8px_0px_var(--primary)]",
-        "animate-in fade-in duration-500",
+        // REMOVED: "border border-primary/80 shadow-[0_0_8px_0px_var(--primary)]", // <<< REMOVED DEFAULT PURPLE BORDER/SHADOW
+        "transition-colors duration-200 ease-in-out", // Added transition for smooth hover
+        "hover:border-primary/80 hover:shadow-[0_0_15px_-3px_var(--primary)]", // <<< ADDED HOVER EFFECT BORDER/SHADOW
+        "animate-in fade-in duration-500", // Keep fade-in animation
         className,
       )}
       {...props}
