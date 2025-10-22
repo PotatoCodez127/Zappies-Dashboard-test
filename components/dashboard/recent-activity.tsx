@@ -1,165 +1,103 @@
+/* v0-cool-site/components/dashboard/profile-settings.tsx */
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { MessageSquare, CalendarCheck, Clock } from "lucide-react"
-import Link from "next/link"
-import { useEffect, useState } from "react"
-import { useCompanySupabase } from "@/lib/supabase/company-client"
+import type React from "react"
+import { useState, useEffect } from "react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
+import { createClient } from "@/lib/supabase/client"
+import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
-import { formatDistanceToNow } from "date-fns"
+import { useCompany } from "@/components/dashboard/company-provider"
 
-// Define a unified interface for activity items
-interface ActivityItem {
-  id: string
-  type: "conversation" | "meeting"
-  description: string
-  timestamp: Date
-  status?: string
+interface ProfileSettingsProps {
+  user: {
+    id: string
+    email?: string
+  }
+  profile: {
+    full_name: string | null
+    company: string | null // This might be redundant if using CompanyProvider?
+  } | null
 }
 
-export function RecentActivity() {
-  const companySupabase = useCompanySupabase()
+export function ProfileSettings({ user, profile }: ProfileSettingsProps) {
+  const companyInfo = useCompany()
+  const router = useRouter()
   const { toast } = useToast()
-  const [activities, setActivities] = useState<ActivityItem[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+
+  const [companyName, setCompanyName] = useState("")
+  const [supabaseUrl, setSupabaseUrl] = useState("")
+  const [supabaseAnonKey, setSupabaseAnonKey] = useState("")
+
+  const [isUpdating, setIsUpdating] = useState(false)
 
   useEffect(() => {
-    async function fetchRecentActivity() {
-      if (!companySupabase) {
-        setIsLoading(false)
-        console.log("RecentActivity: Company Supabase client not available.")
-        return
-      }
-      console.log("RecentActivity: Fetching data...")
-      setIsLoading(true)
-      try {
-        const fetchLimit = 5
-
-        // Fetch latest conversations
-        const convPromise = companySupabase
-          .from("conversation_history")
-          .select("conversation_id, created_at, status")
-          .order("created_at", { ascending: false })
-          .limit(fetchLimit)
-
-        // --- CORRECTED QUERY: Fetch latest meetings using 'full_name' ---
-        const meetingsPromise = companySupabase
-          .from("meetings")
-          .select("id, full_name, created_at, status") // Use 'full_name' instead of 'customer_name'
-          .order("created_at", { ascending: false })
-          .limit(fetchLimit)
-
-        const [convResult, meetingsResult] = await Promise.all([convPromise, meetingsPromise])
-
-        if (convResult.error) throw convResult.error
-        if (meetingsResult.error) throw meetingsResult.error
-
-        const conversationActivities: ActivityItem[] = (convResult.data || []).map((conv) => ({
-          id: conv.conversation_id,
-          type: "conversation",
-          description: `New conversation started (ID: ...${conv.conversation_id.slice(-6)})`,
-          timestamp: new Date(conv.created_at),
-          status: conv.status,
-        }))
-
-        // --- CORRECTED PROCESSING: Use 'full_name' ---
-        const meetingActivities: ActivityItem[] = (meetingsResult.data || []).map((meeting) => ({
-          id: meeting.id,
-          type: "meeting",
-          description: `Meeting booked: ${meeting.full_name || "Unknown"}`, // Use 'full_name' here
-          timestamp: new Date(meeting.created_at),
-          status: meeting.status,
-        }))
-
-        const combinedActivities = [...conversationActivities, ...meetingActivities]
-          .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-          .slice(0, 5)
-
-        console.log("RecentActivity: Data processed.", combinedActivities)
-        setActivities(combinedActivities)
-      } catch (error) {
-        console.error("Error fetching recent activity:", error)
-        toast({ title: "Error", description: "Could not fetch recent activity.", variant: "destructive" })
-      } finally {
-        setIsLoading(false)
-      }
+    if (companyInfo) {
+      setCompanyName(companyInfo.name || "");
+      setSupabaseUrl(companyInfo.supabase_url || "");
+      setSupabaseAnonKey(companyInfo.supabase_anon_key || "");
     }
-    fetchRecentActivity()
-  }, [companySupabase, toast])
+  }, [companyInfo]);
 
-  // --- Helper functions remain the same ---
-  const getActivityIcon = (type: "conversation" | "meeting") => {
-    return type === "conversation" ? (
-      <MessageSquare className="h-5 w-5 text-muted-foreground" />
-    ) : (
-      <CalendarCheck className="h-5 w-5 text-muted-foreground" />
-    )
-  }
-  const getActivityLink = (item: ActivityItem) => {
-    return item.type === "conversation" ? "/dashboard/conversations" : "/dashboard/leads"
-  }
-  const getStatusBadge = (status?: string) => {
-    if (!status) return null
-    let variant: "success" | "warning" | "error" | "outline" = "outline"
-    if (status === "confirmed" || status === "active") variant = "success"
-    if (status === "pending_confirmation") variant = "warning"
-    if (status === "cancelled") variant = "error"
-    return (
-      <Badge variant={variant} className="text-xs">
-        {status.replace(/_/g, " ")}
-      </Badge>
-    )
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsUpdating(true)
+
+    if (!companyInfo || !companyInfo.id) {
+      toast({ title: "Frontend Error", description: "Could not find company info.", variant: "destructive", });
+      setIsUpdating(false); return;
+    }
+
+    const supabase = createClient()
+    try {
+      const updates = { name: companyName, supabase_url: supabaseUrl, supabase_anon_key: supabaseAnonKey, updated_at: new Date().toISOString() };
+      const { data, error } = await supabase.from("companies").update(updates).eq("id", companyInfo.id).select();
+      if (error) throw error;
+      toast({ title: "Success!", description: "Settings updated." });
+      router.refresh();
+    } catch (error) {
+      const err = error as any;
+      toast({ title: "Update Failed", description: err.message || "An unknown database error occurred.", variant: "destructive", });
+    } finally { setIsUpdating(false); }
   }
 
-  // --- Render logic remains the same ---
   return (
-    <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-[#EDE7C7]">Recent Activity</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {isLoading ? (
-          <div className="space-y-4">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="flex items-center gap-4 p-3">
-                <div className="h-5 w-5 bg-[#2A2A2A] rounded animate-pulse"></div>
-                <div className="flex-1 space-y-2">
-                  <div className="h-4 w-3/4 bg-[#2A2A2A] rounded animate-pulse"></div>
-                  <div className="h-3 w-1/4 bg-[#2A2A2A] rounded animate-pulse"></div>
-                </div>
-              </div>
-            ))}
+    <form onSubmit={handleUpdate} className="grid gap-6">
+       {/* Card uses theme styling */}
+      <Card>
+        <CardHeader>
+           {/* Use theme variables */}
+          <CardTitle className="text-foreground">Company & Database Settings</CardTitle>
+          <CardDescription className="text-muted-foreground">Manage details and connect your bot's database.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+             {/* Label uses theme styling */}
+            <Label htmlFor="companyName">Company Name</Label>
+             {/* Input uses theme styling */}
+            <Input id="companyName" type="text" value={companyName || ''} onChange={(e) => setCompanyName(e.target.value)} placeholder="Your Company Name" />
           </div>
-        ) : !companySupabase ? (
-          <div className="text-center py-6 text-sm text-[#EDE7C7]/60">
-            Connect database in settings to view activity.
+          <div className="space-y-2">
+            {/* Fix typo here */}
+            <Label htmlFor="supabaseUrl">Supabase URL</Label>
+            <Input id="supabaseUrl" type="url" value={supabaseUrl || ''} onChange={(e) => setSupabaseUrl(e.target.value)} placeholder="https://<your-project-ref>.supabase.co" />
           </div>
-        ) : activities.length === 0 ? (
-          <p className="text-muted-foreground text-sm text-center py-6">No recent activity found.</p>
-        ) : (
-          <div className="space-y-1">
-            {activities.map((activity) => (
-              <Link href={getActivityLink(activity)} key={activity.id} className="block group">
-                <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-[#2A2A2A]/50 transition-colors cursor-pointer">
-                  <div className="mt-1 flex-shrink-0">{getActivityIcon(activity.type)}</div>
-                  <div className="flex-1 space-y-1 overflow-hidden">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-foreground truncate group-hover:text-white transition-colors">
-                        {activity.description}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Clock className="h-3 w-3" />
-                      {formatDistanceToNow(activity.timestamp, { addSuffix: true })}
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
+          <div className="space-y-2">
+            <Label htmlFor="supabaseAnonKey">Supabase Anon Key</Label>
+            <Input id="supabaseAnonKey" type="text" value={supabaseAnonKey || ''} onChange={(e) => setSupabaseAnonKey(e.target.value)} placeholder="Enter your Supabase anon (public) key" />
           </div>
-        )}
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+
+      <div className="flex justify-end">
+         {/* Button uses default theme variant */}
+        <Button type="submit" disabled={isUpdating}>
+          {isUpdating ? "Saving..." : "Save Settings"}
+        </Button>
+      </div>
+    </form>
   )
 }

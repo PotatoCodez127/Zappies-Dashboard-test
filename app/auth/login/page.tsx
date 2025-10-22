@@ -1,3 +1,4 @@
+/* v0-cool-site/app/auth/login/page.tsx */
 "use client"
 
 import type React from "react"
@@ -30,9 +31,8 @@ export default function LoginPage() {
         email,
         password,
       })
-      
+
       if (signInError) {
-        // **DETAILED ERROR LOGGING**
         console.error("--- Supabase signInWithPassword Error ---");
         console.error("Error Code:", signInError.code);
         console.error("Error Status:", signInError.status);
@@ -40,7 +40,6 @@ export default function LoginPage() {
         console.error("Full Error Object:", signInError);
         console.error("---------------------------------------");
 
-        // Set a more informative error message if possible
         if (signInError.message.includes("Email not confirmed")) {
           setError("Email not confirmed. Please check your inbox for the verification link.")
         } else if (signInError.status === 400) {
@@ -63,16 +62,18 @@ export default function LoginPage() {
       setError(catchError instanceof Error ? catchError.message : "An unexpected error occurred.")
       setIsLoading(false)
     }
-    // Note: Removed finally block for isLoading = false, as it's handled in error/success paths.
   }
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center bg-[#0A0A0A] p-6">
+    // Use theme background
+    <div className="flex min-h-screen w-full items-center justify-center bg-background p-6">
       <div className="w-full max-w-sm">
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
+        {/* Card uses theme styling */}
+        <Card>
           <CardHeader>
-            <CardTitle className="text-2xl text-[#EDE7C7]">Login</CardTitle>
-            <CardDescription className="text-[#EDE7C7]/60">
+            {/* Use theme variables */}
+            <CardTitle className="text-2xl text-foreground">Login</CardTitle>
+            <CardDescription className="text-muted-foreground">
               Enter your credentials to access the dashboard
             </CardDescription>
           </CardHeader>
@@ -80,9 +81,9 @@ export default function LoginPage() {
             <form onSubmit={handleLogin}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="email" className="text-[#EDE7C7]">
-                    Email
-                  </Label>
+                  {/* Label uses theme variable */}
+                  <Label htmlFor="email">Email</Label>
+                  {/* Input uses theme variable */}
                   <Input
                     id="email"
                     type="email"
@@ -90,34 +91,29 @@ export default function LoginPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#EDE7C7]"
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="password" className="text-[#EDE7C7]">
-                    Password
-                  </Label>
+                  <Label htmlFor="password">Password</Label>
                   <Input
                     id="password"
                     type="password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#EDE7C7]"
                   />
                 </div>
-                {error && <p className="text-sm text-red-500">{error}</p>}
-                <Button
-                  type="submit"
-                  className="w-full bg-[#EDE7C7] text-[#0A0A0A] hover:bg-[#EDE7C7]/90"
-                  disabled={isLoading}
-                >
+                 {/* Destructive text color for error */}
+                {error && <p className="text-sm text-destructive">{error}</p>}
+                 {/* Button uses default theme variant */}
+                <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? "Logging in..." : "Login"}
                 </Button>
               </div>
-              <div className="mt-4 text-center text-sm text-[#EDE7C7]/60">
+              <div className="mt-4 text-center text-sm text-muted-foreground">
                 Don&apos;t have an account?{" "}
-                <Link href="/auth/signup" className="text-[#EDE7C7] underline underline-offset-4">
+                 {/* Link uses theme variable */}
+                <Link href="/auth/signup" className="text-foreground underline underline-offset-4">
                   Sign up
                 </Link>
               </div>
