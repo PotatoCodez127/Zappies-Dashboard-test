@@ -28,43 +28,47 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   if (companyUserError || !companyUser) {
     console.error("Dashboard Layout Error: Could not find company link for user.", companyUserError)
+    // Keep error display simple
     return (
       <div className="flex min-h-screen items-center justify-center bg-background text-foreground p-4">
-        <p className="text-center">Error: Could not verify your company membership. Please contact support.</p>
+        <p className="text-center">Error: Could not verify your company membership.</p>
       </div>
     )
   }
 
   const { data: company, error: companyError } = await supabase
     .from("companies")
-    .select("*")
+    .select("*") // Select necessary fields
     .eq("id", companyUser.company_id)
     .single()
 
   if (companyError || !company) {
     console.error("Dashboard Layout Error: Could not fetch company details.", companyError)
+    // Keep error display simple
     return (
       <div className="flex min-h-screen items-center justify-center bg-background text-foreground p-4">
-        <p className="text-center">Error: Could not load company data. Please check permissions and contact support.</p>
+        <p className="text-center">Error: Could not load company data.</p>
       </div>
     )
   }
 
   return (
     <CompanyProvider company={company}>
-      {/* Ensure the main container uses the pure black background */}
+      {/* Main container uses black background */}
       <div className="flex h-screen bg-background overflow-hidden relative">
         {/* Large atmospheric purple glow */}
         <div
-          className="absolute inset-0 pointer-events-none z-0 opacity-50 blur-3xl" // Added blur for softness
+          className="absolute inset-0 pointer-events-none z-0 opacity-50 blur-3xl" // Keep blur
           style={{
-            background: "radial-gradient(ellipse at 50% 30%, rgba(192,0,192,0.15) 0%, transparent 70%)", // Centered glow
+            // Centered radial gradient, adjust opacity/spread as needed
+            background: "radial-gradient(ellipse at 50% 30%, rgba(192,0,192,0.15) 0%, transparent 70%)",
           }}
         />
         <DashboardSidebar />
-        <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10">
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10"> {/* Content above glow */}
           <DashboardHeader user={user} />
           <main className="flex-1 overflow-y-auto">
+            {/* Consistent padding */}
             <div className="p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto w-full">{children}</div>
           </main>
         </div>

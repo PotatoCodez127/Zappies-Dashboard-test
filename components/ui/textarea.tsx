@@ -10,7 +10,7 @@ function Textarea({ className, ...props }: React.ComponentProps<'textarea'>) {
       className={cn(
         // Use input background, standard foreground text, muted placeholder
         'placeholder:text-muted-foreground bg-input text-foreground',
-         // Use subtle border color from variable, purple ring on focus
+         // Use subtle border color (purple/20), focus border uses primary purple
         'border-border focus-visible:border-primary',
         // Base styles
         'flex field-sizing-content min-h-16 w-full rounded-md border px-3 py-2 text-base shadow-xs transition-[border-color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',

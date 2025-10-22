@@ -1,52 +1,49 @@
+/* v0-cool-site/app/globals.css */
+/* (and styles/globals.css if you still have both) */
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Custom color scheme for Zappies AI brand */
-  --cream: #ede7c7;
-  --royal-red: #c41e3a;
-  --deep-red: #8b1538;
-  --dark-brown: #200e01;
-
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  /* Remove old variables */
+  --background: oklch(1 0 0); /* White */
+  --foreground: oklch(0.1 0 0); /* Near Black */
+  --card: oklch(1 0 0); /* White */
+  --card-foreground: oklch(0.1 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.1 0 0);
+  --primary: oklch(0.6 0.25 300); /* Purple */
+  --primary-foreground: oklch(1 0 0); /* White */
+  --secondary: oklch(0.97 0 0); /* Light Gray */
+  --secondary-foreground: oklch(0.1 0 0);
   --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+  --muted-foreground: oklch(0.5 0 0); /* Medium Gray */
   --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --accent-foreground: oklch(0.1 0 0);
+  --destructive: oklch(0.65 0.2 40); /* Red/Orange */
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.92 0 0); /* Light Gray Border */
+  --input: oklch(0.92 0 0);
+  --ring: oklch(0.6 0.25 300); /* Purple Ring */
+  --chart-1: oklch(0.6 0.25 300); /* Purple */
+  --chart-2: oklch(0.55 0.2 280);
+  --chart-3: oklch(0.5 0.15 260);
+  --chart-4: oklch(0.45 0.1 240);
+  --chart-5: oklch(0.4 0.05 220);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar: oklch(1 0 0); /* Light sidebar */
+  --sidebar-foreground: oklch(0.1 0 0);
+  --sidebar-primary: oklch(0.6 0.25 300);
+  --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-accent-foreground: oklch(0.1 0 0);
+  --sidebar-border: oklch(0.92 0 0);
+  --sidebar-ring: oklch(0.6 0.25 300);
 }
 
 .dark {
-  /* Pure black background with vibrant purple accents (shipable.ai style) */
+  /* Shipable.ai inspired theme: Pure Black + Purple */
   --background: oklch(0 0 0); /* Pure Black #000000 */
   --foreground: oklch(0.98 0 0); /* White/Very Light Gray #f5f5f5 */
   --card: oklch(0.1 0 0); /* Very Dark Gray #121212 */
@@ -55,36 +52,37 @@
   --popover-foreground: oklch(0.98 0 0);
   --primary: oklch(0.6 0.25 300); /* Vibrant Purple #c000c0 */
   --primary-foreground: oklch(0.98 0 0); /* White for contrast */
-  --secondary: oklch(0.15 0 0); /* Slightly darker purple/gray */
+  --secondary: oklch(0.15 0 0); /* Darker Gray for secondary elements */
   --secondary-foreground: oklch(0.98 0 0);
-  --muted: oklch(0.15 0 0); /* Dark Gray similar to card */
-  --muted-foreground: oklch(0.6 0 0); /* Medium Gray #888888 */
-  --accent: oklch(0.15 0 0); /* Match muted for subtle hover */
+  --muted: oklch(0.15 0 0); /* Dark Gray similar to secondary */
+  --muted-foreground: oklch(0.6 0 0); /* Medium Gray #888888 for less important text */
+  --accent: oklch(0.15 0 0); /* Match muted/secondary for subtle hover backgrounds */
   --accent-foreground: oklch(0.98 0 0);
   --destructive: oklch(0.65 0.2 40); /* Functional red/orange #ff6000 */
   --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.6 0.25 300); /* Purple border */
+  /* Border uses primary (purple) with low opacity by default */
+  --border: oklch(0.6 0.25 300 / 0.2); /* Purple border with low opacity */
   --input: oklch(0.1 0 0); /* Match card background */
   --ring: oklch(0.6 0.25 300); /* Purple for focus rings */
-  /* Updated chart colors with purple and analogous tones */
+  /* Chart colors with purple and analogous tones */
   --chart-1: oklch(0.6 0.25 300); /* Vibrant Purple */
   --chart-2: oklch(0.55 0.2 280); /* Medium Purple */
   --chart-3: oklch(0.5 0.15 260); /* Desaturated Purple/Blue */
   --chart-4: oklch(0.45 0.1 240); /* Desaturated Blue */
   --chart-5: oklch(0.4 0.05 220); /* Desaturated Gray-Blue */
-  /* Updated sidebar colors to align with pure black + purple palette */
-  --sidebar: oklch(0 0 0); /* Pure Black */
+  /* Sidebar colors */
+  --sidebar: oklch(0 0 0); /* Pure Black sidebar background */
   --sidebar-foreground: oklch(0.98 0 0);
   --sidebar-primary: oklch(0.6 0.25 300); /* Vibrant Purple */
   --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.15 0 0);
+  --sidebar-accent: oklch(0.15 0 0); /* Dark Gray hover */
   --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(0.6 0.25 300); /* Purple border */
+  --sidebar-border: oklch(0.6 0.25 300 / 0.2); /* Subtle Purple border */
   --sidebar-ring: oklch(0.6 0.25 300);
 }
 
+/* --- THEME INLINE (Keep as is) --- */
 @theme inline {
-  /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -125,130 +123,51 @@
 
 @layer base {
   * {
+    /* Use the defined --border variable with low opacity */
     @apply border-border outline-ring/50;
   }
   body {
+    /* Use variables for background and text */
     @apply bg-background text-foreground;
   }
 }
 
-/* Custom animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 30px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    transform: translate3d(30px, 0, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) rotate(0deg);
-  }
-  50% {
-    transform: translate3d(0, -20px, 0) rotate(2deg);
-  }
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-@keyframes gradientShift {
-  0% {
-    background-position: 0% center;
-  }
-  100% {
-    background-position: 200% center;
-  }
-}
-
-/* Performance optimization classes */
-.gpu-accelerated {
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-.optimize-animations {
-  will-change: opacity, transform;
-}
-
-/* Added smooth scroll behavior and responsive utilities */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Removed old nebula glow animation, keeping simple animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Updated scrollbar styling for pure black theme with purple accent */
+/* Custom scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: var(--background); /* Pure black track */
 }
-
 ::-webkit-scrollbar-thumb {
-  background: #121212;
+  background: var(--card); /* Very dark gray thumb */
   border-radius: 4px;
   transition: background 0.2s ease;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: #c000c0;
+  background: var(--primary); /* Purple thumb on hover */
 }
 
-/* Smooth transitions for all interactive elements */
-button,
-a,
-input,
-textarea,
-select {
+/* Smooth transitions */
+button, a, input, textarea, select {
   transition: all 0.2s ease-in-out;
 }
 
-/* Prevent layout shift on mobile */
-@media (max-width: 1023px) {
-  body {
-    overflow-x: hidden;
-  }
+/* Remove default focus outline if using ring */
+*:focus-visible {
+  outline: none;
 }
 
-/* Ensure cards don't overflow on small screens */
-.card-responsive {
-  max-width: 100%;
-  overflow: hidden;
+/* Card fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-in.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+html {
+  scroll-behavior: smooth;
 }
