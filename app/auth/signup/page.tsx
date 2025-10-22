@@ -50,8 +50,8 @@ export default function SignUpPage() {
       <div className="w-full max-w-sm">
         <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
           <CardHeader>
-            <CardTitle className="text-2xl text-[#a83232]">Sign Up</CardTitle>
-            <CardDescription className="text-[#a83232]/60">
+            <CardTitle className="text-2xl text-[#ede7c7]">Sign Up</CardTitle>
+            <CardDescription className="text-[#ede7c7]/60">
               Create a new account to access the dashboard
             </CardDescription>
           </CardHeader>
@@ -59,7 +59,7 @@ export default function SignUpPage() {
             <form onSubmit={handleSignUp}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="fullName" className="text-[#a83232]">
+                  <Label htmlFor="fullName" className="text-[#ede7c7]">
                     Full Name
                   </Label>
                   <Input
@@ -69,11 +69,11 @@ export default function SignUpPage() {
                     required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#a83232]"
+                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#ede7c7]"
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="email" className="text-[#a83232]">
+                  <Label htmlFor="email" className="text-[#ede7c7]">
                     Email
                   </Label>
                   <Input
@@ -83,11 +83,11 @@ export default function SignUpPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#a83232]"
+                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#ede7c7]"
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="password" className="text-[#a83232]">
+                  <Label htmlFor="password" className="text-[#ede7c7]">
                     Password
                   </Label>
                   <Input
@@ -96,21 +96,21 @@ export default function SignUpPage() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#a83232]"
+                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#ede7c7]"
                   />
                 </div>
                 {error && <p className="text-sm text-red-500">{error}</p>}
                 <Button
                   type="submit"
-                  className="w-full bg-[#a83232] text-[#0A0A0A] hover:bg-[#a83232]/90"
+                  className="w-full bg-[#ede7c7] text-[#0A0A0A] hover:bg-[#ede7c7]/90"
                   disabled={isLoading}
                 >
                   {isLoading ? "Creating account..." : "Sign Up"}
                 </Button>
               </div>
-              <div className="mt-4 text-center text-sm text-[#a83232]/60">
+              <div className="mt-4 text-center text-sm text-[#ede7c7]/60">
                 Already have an account?{" "}
-                <Link href="/auth/login" className="text-[#a83232] underline underline-offset-4">
+                <Link href="/auth/login" className="text-[#ede7c7] underline underline-offset-4">
                   Login
                 </Link>
               </div>

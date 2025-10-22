@@ -71,8 +71,8 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
           <CardHeader>
-            <CardTitle className="text-2xl text-[#a83232]">Login</CardTitle>
-            <CardDescription className="text-[#a83232]/60">
+            <CardTitle className="text-2xl text-[#ede7c7]">Login</CardTitle>
+            <CardDescription className="text-[#ede7c7]/60">
               Enter your credentials to access the dashboard
             </CardDescription>
           </CardHeader>
@@ -80,7 +80,7 @@ export default function LoginPage() {
             <form onSubmit={handleLogin}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="email" className="text-[#a83232]">
+                  <Label htmlFor="email" className="text-[#ede7c7]">
                     Email
                   </Label>
                   <Input
@@ -90,11 +90,11 @@ export default function LoginPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#a83232]"
+                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#ede7c7]"
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="password" className="text-[#a83232]">
+                  <Label htmlFor="password" className="text-[#ede7c7]">
                     Password
                   </Label>
                   <Input
@@ -103,21 +103,21 @@ export default function LoginPage() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#a83232]"
+                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#ede7c7]"
                   />
                 </div>
                 {error && <p className="text-sm text-red-500">{error}</p>}
                 <Button
                   type="submit"
-                  className="w-full bg-[#a83232] text-[#0A0A0A] hover:bg-[#a83232]/90"
+                  className="w-full bg-[#ede7c7] text-[#0A0A0A] hover:bg-[#ede7c7]/90"
                   disabled={isLoading}
                 >
                   {isLoading ? "Logging in..." : "Login"}
                 </Button>
               </div>
-              <div className="mt-4 text-center text-sm text-[#a83232]/60">
+              <div className="mt-4 text-center text-sm text-[#ede7c7]/60">
                 Don&apos;t have an account?{" "}
-                <Link href="/auth/signup" className="text-[#a83232] underline underline-offset-4">
+                <Link href="/auth/signup" className="text-[#ede7c7] underline underline-offset-4">
                   Sign up
                 </Link>
               </div>
