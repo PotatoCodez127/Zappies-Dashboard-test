@@ -40,9 +40,9 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
             className="lg:hidden hover:bg-[#2A2A2A] transition-colors duration-200"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            <Menu className="h-5 w-5 text-[#a83232]" />
+            <Menu className="h-5 w-5 text-[var(--dashboard-text-color)]" />
           </Button>
-          <h1 className="text-base sm:text-lg font-semibold text-[#a83232]">Dashboard</h1>
+          <h1 className="text-base sm:text-lg font-semibold text-[var(--dashboard-text-color)]">Dashboard</h1>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -51,18 +51,18 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
               size="icon"
               className="rounded-full hover:bg-[#2A2A2A] transition-colors duration-200"
             >
-              <User className="h-5 w-5 text-[#a83232]" />
+              <User className="h-5 w-5 text-[var(--dashboard-text-color)]" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
             className="bg-[#1A1A1A] border-[#2A2A2A] w-56 animate-in fade-in-0 zoom-in-95 duration-200"
           >
-            <DropdownMenuLabel className="text-[#a83232] truncate">{user.email}</DropdownMenuLabel>
+            <DropdownMenuLabel className="text-[var(--dashboard-text-color)] truncate">{user.email}</DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-[#2A2A2A]" />
             <DropdownMenuItem
               onClick={() => router.push("/dashboard/settings")}
-              className="text-[#a83232]/80 focus:text-[#a83232] focus:bg-[#2A2A2A] cursor-pointer transition-colors duration-150"
+              className="text-[var(--dashboard-text-color)]/80 focus:text-[var(--dashboard-text-color)] focus:bg-[#2A2A2A] cursor-pointer transition-colors duration-150"
             >
               <Settings className="mr-2 h-4 w-4" />
               Settings
@@ -70,7 +70,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
             <DropdownMenuSeparator className="bg-[#2A2A2A]" />
             <DropdownMenuItem
               onClick={handleSignOut}
-              className="text-[#a83232]/80 focus:text-[#a83232] focus:bg-[#2A2A2A] cursor-pointer transition-colors duration-150"
+              className="text-[var(--dashboard-text-color)]/80 focus:text-[var(--dashboard-text-color)] focus:bg-[#2A2A2A] cursor-pointer transition-colors duration-150"
             >
               <LogOut className="mr-2 h-4 w-4" />
               Sign out

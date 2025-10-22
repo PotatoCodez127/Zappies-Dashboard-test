@@ -48,7 +48,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     const formattedDate = data.fullDate ? format(parseISO(data.fullDate), "MMM d, yyyy") : label
     return (
       <div className="bg-[#1A1A1A] p-3 border border-[#2A2A2A] rounded-md shadow-lg text-xs">
-        <p className="label text-[#a83232]/80">{`${formattedDate}`}</p>
+        <p className="label text-[var(--dashboard-text-color)]/80">{`${formattedDate}`}</p>
         <p className="intro text-[#a7a2ff]">{`Total Booked : ${data.total}`}</p>
         <p className="intro text-[#82ca9d]">{`Confirmed : ${data.confirmed}`}</p>
       </div>
@@ -160,7 +160,7 @@ export default function DashboardPage() {
   }, [companySupabase]) // Re-run effect if company client changes
 
   const renderTrend = (trendValue: number | null) => {
-    if (trendValue === null || trendValue === 0) return <span className="text-xs text-[#a83232]/50">--</span>
+    if (trendValue === null || trendValue === 0) return <span className="text-xs text-[var(--dashboard-text-color)]/50">--</span>
     const isPositive = trendValue > 0
     return (
       <span className={`flex items-center text-xs ${isPositive ? "text-green-500" : "text-red-500"}`}>
@@ -177,11 +177,11 @@ export default function DashboardPage() {
         <CardContent className="pt-6">
           <div className="text-center py-12">
             <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-[#a83232]">Database Not Connected</h3>
-            <p className="text-[#a83232]/60 mt-2 max-w-md mx-auto">
+            <h3 className="text-xl font-bold text-[var(--dashboard-text-color)]">Database Not Connected</h3>
+            <p className="text-[var(--dashboard-text-color)]/60 mt-2 max-w-md mx-auto">
               Please go to the settings page to connect your bot's database.
             </p>
-            <Button asChild className="mt-6 bg-[#a83232] text-[#0A0A0A] hover:bg-[#a83232]/90">
+            <Button asChild className="mt-6 bg-[var(--dashboard-text-color)] text-[#0A0A0A] hover:bg-[var(--dashboard-text-color)]/90">
               <Link href="/dashboard/settings">Go to Settings</Link>
             </Button>
           </div>
@@ -205,7 +205,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6 sm:space-y-8">
       <div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-[#a83232] tracking-tight">Overview</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)] tracking-tight">Overview</h2>
         <p className="text-sm sm:text-base text-muted-foreground mt-2">Here's your bot's performance summary.</p>
       </div>
 
@@ -213,7 +213,7 @@ export default function DashboardPage() {
         {statCards.map((stat) => (
           <Card
             key={stat.title}
-            className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[#a83232]/20"
+            className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20"
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2 min-h-[72px]">
               <CardTitle className="text-sm font-medium text-muted-foreground leading-snug">{stat.title}</CardTitle>
@@ -223,7 +223,7 @@ export default function DashboardPage() {
               {isLoading ? (
                 <div className="h-8 w-1/2 bg-[#2A2A2A] rounded-md animate-pulse mb-1" />
               ) : (
-                <div className="text-2xl sm:text-3xl font-bold text-[#a83232] leading-none">{stat.value}</div>
+                <div className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)] leading-none">{stat.value}</div>
               )}
               <div className="h-4 mt-2">{!isLoading && renderTrend(stat.trend)}</div>
             </CardContent>
@@ -231,9 +231,9 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[#a83232]/20">
+      <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20">
         <CardHeader>
-          <CardTitle className="text-lg sm:text-xl text-[#a83232] flex items-center gap-2">
+          <CardTitle className="text-lg sm:text-xl text-[var(--dashboard-text-color)] flex items-center gap-2">
             <LineChartIcon className="h-5 w-5 flex-shrink-0" />
             <span className="truncate">
               Daily Meetings Overview {chartDaysCount > 0 ? `(Last ${chartDaysCount} Days)` : ""}
@@ -242,7 +242,7 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent className="pl-2 pr-4">
           {isLoading ? (
-            <div className="h-[250px] sm:h-[300px] lg:h-[350px] w-full bg-[#2A2A2A] rounded-md animate-pulse flex items-center justify-center text-[#a83232]/60 text-sm">
+            <div className="h-[250px] sm:h-[300px] lg:h-[350px] w-full bg-[#2A2A2A] rounded-md animate-pulse flex items-center justify-center text-[var(--dashboard-text-color)]/60 text-sm">
               Loading chart data...
             </div>
           ) : (
@@ -251,7 +251,7 @@ export default function DashboardPage() {
               height={window.innerWidth < 640 ? 250 : window.innerWidth < 1024 ? 300 : 350}
             >
               {!chartData || chartData.length === 0 ? (
-                <div className="flex items-center justify-center h-full text-[#a83232]/60 text-sm">
+                <div className="flex items-center justify-center h-full text-[var(--dashboard-text-color)]/60 text-sm">
                   No meeting data available yet.
                 </div>
               ) : (
@@ -272,20 +272,20 @@ export default function DashboardPage() {
                   <CartesianGrid stroke="#2A2A2A" strokeDasharray="5 5" vertical={false} />
                   <XAxis
                     dataKey="day"
-                    stroke="#a83232"
+                    stroke="var(--dashboard-text-color)"
                     fontSize={10}
                     tickLine={false}
                     axisLine={false}
                     interval={chartDaysCount > 60 ? Math.floor(chartDaysCount / 15) : chartDaysCount > 30 ? 4 : 1}
-                    tick={{ fill: "#a83232" }}
+                    tick={{ fill: "var(--dashboard-text-color)" }}
                   />
                   <YAxis
-                    stroke="#a83232"
+                    stroke="var(--dashboard-text-color)"
                     fontSize={12}
                     tickLine={false}
                     axisLine={false}
                     allowDecimals={false}
-                    tick={{ fill: "#a83232" }}
+                    tick={{ fill: "var(--dashboard-text-color)" }}
                     width={30}
                   />
                   {/* Use CustomTooltip component */}
@@ -293,7 +293,7 @@ export default function DashboardPage() {
                     content={<CustomTooltip />}
                     cursor={{ stroke: "#8B0000", strokeWidth: 1.5, strokeDasharray: "3 3" }}
                   />
-                  <Legend wrapperStyle={{ color: "#a83232", fontSize: "12px", paddingTop: "10px" }} />
+                  <Legend wrapperStyle={{ color: "var(--dashboard-text-color)", fontSize: "12px", paddingTop: "10px" }} />
                   <Area type="monotone" dataKey="total" stroke="none" fillOpacity={0.2} fill="url(#colorTotal)" />
                   <Area
                     type="monotone"

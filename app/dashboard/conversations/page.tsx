@@ -98,11 +98,11 @@ export default function ConversationsPage() {
         <CardContent className="pt-6">
           <div className="text-center py-12">
             <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-[#a83232] tracking-tight">Database Not Connected</h3>
-            <p className="text-[#a83232]/60 mt-2 max-w-md mx-auto">
+            <h3 className="text-xl font-bold text-[var(--dashboard-text-color)] tracking-tight">Database Not Connected</h3>
+            <p className="text-[var(--dashboard-text-color)]/60 mt-2 max-w-md mx-auto">
               Please go to the settings page to connect your bot's database.
             </p>
-            <Button asChild className="mt-6 bg-[#a83232] text-[#0A0A0A] hover:bg-[#a83232]/90">
+            <Button asChild className="mt-6 bg-[var(--dashboard-text-color)] text-[#0A0A0A] hover:bg-[var(--dashboard-text-color)]/90">
               <Link href="/dashboard/settings">Go to Settings</Link>
             </Button>
           </div>
@@ -115,31 +115,31 @@ export default function ConversationsPage() {
     <div className="space-y-4 sm:space-y-6 h-full flex flex-col">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4 flex-shrink-0">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#a83232] tracking-tight">Conversations</h1>
-          <p className="text-sm text-[#a83232]/70 mt-1.5">View your chatbot conversations.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)] tracking-tight">Conversations</h1>
+          <p className="text-sm text-[var(--dashboard-text-color)]/70 mt-1.5">View your chatbot conversations.</p>
         </div>
         <Button
           variant="outline"
           size="icon"
           onClick={fetchConversations}
           disabled={isLoading}
-          className="border-[#2A2A2A] text-[#a83232]/60 hover:text-[#a83232] hover:bg-[#2A2A2A]/50 bg-transparent transition-all duration-200 self-start sm:self-auto flex-shrink-0"
+          className="border-[#2A2A2A] text-[var(--dashboard-text-color)]/60 hover:text-[var(--dashboard-text-color)] hover:bg-[#2A2A2A]/50 bg-transparent transition-all duration-200 self-start sm:self-auto flex-shrink-0"
         >
           <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
         </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0">
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-1 flex flex-col overflow-hidden transition-all duration-200 hover:border-[#a83232]/20 h-[400px] lg:h-full">
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-1 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 h-[400px] lg:h-full">
           <CardHeader className="flex-shrink-0 pb-4">
-            <CardTitle className="text-xl font-semibold text-[#a83232]">Chats</CardTitle>
+            <CardTitle className="text-xl font-semibold text-[var(--dashboard-text-color)]">Chats</CardTitle>
             <div className="relative mt-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#a83232]/40" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--dashboard-text-color)]/40" />
               <Input
                 placeholder="Search conversations..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 bg-[#0A0A0A] border-[#2A2A2A] text-[#a83232] h-10 text-sm"
+                className="pl-9 bg-[#0A0A0A] border-[#2A2A2A] text-[var(--dashboard-text-color)] h-10 text-sm"
               />
             </div>
           </CardHeader>
@@ -147,13 +147,13 @@ export default function ConversationsPage() {
             <ScrollArea className="h-full">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full min-h-[200px]">
-                  <p className="text-base text-[#a83232]/60">Loading...</p>
+                  <p className="text-base text-[var(--dashboard-text-color)]/60">Loading...</p>
                 </div>
               ) : filteredConversations.length === 0 ? (
                 <div className="flex items-center justify-center h-full min-h-[200px]">
                   <div className="text-center px-4">
-                    <MessageSquare className="h-12 w-12 text-[#a83232]/20 mx-auto mb-3" />
-                    <p className="text-base text-[#a83232]/60">No conversations found.</p>
+                    <MessageSquare className="h-12 w-12 text-[var(--dashboard-text-color)]/20 mx-auto mb-3" />
+                    <p className="text-base text-[var(--dashboard-text-color)]/60">No conversations found.</p>
                   </div>
                 </div>
               ) : (
@@ -165,16 +165,16 @@ export default function ConversationsPage() {
                       className={`w-full p-4 flex items-start gap-3 hover:bg-[#2A2A2A]/50 transition-colors rounded-lg ${selectedConversation?.conversation_id === conv.conversation_id ? "bg-[#2A2A2A]/50" : ""}`}
                     >
                       <Avatar className="h-11 w-11 flex-shrink-0">
-                        <AvatarFallback className="bg-[#a83232]/10 text-[#a83232] text-sm font-medium">
+                        <AvatarFallback className="bg-[var(--dashboard-text-color)]/10 text-[var(--dashboard-text-color)] text-sm font-medium">
                           {conv.customerName.substring(5, 7)}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 text-left overflow-hidden min-w-0">
                         <div className="flex items-center justify-between mb-1.5 gap-2">
-                          <p className="text-sm font-semibold text-[#a83232] truncate">{conv.customerName}</p>
-                          <span className="text-xs text-[#a83232]/40 flex-shrink-0">{conv.lastMessageTime}</span>
+                          <p className="text-sm font-semibold text-[var(--dashboard-text-color)] truncate">{conv.customerName}</p>
+                          <span className="text-xs text-[var(--dashboard-text-color)]/40 flex-shrink-0">{conv.lastMessageTime}</span>
                         </div>
-                        <p className="text-sm text-[#a83232]/60 truncate leading-relaxed">{conv.lastMessage}</p>
+                        <p className="text-sm text-[var(--dashboard-text-color)]/60 truncate leading-relaxed">{conv.lastMessage}</p>
                       </div>
                     </button>
                   ))}
@@ -184,19 +184,19 @@ export default function ConversationsPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col overflow-hidden transition-all duration-200 hover:border-[#a83232]/20 h-[500px] lg:h-full">
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 h-[500px] lg:h-full">
           {selectedConversation ? (
             <>
               <CardHeader className="border-b border-[#2A2A2A] flex-shrink-0 pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Avatar className="h-11 w-11">
-                      <AvatarFallback className="bg-[#a83232]/10 text-[#a83232] text-sm font-medium">
+                      <AvatarFallback className="bg-[var(--dashboard-text-color)]/10 text-[var(--dashboard-text-color)] text-sm font-medium">
                         {selectedConversation.customerName.substring(5, 7)}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <CardTitle className="text-lg font-semibold text-[#a83232]">
+                      <CardTitle className="text-lg font-semibold text-[var(--dashboard-text-color)]">
                         {selectedConversation.customerName}
                       </CardTitle>
                       <Badge
@@ -209,7 +209,7 @@ export default function ConversationsPage() {
                   </div>
                   {/* Keep MoreVertical button for future actions */}
                   <Button variant="ghost" size="icon">
-                    <MoreVertical className="h-5 w-5 text-[#a83232]/60" />
+                    <MoreVertical className="h-5 w-5 text-[var(--dashboard-text-color)]/60" />
                   </Button>
                 </div>
               </CardHeader>
@@ -219,7 +219,7 @@ export default function ConversationsPage() {
                     {selectedConversation.history?.map((message, index) => (
                       <div key={index} className={`flex ${message.type === "human" ? "justify-start" : "justify-end"}`}>
                         <div
-                          className={`max-w-[75%] rounded-lg px-4 py-3 ${message.type === "human" ? "bg-[#2A2A2A] text-[#a83232]" : "bg-[#a83232] text-[#0A0A0A]"}`}
+                          className={`max-w-[75%] rounded-lg px-4 py-3 ${message.type === "human" ? "bg-[#2A2A2A] text-[var(--dashboard-text-color)]" : "bg-[var(--dashboard-text-color)] text-[#0A0A0A]"}`}
                         >
                           <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.data.content}</p>
                         </div>
@@ -233,8 +233,8 @@ export default function ConversationsPage() {
           ) : (
             <div className="flex items-center justify-center h-full">
               <div className="text-center px-4">
-                <MessageSquare className="h-16 w-16 text-[#a83232]/20 mx-auto mb-4" />
-                <p className="text-base text-[#a83232]/60">
+                <MessageSquare className="h-16 w-16 text-[var(--dashboard-text-color)]/20 mx-auto mb-4" />
+                <p className="text-base text-[var(--dashboard-text-color)]/60">
                   {isLoading ? "Loading..." : "Select a conversation to view messages."}
                 </p>
               </div>
