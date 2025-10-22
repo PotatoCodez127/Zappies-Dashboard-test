@@ -46,41 +46,41 @@
 }
 
 .dark {
-  /* Updated to deep black background and vibrant red accents for Futuristic Glow UI */
-  --background: oklch(0.08 0 0); /* Deep black */
-  --foreground: oklch(0.95 0.01 106); /* Cream white for high contrast */
-  --card: oklch(0.12 0 0); /* Very dark gray for cards */
+  /* Updated to ambient dark red theme with deep blacks and muted red accents */
+  --background: oklch(0.05 0 0); /* Very deep black #080808 */
+  --foreground: oklch(0.95 0.01 106); /* Cream white #EDE7C7 for high contrast */
+  --card: oklch(0.12 0 0); /* Dark gray #181818 for cards */
   --card-foreground: oklch(0.95 0.01 106);
   --popover: oklch(0.12 0 0);
   --popover-foreground: oklch(0.95 0.01 106);
-  --primary: oklch(0.55 0.25 25); /* Vibrant red #FF1100 equivalent */
-  --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.18 0 0);
+  --primary: oklch(0.45 0.18 25); /* Ambient dark red - less saturated, darker */
+  --primary-foreground: oklch(0.95 0.01 106); /* Cream white for contrast */
+  --secondary: oklch(0.18 0 0); /* Dark gray */
   --secondary-foreground: oklch(0.95 0.01 106);
   --muted: oklch(0.18 0 0);
-  /* Adjusted muted-foreground to be slightly brighter for better readability */
-  --muted-foreground: oklch(0.75 0.01 106); /* Lighter gray for secondary text */
-  /* Adjusted accent to match input background for subtle hover states */
-  --accent: oklch(0.18 0 0); /* Same as input for subtle hover states */
+  --muted-foreground: oklch(0.7 0.01 106); /* Subtle light gray #A0A0A0 */
+  --accent: oklch(0.18 0 0); /* Match input for subtle hover states */
   --accent-foreground: oklch(0.95 0.01 106);
-  --destructive: oklch(0.55 0.25 25);
-  --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.18 0 0);
+  --destructive: oklch(0.5 0.22 25); /* Slightly brighter red for warnings */
+  --destructive-foreground: oklch(0.95 0.01 106);
+  --border: oklch(0.15 0 0); /* Very subtle dark gray #202020 */
   --input: oklch(0.18 0 0);
-  --ring: oklch(0.55 0.25 25); /* Red focus rings */
-  --chart-1: oklch(0.55 0.25 25); /* Red for primary chart data */
-  --chart-2: oklch(0.65 0.15 150);
-  --chart-3: oklch(0.75 0.12 200);
-  --chart-4: oklch(0.7 0.18 80);
-  --chart-5: oklch(0.6 0.2 300);
-  --sidebar: oklch(0.1 0 0);
+  --ring: oklch(0.45 0.18 25); /* Ambient red for focus rings */
+  /* Updated chart colors to complement ambient red theme */
+  --chart-1: oklch(0.45 0.18 25); /* Ambient red for primary data */
+  --chart-2: oklch(0.5 0.12 15); /* Desaturated warm tone */
+  --chart-3: oklch(0.55 0.08 30); /* Muted orange-red */
+  --chart-4: oklch(0.4 0.1 10); /* Deep muted red-brown */
+  --chart-5: oklch(0.6 0.06 0); /* Desaturated gray */
+  /* Updated sidebar colors to align with ambient red palette */
+  --sidebar: oklch(0.08 0 0); /* Slightly lighter than main background */
   --sidebar-foreground: oklch(0.95 0.01 106);
-  --sidebar-primary: oklch(0.55 0.25 25);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-primary: oklch(0.45 0.18 25); /* Ambient red */
+  --sidebar-primary-foreground: oklch(0.95 0.01 106);
   --sidebar-accent: oklch(0.18 0 0);
   --sidebar-accent-foreground: oklch(0.95 0.01 106);
-  --sidebar-border: oklch(0.18 0 0);
-  --sidebar-ring: oklch(0.55 0.25 25);
+  --sidebar-border: oklch(0.15 0 0);
+  --sidebar-ring: oklch(0.45 0.18 25);
 }
 
 @theme inline {
