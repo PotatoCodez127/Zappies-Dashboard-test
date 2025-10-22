@@ -110,27 +110,27 @@ export default function CallsPage() {
   const getOutcomeBadge = (call: CallHistoryEntry) => {
     if (call.resulted_in_meeting === true) {
       return (
-        <Badge variant="outline" className="border-green-500/50 text-green-500 text-xs">
+        <Badge variant="success" className="text-xs">
           Meeting Booked
         </Badge>
       )
     }
     if (call.disqualification_reason) {
       return (
-        <Badge variant="outline" className="border-red-500/50 text-red-500 text-xs">
+        <Badge variant="error" className="text-xs">
           Disqualified
         </Badge>
       )
     }
     if (call.resulted_in_meeting === false) {
       return (
-        <Badge variant="outline" className="border-yellow-500/50 text-yellow-500 text-xs">
+        <Badge variant="warning" className="text-xs">
           No Meeting
         </Badge>
       )
     }
     return (
-      <Badge variant="outline" className="border-gray-500/50 text-gray-500 text-xs">
+      <Badge variant="outline" className="text-xs">
         Unknown Outcome
       </Badge>
     )
@@ -143,7 +143,7 @@ export default function CallsPage() {
         <CardContent className="pt-6">
           <div className="text-center py-12">
             <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-[#EDE7C7]">Database Not Connected</h3>
+            <h3 className="text-xl font-bold text-[#EDE7C7] tracking-tight">Database Not Connected</h3>
             <p className="text-[#EDE7C7]/60 mt-2 max-w-md mx-auto">
               Please go to the settings page to connect your bot's database.
             </p>
@@ -244,7 +244,7 @@ export default function CallsPage() {
                           <p className="text-sm text-[#EDE7C7]/60 mb-2 truncate">
                             {call.client_number || call.email || "No contact info"}
                           </p>
-                          <div className="flex items-center gap-4 text-xs text-[#EDE7C7]/40 flex-wrap">
+                          <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
                             {" "}
                             <div className="flex items-center gap-1">
                               {" "}
@@ -300,30 +300,30 @@ export default function CallsPage() {
                 <div className="space-y-3 border-t border-[#2A2A2A] pt-4">
                   <div className="flex justify-between">
                     {" "}
-                    <span className="text-[#EDE7C7]/60">Call Time</span>{" "}
-                    <span className="text-[#EDE7C7] text-right">
+                    <span className="text-muted-foreground">Call Time</span>{" "}
+                    <span className="text-foreground text-right">
                       {format(parseISO(selectedCall.created_at), "MMM d, yyyy h:mm a")}
                     </span>{" "}
                   </div>
                   {selectedCall.call_duration_seconds !== null && (
                     <div className="flex justify-between">
                       {" "}
-                      <span className="text-[#EDE7C7]/60">Duration</span>{" "}
-                      <span className="text-[#EDE7C7]">{formatDuration(selectedCall.call_duration_seconds)}</span>{" "}
+                      <span className="text-muted-foreground">Duration</span>{" "}
+                      <span className="text-foreground">{formatDuration(selectedCall.call_duration_seconds)}</span>{" "}
                     </div>
                   )}
                   {selectedCall.company_name && (
                     <div className="flex justify-between">
                       {" "}
-                      <span className="text-[#EDE7C7]/60">Company</span>{" "}
-                      <span className="text-[#EDE7C7] text-right">{selectedCall.company_name}</span>{" "}
+                      <span className="text-muted-foreground">Company</span>{" "}
+                      <span className="text-foreground text-right">{selectedCall.company_name}</span>{" "}
                     </div>
                   )}
                   {selectedCall.monthly_budget !== null && (
                     <div className="flex justify-between">
                       {" "}
-                      <span className="text-[#EDE7C7]/60">Budget</span>{" "}
-                      <span className="text-[#EDE7C7]">
+                      <span className="text-muted-foreground">Budget</span>{" "}
+                      <span className="text-foreground">
                         R {selectedCall.monthly_budget.toLocaleString("en-ZA")}
                       </span>{" "}
                     </div>
@@ -332,14 +332,14 @@ export default function CallsPage() {
                 {selectedCall.goal && (
                   <div className="border-t border-[#2A2A2A] pt-4">
                     {" "}
-                    <Label className="text-[#EDE7C7]/80 block mb-2 font-medium">Call Goal</Label>{" "}
-                    <p className="text-[#EDE7C7] bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap">
+                    <Label className="block mb-2 font-medium">Call Goal</Label>{" "}
+                    <p className="text-foreground bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap">
                       {selectedCall.goal}
                     </p>{" "}
                   </div>
                 )}
                 <div className="border-t border-[#2A2A2A] pt-4 space-y-2">
-                  <Label className="text-[#EDE7C7]/80 block font-medium">Call Outcome</Label>
+                  <Label className="block font-medium">Call Outcome</Label>
                   <p
                     className={`font-medium ${selectedCall.resulted_in_meeting ? "text-green-500" : selectedCall.disqualification_reason ? "text-red-500" : "text-yellow-500"}`}
                   >
@@ -353,15 +353,15 @@ export default function CallsPage() {
                   {selectedCall.disqualification_reason && (
                     <div>
                       {" "}
-                      <Label className="text-[#EDE7C7]/60 text-xs">Reason:</Label>{" "}
-                      <p className="text-[#EDE7C7] mt-1 text-sm bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap">
+                      <Label className="text-xs">Reason:</Label>{" "}
+                      <p className="text-foreground mt-1 text-sm bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap">
                         {selectedCall.disqualification_reason}
                       </p>{" "}
                     </div>
                   )}
                 </div>
                 <div className="border-t border-[#2A2A2A] pt-4">
-                  <Label htmlFor="callNotes" className="text-[#EDE7C7]/80 block mb-2 font-medium">
+                  <Label htmlFor="callNotes" className="block mb-2 font-medium">
                     Notes (Not Saved)
                   </Label>
                   <Textarea
@@ -372,7 +372,7 @@ export default function CallsPage() {
                     className="bg-[#0A0A0A] border-[#2A2A2A] text-[#EDE7C7]"
                     rows={3}
                   />
-                  <p className="text-xs text-[#EDE7C7]/50 mt-1">Notes are for temporary reference only.</p>
+                  <p className="text-xs text-muted-foreground mt-1">Notes are for temporary reference only.</p>
                 </div>
               </div>
             ) : (

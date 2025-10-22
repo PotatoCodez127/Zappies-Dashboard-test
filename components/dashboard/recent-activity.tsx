@@ -2,20 +2,20 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { MessageSquare, CalendarCheck, Clock, AlertTriangle } from "lucide-react"
+import { MessageSquare, CalendarCheck, Clock } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useCompanySupabase } from "@/lib/supabase/company-client"
 import { useToast } from "@/hooks/use-toast"
-import { formatDistanceToNow } from 'date-fns'
+import { formatDistanceToNow } from "date-fns"
 
 // Define a unified interface for activity items
 interface ActivityItem {
-  id: string;
-  type: "conversation" | "meeting";
-  description: string;
-  timestamp: Date;
-  status?: string;
+  id: string
+  type: "conversation" | "meeting"
+  description: string
+  timestamp: Date
+  status?: string
 }
 
 export function RecentActivity() {
@@ -27,87 +27,90 @@ export function RecentActivity() {
   useEffect(() => {
     async function fetchRecentActivity() {
       if (!companySupabase) {
-        setIsLoading(false);
-        console.log("RecentActivity: Company Supabase client not available.");
-        return;
+        setIsLoading(false)
+        console.log("RecentActivity: Company Supabase client not available.")
+        return
       }
-       console.log("RecentActivity: Fetching data...");
-      setIsLoading(true);
+      console.log("RecentActivity: Fetching data...")
+      setIsLoading(true)
       try {
-        const fetchLimit = 5;
+        const fetchLimit = 5
 
         // Fetch latest conversations
         const convPromise = companySupabase
           .from("conversation_history")
           .select("conversation_id, created_at, status")
           .order("created_at", { ascending: false })
-          .limit(fetchLimit);
+          .limit(fetchLimit)
 
         // --- CORRECTED QUERY: Fetch latest meetings using 'full_name' ---
         const meetingsPromise = companySupabase
           .from("meetings")
           .select("id, full_name, created_at, status") // Use 'full_name' instead of 'customer_name'
           .order("created_at", { ascending: false })
-          .limit(fetchLimit);
+          .limit(fetchLimit)
 
-        const [convResult, meetingsResult] = await Promise.all([convPromise, meetingsPromise]);
+        const [convResult, meetingsResult] = await Promise.all([convPromise, meetingsPromise])
 
-        if (convResult.error) throw convResult.error;
-        if (meetingsResult.error) throw meetingsResult.error;
+        if (convResult.error) throw convResult.error
+        if (meetingsResult.error) throw meetingsResult.error
 
-        const conversationActivities: ActivityItem[] = (convResult.data || []).map(conv => ({
-            id: conv.conversation_id,
-            type: "conversation",
-            description: `New conversation started (ID: ...${conv.conversation_id.slice(-6)})`,
-            timestamp: new Date(conv.created_at),
-            status: conv.status
-        }));
+        const conversationActivities: ActivityItem[] = (convResult.data || []).map((conv) => ({
+          id: conv.conversation_id,
+          type: "conversation",
+          description: `New conversation started (ID: ...${conv.conversation_id.slice(-6)})`,
+          timestamp: new Date(conv.created_at),
+          status: conv.status,
+        }))
 
         // --- CORRECTED PROCESSING: Use 'full_name' ---
-        const meetingActivities: ActivityItem[] = (meetingsResult.data || []).map(meeting => ({
-            id: meeting.id,
-            type: "meeting",
-            description: `Meeting booked: ${meeting.full_name || 'Unknown'}`, // Use 'full_name' here
-            timestamp: new Date(meeting.created_at),
-            status: meeting.status
-        }));
+        const meetingActivities: ActivityItem[] = (meetingsResult.data || []).map((meeting) => ({
+          id: meeting.id,
+          type: "meeting",
+          description: `Meeting booked: ${meeting.full_name || "Unknown"}`, // Use 'full_name' here
+          timestamp: new Date(meeting.created_at),
+          status: meeting.status,
+        }))
 
         const combinedActivities = [...conversationActivities, ...meetingActivities]
-            .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-            .slice(0, 5);
+          .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+          .slice(0, 5)
 
-        console.log("RecentActivity: Data processed.", combinedActivities);
-        setActivities(combinedActivities);
-
+        console.log("RecentActivity: Data processed.", combinedActivities)
+        setActivities(combinedActivities)
       } catch (error) {
-        console.error("Error fetching recent activity:", error);
-        toast({ title: "Error", description: "Could not fetch recent activity.", variant: "destructive" });
+        console.error("Error fetching recent activity:", error)
+        toast({ title: "Error", description: "Could not fetch recent activity.", variant: "destructive" })
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
     }
-    fetchRecentActivity();
-  }, [companySupabase, toast]);
-
+    fetchRecentActivity()
+  }, [companySupabase, toast])
 
   // --- Helper functions remain the same ---
   const getActivityIcon = (type: "conversation" | "meeting") => {
-      return type === "conversation"
-        ? <MessageSquare className="h-5 w-5 text-blue-400" />
-        : <CalendarCheck className="h-5 w-5 text-green-400" />;
+    return type === "conversation" ? (
+      <MessageSquare className="h-5 w-5 text-muted-foreground" />
+    ) : (
+      <CalendarCheck className="h-5 w-5 text-muted-foreground" />
+    )
   }
-   const getActivityLink = (item: ActivityItem) => {
-      return item.type === "conversation" ? "/dashboard/conversations" : "/dashboard/leads";
+  const getActivityLink = (item: ActivityItem) => {
+    return item.type === "conversation" ? "/dashboard/conversations" : "/dashboard/leads"
   }
-   const getStatusBadge = (status?: string) => {
-       // ... (status badge logic remains the same)
-        if (!status) return null;
-       let className = "border-[#EDE7C7]/50 text-[#EDE7C7]/60";
-       if (status === 'confirmed' || status === 'active') className = "border-green-500/50 text-green-500";
-       if (status === 'pending_confirmation') className = "border-yellow-500/50 text-yellow-500";
-       if (status === 'cancelled') className = "border-red-500/50 text-red-500";
-       return <Badge variant="outline" className={`text-xs ${className}`}>{status.replace(/_/g, ' ')}</Badge>;
-   }
+  const getStatusBadge = (status?: string) => {
+    if (!status) return null
+    let variant: "success" | "warning" | "error" | "outline" = "outline"
+    if (status === "confirmed" || status === "active") variant = "success"
+    if (status === "pending_confirmation") variant = "warning"
+    if (status === "cancelled") variant = "error"
+    return (
+      <Badge variant={variant} className="text-xs">
+        {status.replace(/_/g, " ")}
+      </Badge>
+    )
+  }
 
   // --- Render logic remains the same ---
   return (
@@ -117,34 +120,36 @@ export function RecentActivity() {
       </CardHeader>
       <CardContent>
         {isLoading ? (
-            <div className="space-y-4">
-                 {[...Array(5)].map((_, i) => (
-                    <div key={i} className="flex items-center gap-4 p-3">
-                         <div className="h-5 w-5 bg-[#2A2A2A] rounded animate-pulse"></div>
-                         <div className="flex-1 space-y-2">
-                            <div className="h-4 w-3/4 bg-[#2A2A2A] rounded animate-pulse"></div>
-                            <div className="h-3 w-1/4 bg-[#2A2A2A] rounded animate-pulse"></div>
-                         </div>
-                    </div>
-                 ))}
-            </div>
+          <div className="space-y-4">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="flex items-center gap-4 p-3">
+                <div className="h-5 w-5 bg-[#2A2A2A] rounded animate-pulse"></div>
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 w-3/4 bg-[#2A2A2A] rounded animate-pulse"></div>
+                  <div className="h-3 w-1/4 bg-[#2A2A2A] rounded animate-pulse"></div>
+                </div>
+              </div>
+            ))}
+          </div>
         ) : !companySupabase ? (
-             <div className="text-center py-6 text-sm text-[#EDE7C7]/60">Connect database in settings to view activity.</div>
+          <div className="text-center py-6 text-sm text-[#EDE7C7]/60">
+            Connect database in settings to view activity.
+          </div>
         ) : activities.length === 0 ? (
-          <p className="text-[#EDE7C7]/60 text-sm text-center py-6">No recent activity found.</p>
+          <p className="text-muted-foreground text-sm text-center py-6">No recent activity found.</p>
         ) : (
           <div className="space-y-1">
             {activities.map((activity) => (
               <Link href={getActivityLink(activity)} key={activity.id} className="block group">
                 <div className="flex items-start gap-4 p-3 rounded-lg hover:bg-[#2A2A2A]/50 transition-colors cursor-pointer">
-                  <div className="mt-1 flex-shrink-0">
-                    {getActivityIcon(activity.type)}
-                  </div>
+                  <div className="mt-1 flex-shrink-0">{getActivityIcon(activity.type)}</div>
                   <div className="flex-1 space-y-1 overflow-hidden">
                     <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-[#EDE7C7] truncate group-hover:text-white transition-colors">{activity.description}</p>
+                      <p className="text-sm font-medium text-foreground truncate group-hover:text-white transition-colors">
+                        {activity.description}
+                      </p>
                     </div>
-                    <div className="flex items-center gap-1 text-xs text-[#EDE7C7]/40">
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Clock className="h-3 w-3" />
                       {formatDistanceToNow(activity.timestamp, { addSuffix: true })}
                     </div>

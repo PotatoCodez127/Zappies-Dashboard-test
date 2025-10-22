@@ -206,7 +206,7 @@ export default function DashboardPage() {
     <div className="space-y-6 sm:space-y-8">
       <div>
         <h2 className="text-2xl sm:text-3xl font-bold text-[#EDE7C7] tracking-tight">Overview</h2>
-        <p className="text-sm sm:text-base text-[#EDE7C7]/60 mt-2">Here's your bot's performance summary.</p>
+        <p className="text-sm sm:text-base text-muted-foreground mt-2">Here's your bot's performance summary.</p>
       </div>
 
       <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
@@ -216,8 +216,8 @@ export default function DashboardPage() {
             className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[#EDE7C7]/20"
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2 min-h-[72px]">
-              <CardTitle className="text-sm font-medium text-[#EDE7C7]/80 leading-snug">{stat.title}</CardTitle>
-              <stat.icon className="h-4 w-4 text-[#EDE7C7]/60 flex-shrink-0" />
+              <CardTitle className="text-sm font-medium text-muted-foreground leading-snug">{stat.title}</CardTitle>
+              <stat.icon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
             </CardHeader>
             <CardContent className="pt-0">
               {isLoading ? (

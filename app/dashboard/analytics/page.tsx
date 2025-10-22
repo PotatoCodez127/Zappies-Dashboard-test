@@ -154,14 +154,14 @@ export default function AnalyticsPage() {
       </div>
 
       {isLoading ? (
-        <div className="text-center py-12 text-sm sm:text-base text-[#EDE7C7]/60">Loading analytics...</div>
+        <div className="text-center py-12 text-sm sm:text-base text-muted-foreground">Loading analytics...</div>
       ) : (
         <>
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[#EDE7C7]/20">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-[#EDE7C7]/80">Total Conversations</CardTitle>
-                <MessageSquare className="h-4 w-4 text-[#EDE7C7]/60 flex-shrink-0" />
+                <CardTitle className="text-sm font-medium text-muted-foreground">Total Conversations</CardTitle>
+                <MessageSquare className="h-4 w-4 text-muted-foreground flex-shrink-0" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-[#EDE7C7]">{metrics.totalConversations}</div>
@@ -169,8 +169,8 @@ export default function AnalyticsPage() {
             </Card>
             <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[#EDE7C7]/20">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-[#EDE7C7]/80">Total Meetings Booked</CardTitle>
-                <Calendar className="h-4 w-4 text-[#EDE7C7]/60 flex-shrink-0" />
+                <CardTitle className="text-sm font-medium text-muted-foreground">Total Meetings Booked</CardTitle>
+                <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-[#EDE7C7]">{metrics.totalMeetings}</div>
@@ -178,12 +178,12 @@ export default function AnalyticsPage() {
             </Card>
             <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[#EDE7C7]/20">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-[#EDE7C7]/80">Confirmation Rate</CardTitle>
-                <TrendingUp className="h-4 w-4 text-[#EDE7C7]/60 flex-shrink-0" />
+                <CardTitle className="text-sm font-medium text-muted-foreground">Confirmation Rate</CardTitle>
+                <TrendingUp className="h-4 w-4 text-muted-foreground flex-shrink-0" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-[#EDE7C7]">{metrics.confirmationRate}%</div>
-                <p className="text-xs text-[#EDE7C7]/60 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   {metrics.totalMeetings > 0
                     ? `${metrics.totalMeetings - (meetingStatusData.find((s) => s.name === "Pending")?.value || 0) - (meetingStatusData.find((s) => s.name === "Cancelled")?.value || 0)} confirmed`
                     : "No meetings yet"}

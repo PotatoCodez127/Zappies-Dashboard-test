@@ -58,9 +58,11 @@
   --secondary: oklch(0.18 0 0);
   --secondary-foreground: oklch(0.95 0.01 106);
   --muted: oklch(0.18 0 0);
-  --muted-foreground: oklch(0.65 0.01 106);
-  --accent: oklch(0.55 0.25 25); /* Vibrant red accent */
-  --accent-foreground: oklch(0.98 0 0);
+  /* Adjusted muted-foreground to be slightly brighter for better readability */
+  --muted-foreground: oklch(0.75 0.01 106); /* Lighter gray for secondary text */
+  /* Adjusted accent to match input background for subtle hover states */
+  --accent: oklch(0.18 0 0); /* Same as input for subtle hover states */
+  --accent-foreground: oklch(0.95 0.01 106);
   --destructive: oklch(0.55 0.25 25);
   --destructive-foreground: oklch(0.98 0 0);
   --border: oklch(0.18 0 0);
