@@ -1,3 +1,4 @@
+/* v0-cool-site/app/dashboard/settings/page.tsx */
 import { createClient } from "@/lib/supabase/server"
 import { cookies } from "next/headers" // Import cookies HERE
 import { redirect } from "next/navigation"
@@ -21,8 +22,9 @@ export default async function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold text-[#EDE7C7]">Settings</h2>
-        <p className="text-[#EDE7C7]/60 mt-2">Manage your account and company settings.</p>
+        {/* Use theme variables */}
+        <h2 className="text-2xl sm:text-3xl font-bold text-foreground">Settings</h2>
+        <p className="text-muted-foreground mt-2">Manage your account and company settings.</p>
       </div>
 
       <ProfileSettings user={user} profile={profile} />

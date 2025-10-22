@@ -1,7 +1,7 @@
+/* v0-cool-site/app/auth/signup/page.tsx */
 "use client"
 
 import type React from "react"
-
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -46,12 +46,15 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center bg-[#0A0A0A] p-6">
+     // Use theme background
+    <div className="flex min-h-screen w-full items-center justify-center bg-background p-6">
       <div className="w-full max-w-sm">
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
+         {/* Card uses theme styling */}
+        <Card>
           <CardHeader>
-            <CardTitle className="text-2xl text-[#EDE7C7]">Sign Up</CardTitle>
-            <CardDescription className="text-[#EDE7C7]/60">
+             {/* Use theme foreground/muted */}
+            <CardTitle className="text-2xl text-foreground">Sign Up</CardTitle>
+            <CardDescription className="text-muted-foreground">
               Create a new account to access the dashboard
             </CardDescription>
           </CardHeader>
@@ -59,9 +62,9 @@ export default function SignUpPage() {
             <form onSubmit={handleSignUp}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="fullName" className="text-[#EDE7C7]">
-                    Full Name
-                  </Label>
+                  {/* Label uses theme styling */}
+                  <Label htmlFor="fullName">Full Name</Label>
+                   {/* Input uses theme styling */}
                   <Input
                     id="fullName"
                     type="text"
@@ -69,13 +72,10 @@ export default function SignUpPage() {
                     required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#EDE7C7]"
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="email" className="text-[#EDE7C7]">
-                    Email
-                  </Label>
+                  <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
                     type="email"
@@ -83,34 +83,29 @@ export default function SignUpPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#EDE7C7]"
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="password" className="text-[#EDE7C7]">
-                    Password
-                  </Label>
+                  <Label htmlFor="password">Password</Label>
                   <Input
                     id="password"
                     type="password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="bg-[#0A0A0A] border-[#2A2A2A] text-[#EDE7C7]"
                   />
                 </div>
-                {error && <p className="text-sm text-red-500">{error}</p>}
-                <Button
-                  type="submit"
-                  className="w-full bg-[#EDE7C7] text-[#0A0A0A] hover:bg-[#EDE7C7]/90"
-                  disabled={isLoading}
-                >
+                 {/* Destructive text color for error */}
+                {error && <p className="text-sm text-destructive">{error}</p>}
+                 {/* Button uses default theme variant */}
+                <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? "Creating account..." : "Sign Up"}
                 </Button>
               </div>
-              <div className="mt-4 text-center text-sm text-[#EDE7C7]/60">
+              <div className="mt-4 text-center text-sm text-muted-foreground">
                 Already have an account?{" "}
-                <Link href="/auth/login" className="text-[#EDE7C7] underline underline-offset-4">
+                 {/* Link uses theme styling */}
+                <Link href="/auth/login" className="text-foreground underline underline-offset-4">
                   Login
                 </Link>
               </div>
