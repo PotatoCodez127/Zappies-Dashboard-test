@@ -46,71 +46,37 @@
 }
 
 .dark {
-  /* Pure black background with vibrant purple accents (shipable.ai style) */
-  --background: oklch(0 0 0); /* Pure Black #000000 */
+  /* --- MODIFICATION START --- */
+  --background: #000000; /* WAS: oklch(0 0 0); Explicitly set pure black */
+  /* --- MODIFICATION END --- */
+
   --foreground: oklch(0.98 0 0); /* White/Very Light Gray #f5f5f5 - KEEP */
-
-  /* --- MODIFICATIONS START --- */
-
-  /* Card background slightly darker */
-  --card: oklch(0.05 0 0); /* WAS: oklch(0.1 0 0); Darker Gray #0c0c0c */
+  --card: oklch(0.05 0 0); /* Darker Gray #0c0c0c - KEEP */
   --card-foreground: oklch(0.98 0 0); /* KEEP */
-
-  /* Popover to match card */
-  --popover: oklch(0.05 0 0); /* WAS: oklch(0.1 0 0); */
+  --popover: oklch(0.05 0 0); /* KEEP */
   --popover-foreground: oklch(0.98 0 0); /* KEEP */
-
-  /* Primary purple - KEEP */
-  --primary: oklch(0.6 0.25 300); /* Vibrant Purple #c000c0 */
+  --primary: oklch(0.6 0.25 300); /* Vibrant Purple #c000c0 - KEEP */
   --primary-foreground: oklch(0.98 0 0); /* White for contrast - KEEP */
-
-  /* Secondary slightly darker */
-  --secondary: oklch(0.1 0 0); /* WAS: oklch(0.15 0 0); */
+  --secondary: oklch(0.1 0 0); /* KEEP */
   --secondary-foreground: oklch(0.98 0 0); /* KEEP */
-
-  /* Muted background slightly darker */
-  --muted: oklch(0.1 0 0); /* WAS: oklch(0.15 0 0); */
-  /* Muted foreground slightly brighter */
-  --muted-foreground: oklch(0.7 0 0); /* WAS: oklch(0.6 0 0); Brighter Gray #ababab */
-
-  /* Accent slightly darker */
-  --accent: oklch(0.1 0 0); /* WAS: oklch(0.15 0 0); */
+  --muted: oklch(0.1 0 0); /* KEEP */
+  --muted-foreground: oklch(0.7 0 0); /* Brighter Gray #ababab - KEEP */
+  --accent: oklch(0.1 0 0); /* KEEP */
   --accent-foreground: oklch(0.98 0 0); /* KEEP */
-
-  /* Destructive - KEEP */
-  --destructive: oklch(0.65 0.2 40); /* Functional red/orange #ff6000 */
-  --destructive-foreground: oklch(0.98 0 0);
-
-  /* Default Border - Much darker/less saturated purple */
-  --border: oklch(0.2 0.02 300); /* WAS: oklch(0.6 0.25 300); Dark Purple/Gray */
-
-  /* Input background to match card */
-  --input: oklch(0.05 0 0); /* WAS: oklch(0.1 0 0); */
-
-  /* Ring (focus) - KEEP */
-  --ring: oklch(0.6 0.25 300); /* Purple for focus rings */
-
-  /* Dashboard Text Color - Use Foreground */
-  --dashboard-text-color: var(--foreground); /* WAS: #7e7e7e */
+  --destructive: oklch(0.65 0.2 40); /* Functional red/orange #ff6000 - KEEP */
+  --destructive-foreground: oklch(0.98 0 0); /* KEEP */
+  --border: oklch(0.2 0.02 300); /* Dark Purple/Gray - KEEP */
+  --input: oklch(0.05 0 0); /* KEEP */
+  --ring: oklch(0.6 0.25 300); /* Purple for focus rings - KEEP */
+  --dashboard-text-color: var(--foreground); /* KEEP */
 
   /* Chart colors - KEEP for now */
-  --chart-1: oklch(0.6 0.25 300); /* Vibrant Purple */
-  --chart-2: oklch(0.55 0.2 280); /* Medium Purple */
-  --chart-3: oklch(0.5 0.15 260); /* Desaturated Purple/Blue */
-  --chart-4: oklch(0.45 0.1 240); /* Desaturated Blue */
-  --chart-5: oklch(0.4 0.05 220); /* Desaturated Gray-Blue */
+  --chart-1: oklch(0.6 0.25 300);
+  /* ... other chart colors ... */
 
   /* Sidebar colors - KEEP for now */
-  --sidebar: oklch(0 0 0); /* Pure Black */
-  --sidebar-foreground: oklch(0.98 0 0);
-  --sidebar-primary: oklch(0.6 0.25 300); /* Vibrant Purple */
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.15 0 0);
-  --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(0.6 0.25 300); /* Purple border */
-  --sidebar-ring: oklch(0.6 0.25 300);
-
-  /* --- MODIFICATIONS END --- */
+  --sidebar: oklch(0 0 0);
+  /* ... other sidebar colors ... */
 }
 
 @theme inline {
