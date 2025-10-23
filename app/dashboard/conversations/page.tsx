@@ -132,11 +132,13 @@ export default function ConversationsPage() {
         {/* --- END MODIFICATION --- */}
       </div>
 
-      {/* --- MODIFIED: Added Animation & Delay and Fixed Scroll Issues (Bug #3 & #4) --- */}
+      {/* --- MODIFIED: Fixed Scroll Issues (Bug #1) --- */}
+      {/* Ensure min-h-0 is set on the flex-1 container to allow children to shrink and enable overflow scroll */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
+        
         {/* Chat List Card (Left) */}
         <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-1 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 lg:h-full">
-        {/* REMOVED fixed height h-[400px] */}
+        {/* lg:h-full combined with the flex-1 min-h-0 parent ensures card fills remaining vertical space */}
           <CardHeader className="flex-shrink-0 pb-4">
             <CardTitle className="text-xl font-semibold text-[var(--dashboard-text-color)]">Chats</CardTitle>
             <div className="relative mt-4">
@@ -150,6 +152,7 @@ export default function ConversationsPage() {
             </div>
           </CardHeader>
           <CardContent className="p-0 flex-1 overflow-hidden">
+          {/* CardContent is flex-1 and overflow-hidden, ScrollArea inside is h-full */}
             <ScrollArea className="h-full">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full min-h-[200px]">
@@ -192,7 +195,7 @@ export default function ConversationsPage() {
 
         {/* Message View Card (Right) */}
         <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 lg:h-full">
-        {/* REMOVED fixed height h-[500px] */}
+        {/* lg:h-full ensures card fills remaining vertical space */}
           {selectedConversation ? (
             <>
               <CardHeader className="border-b border-[#2A2A2A] flex-shrink-0 pb-4">
@@ -222,6 +225,7 @@ export default function ConversationsPage() {
                 </div>
               </CardHeader>
               <CardContent className="flex-1 p-6 overflow-hidden">
+              {/* CardContent is flex-1 and overflow-hidden, ScrollArea inside is h-full */}
                 <ScrollArea className="h-full pr-4">
                   <div className="space-y-4">
                     {selectedConversation.history?.map((message, index) => (

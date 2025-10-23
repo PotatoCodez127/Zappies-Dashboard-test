@@ -212,67 +212,78 @@ export default function AnalyticsPage() {
                  </CardTitle>
                </CardHeader>
                <CardContent className="pt-4">
-                 <ResponsiveContainer width="100%" height={250}>
-                   {meetingStatusData.length === 0 ? (
-                     <div className="flex items-center justify-center h-full">
-                       <div className="text-center px-4">
-                         <PieChartIcon className="h-12 w-12 text-[var(--dashboard-text-color)]/20 mx-auto mb-3" />
-                         <p className="text-sm text-[var(--dashboard-text-color)]/60">No meeting data available.</p>
-                       </div>
-                     </div>
-                   ) : (
-                     <PieChart>
-                       <Pie
-                         data={meetingStatusData}
-                         cx="50%"
-                         cy="50%"
-                         labelLine={false}
-                         outerRadius={80}
-                         innerRadius={50}
-                         fill="#8884d8"
-                         dataKey="value"
-                         label={({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
-                           const RADIAN = Math.PI / 180
-                           const radius = innerRadius + (outerRadius - innerRadius) * 0.5
-                           const x = cx + radius * Math.cos(-midAngle * RADIAN)
-                           const y = cy + radius * Math.sin(-midAngle * RADIAN)
-                           return percent > 0.05 ? (
-                             <text
-                               x={x}
-                               y={y}
-                               fill="#000000" // <<< MODIFIED: Changed text color to black (Fixes Bug #7)
-                               textAnchor={x > cx ? "start" : "end"}
-                               dominantBaseline="central"
-                               fontSize={12}
-                             >
-                               {`${(percent * 100).toFixed(0)}%`}
-                             </text>
-                           ) : null
-                         }}
-                       >
-                         {meetingStatusData.map((entry, index) => (
-                           <Cell
-                             key={`cell-${index}`}
-                             fill={getThemeColor(entry.name)}
-                             stroke={getThemeColor(entry.name)}
-                           />
-                         ))}
-                       </Pie>
-                       <Tooltip
-                         cursor={{ fill: "rgba(42, 42, 42, 0.3)" }}
-                         contentStyle={{
-                           backgroundColor: "rgba(26, 26, 26, 0.9)",
-                           border: "1px solid #2A2A2A",
-                           color: "var(--dashboard-text-color)",
-                           borderRadius: "0.5rem",
-                         }}
-                         itemStyle={{ color: "var(--dashboard-text-color)" }}
-                         formatter={(value: number, name: string) => [`${value} meetings`, name]}
-                       />
-                       <Legend wrapperStyle={{ color: "var(--dashboard-text-color)", fontSize: "12px" }} />
-                     </PieChart>
-                   )}
-                 </ResponsiveContainer>
+               {/* --- MODIFIED: Redesigned Pie Chart Layout (Fixes Bug #2) --- */}
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                  <div className="col-span-1">
+                    <ResponsiveContainer width="100%" height={250}>
+                      {meetingStatusData.length === 0 ? (
+                        <div className="flex items-center justify-center h-full">
+                          <div className="text-center px-4">
+                            <PieChartIcon className="h-12 w-12 text-[var(--dashboard-text-color)]/20 mx-auto mb-3" />
+                            <p className="text-sm text-[var(--dashboard-text-color)]/60">No meeting data available.</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <PieChart>
+                          <Pie
+                            data={meetingStatusData}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            outerRadius={70} // Smaller size
+                            innerRadius={50}
+                            fill="#8884d8"
+                            dataKey="value"
+                            // REMOVED label prop to remove percentages on chart
+                          >
+                            {meetingStatusData.map((entry, index) => (
+                              <Cell
+                                key={`cell-${index}`}
+                                fill={getThemeColor(entry.name)}
+                                stroke={getThemeColor(entry.name)}
+                              />
+                            ))}
+                          </Pie>
+                          {/* Removed default Legend from chart area */}
+                          <Tooltip
+                            cursor={{ fill: "rgba(42, 42, 42, 0.3)" }}
+                            contentStyle={{
+                              backgroundColor: "rgba(26, 26, 26, 0.9)",
+                              border: "1px solid #2A2A2A",
+                              color: "var(--dashboard-text-color)",
+                              borderRadius: "0.5rem",
+                            }}
+                            itemStyle={{ color: "var(--dashboard-text-color)" }}
+                            formatter={(value: number, name: string) => [`${value} meetings`, name]}
+                          />
+                        </PieChart>
+                      )}
+                    </ResponsiveContainer>
+                  </div>
+                   
+                  {/* Custom Legend/Breakdown List */}
+                  <div className="col-span-1 space-y-3 px-4 py-2">
+                      <h3 className="text-sm font-semibold text-[var(--dashboard-text-color)]/80 mb-2">Breakdown</h3>
+                      {(() => {
+                          const total = meetingStatusData.reduce((sum, entry) => sum + entry.value, 0);
+                          return meetingStatusData.map((entry) => (
+                              <div key={entry.name} className="flex items-center justify-between text-sm">
+                                  <div className="flex items-center gap-2">
+                                      <div
+                                          className="w-3 h-3 rounded-full"
+                                          style={{ backgroundColor: getThemeColor(entry.name) }}
+                                      />
+                                      <span className="text-[var(--dashboard-text-color)]/80">{entry.name}</span>
+                                  </div>
+                                  <span className="font-semibold" style={{ color: getThemeColor(entry.name) }}>
+                                      {total > 0 ? `${Math.round((entry.value / total) * 100)}%` : '0%'} ({entry.value})
+                                  </span>
+                              </div>
+                          ));
+                      })()}
+                   </div>
+               </div>
+               {/* --- END MODIFIED: Redesigned Pie Chart Layout --- */}
                </CardContent>
              </Card>
 
