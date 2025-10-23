@@ -32,7 +32,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
 
   return (
     <>
-      <header className="h-14 sm:h-16 border-b border-border bg-card flex items-center justify-between px-4 sm:px-6 flex-shrink-0 shadow-[0_4px_15px_-5px_theme(colors.primary/0.5)]">
+      <header className="h-14 sm:h-16 border-b border-border bg-card flex items-center justify-between px-4 sm:px-6 flex-shrink-0 shadow-[0_4px_15px_0px_theme(colors.primary/0.5)]">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
