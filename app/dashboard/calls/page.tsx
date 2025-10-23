@@ -209,7 +209,7 @@ export default function CallsPage() {
         style={{ animationDelay: "200ms", animationFillMode: "backwards" }}
       >
         {/* Call Logs List Card */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 max-h-[600px]">
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 max-h-[calc(100vh-240px)]">
           <CardHeader className="flex-shrink-0">
             <CardTitle className="text-[var(--dashboard-text-color)]">Call History ({filteredCalls.length})</CardTitle>
           </CardHeader>
@@ -292,7 +292,7 @@ export default function CallsPage() {
         </Card>
 
         {/* Call Details Panel Card */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] flex flex-col transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 max-h-[600px]">
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] flex flex-col transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 max-h-[calc(100vh-240px)]">
           <CardHeader className="flex-shrink-0">
             <CardTitle className="text-[var(--dashboard-text-color)]">Call Details</CardTitle>
           </CardHeader>
