@@ -32,18 +32,26 @@ interface HourlyActivityData {
   meetings: number
 }
 
-// Define colors for the pie chart segments
-const COLORS: { [key: string]: string } = {
-  confirmed: "#82ca9d",
-  pending_confirmation: "#ffc658",
-  cancelled: "#ff8042",
-  default: "#8884d8",
-}
+// Define status name mapping (maps internal DB status to displayed name)
 const STATUS_NAMES: { [key: string]: string } = {
   confirmed: "Confirmed",
   pending_confirmation: "Pending",
   cancelled: "Cancelled",
 }
+
+// Define theme colors for chart segments
+const THEME_CHART_COLORS: { [key: string]: string } = {
+  Confirmed: "#00e0c6", // Teal (Consistent with Overview chart 'Confirmed' line)
+  Pending: "oklch(0.65 0.2 40)", // Theme's destructive/warning (Yellow/Orange)
+  Cancelled: "oklch(0.4 0.1 20)", // Darker red/grey
+  Default: "var(--primary)", // Theme primary purple
+}
+
+// Helper function to get the color based on the segment name
+const getThemeColor = (statusName: string) => {
+  return THEME_CHART_COLORS[statusName] || THEME_CHART_COLORS.Default;
+};
+
 
 export default function AnalyticsPage() {
   const companySupabase = useCompanySupabase()
@@ -245,14 +253,8 @@ export default function AnalyticsPage() {
                          {meetingStatusData.map((entry, index) => (
                            <Cell
                              key={`cell-${index}`}
-                             fill={
-                               COLORS[entry.name.toLowerCase().replace(/ /g, "_") as keyof typeof COLORS] ||
-                               COLORS.default
-                             }
-                             stroke={
-                               COLORS[entry.name.toLowerCase().replace(/ /g, "_") as keyof typeof COLORS] ||
-                               COLORS.default
-                             }
+                             fill={getThemeColor(entry.name)}
+                             stroke={getThemeColor(entry.name)}
                            />
                          ))}
                        </Pie>

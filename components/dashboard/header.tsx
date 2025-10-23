@@ -50,7 +50,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
           >
             <Menu className="h-5 w-5 text-[var(--dashboard-text-color)]" />
           </Button>
-          <h1 className="text-base sm:text-lg font-semibold text-[var(--dashboard-text-color)]">Dashboardd</h1>
+          <h1 className="text-base sm:text-lg font-semibold text-[var(--dashboard-text-color)]">Dashboard</h1>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
