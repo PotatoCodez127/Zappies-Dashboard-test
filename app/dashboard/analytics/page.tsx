@@ -240,7 +240,7 @@ export default function AnalyticsPage() {
                              <text
                                x={x}
                                y={y}
-                               fill="var(--dashboard-text-color)"
+                               fill="#000000" // <<< MODIFIED: Changed text color to black (Fixes Bug #7)
                                textAnchor={x > cx ? "start" : "end"}
                                dominantBaseline="central"
                                fontSize={12}

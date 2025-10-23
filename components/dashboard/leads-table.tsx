@@ -21,6 +21,7 @@ import Link from "next/link"
 import { useCompanySupabase } from "@/lib/supabase/company-client"
 import { useToast } from "@/hooks/use-toast"
 import { format, parseISO } from "date-fns"
+import { ScrollArea } from "@/components/ui/scroll-area" // <<< Import ScrollArea
 
 // Interface matching the 'call_history' table schema
 interface CallHistoryEntry {
@@ -159,8 +160,10 @@ export function LeadsTable() {
   }
 
   return (
-    <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
-      <CardHeader>
+    // --- MODIFICATION START (Fixed Scroll Issue - Bug #6) ---
+    // Make Card a flex container with constrained height
+    <Card className="bg-[#1A1A1A] border-[#2A2A2A] flex flex-col lg:h-[80vh]">
+      <CardHeader className="flex-shrink-0">
         <CardTitle className="text-[var(--dashboard-text-color)]">Call History ({filteredCalls.length})</CardTitle>
         <div className="flex flex-col sm:flex-row gap-4 mt-4">
           {/* Search */}
@@ -189,182 +192,189 @@ export function LeadsTable() {
           </Select>
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {callHistory.length === 0 ? (
-            <div className="flex items-center justify-center py-12 min-h-[200px]">
-              <div className="text-center px-4">
-                <Phone className="h-12 w-12 text-[var(--dashboard-text-color)]/20 mx-auto mb-3" />
-                <p className="text-base text-[var(--dashboard-text-color)]/60">No call history found.</p>
-              </div>
-            </div>
-          ) : filteredCalls.length === 0 ? (
-            <div className="flex items-center justify-center py-12 min-h-[200px]">
-              <div className="text-center px-4">
-                <Search className="h-12 w-12 text-[var(--dashboard-text-color)]/20 mx-auto mb-3" />
-                <p className="text-base text-[var(--dashboard-text-color)]/60">No calls match your current filters.</p>
-              </div>
-            </div>
-          ) : (
-            filteredCalls.map((call) => (
-              <div
-                key={call.id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-lg bg-[#0A0A0A] border border-[#2A2A2A]"
-              >
-                {/* Call Row Display */}
-                <div className="flex-1 space-y-2">
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <p className="font-medium text-[var(--dashboard-text-color)]">{call.full_name || "N/A"}</p>
-                    {call.resulted_in_meeting === true && (
-                      <Badge className="bg-green-500/10 text-green-500 border-green-500/20">
-                        <ThumbsUp className="h-3 w-3 mr-1" /> Meeting
-                      </Badge>
-                    )}
-                    {call.resulted_in_meeting === false && !call.disqualification_reason && (
-                      <Badge className="bg-yellow-500/10 text-yellow-500 border-yellow-500/20">
-                        <ThumbsDown className="h-3 w-3 mr-1" /> No Meeting
-                      </Badge>
-                    )}
-                    {call.disqualification_reason && (
-                      <Badge className="bg-red-500/10 text-red-500 border-red-500/20">
-                        <ThumbsDown className="h-3 w-3 mr-1" /> Disqualified
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="text-sm text-[var(--dashboard-text-color)]/60 space-y-1">
-                    <p className="flex items-center gap-1.5">
-                      <Mail className="h-3 w-3 flex-shrink-0" /> {call.email || "N/A"}
-                    </p>
-                    {call.company_name && (
-                      <p className="flex items-center gap-1.5">
-                        <User className="h-3 w-3 flex-shrink-0" /> {call.company_name}
-                      </p>
-                    )}
-                  </div>
-                  <p className="text-xs text-[var(--dashboard-text-color)]/40">{format(parseISO(call.created_at), "MMM d, yyyy h:mm a")}</p>
+      {/* Make CardContent take remaining height and enable internal scrolling */}
+      <CardContent className="flex-1 overflow-hidden p-0">
+        <ScrollArea className="h-full px-6 pb-6">
+          <div className="space-y-4">
+            {callHistory.length === 0 ? (
+              <div className="flex items-center justify-center py-12 min-h-[200px]">
+                <div className="text-center px-4">
+                  <Phone className="h-12 w-12 text-[var(--dashboard-text-color)]/20 mx-auto mb-3" />
+                  <p className="text-base text-[var(--dashboard-text-color)]/60">No call history found.</p>
                 </div>
-                {/* View Details Button */}
-                <Dialog onOpenChange={(open) => setSelectedCall(open ? call : null)}>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="bg-[var(--dashboard-text-color)]/5 border-[var(--dashboard-text-color)]/20 text-[var(--dashboard-text-color)] hover:bg-[var(--dashboard-text-color)]/10"
-                    >
-                      {" "}
-                      <Eye className="h-4 w-4 mr-2" /> View Details{" "}
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="bg-[#1A1A1A] border-[#2A2A2A] max-w-lg">
-                    <DialogHeader>
-                      {" "}
-                      <DialogTitle className="text-[var(--dashboard-text-color)]">Call Details</DialogTitle>{" "}
-                      <DialogDescription className="text-[var(--dashboard-text-color)]/60">
-                        Detailed information about the call.
-                      </DialogDescription>{" "}
-                    </DialogHeader>
-                    {selectedCall && (
-                      <div className="space-y-6 pt-4 text-sm">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <div className="space-y-1">
-                            {" "}
-                            <Label className="text-[var(--dashboard-text-color)]/80">Caller Name</Label>{" "}
-                            <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
-                              <User className="h-4 w-4" /> {selectedCall.full_name || "N/A"}
-                            </p>{" "}
-                          </div>
-                          <div className="space-y-1">
-                            {" "}
-                            <Label className="text-[var(--dashboard-text-color)]/80">Caller Email</Label>{" "}
-                            <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
-                              <Mail className="h-4 w-4" /> {selectedCall.email || "N/A"}
-                            </p>{" "}
-                          </div>
-                          {selectedCall.company_name && (
-                            <div className="space-y-1">
-                              {" "}
-                              <Label className="text-[var(--dashboard-text-color)]/80">Company</Label>{" "}
-                              <p className="text-[var(--dashboard-text-color)]">{selectedCall.company_name}</p>{" "}
-                            </div>
-                          )}
-                          <div className="space-y-1">
-                            {" "}
-                            <Label className="text-[var(--dashboard-text-color)]/80">Call Time</Label>{" "}
-                            <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
-                              <Clock className="h-4 w-4" />{" "}
-                              {format(parseISO(selectedCall.created_at), "MMM d, yyyy h:mm a")}
-                            </p>{" "}
-                          </div>
-                          {selectedCall.call_duration_seconds !== null && (
-                            <div className="space-y-1">
-                              {" "}
-                              <Label className="text-[var(--dashboard-text-color)]/80">Call Duration</Label>{" "}
-                              <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
-                                <Clock className="h-4 w-4" /> {formatDuration(selectedCall.call_duration_seconds)}
-                              </p>{" "}
-                            </div>
-                          )}
-                          {selectedCall.monthly_budget !== null && (
-                            <div className="space-y-1">
-                              {" "}
-                              <Label className="text-[var(--dashboard-text-color)]/80">Monthly Budget</Label>{" "}
-                              <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
-                                <DollarSign className="h-4 w-4" /> {formatBudget(selectedCall.monthly_budget)}
-                              </p>{" "}
-                            </div>
-                          )}
-                        </div>
-                        {selectedCall.goal && (
-                          <div>
-                            {" "}
-                            <Label className="text-[var(--dashboard-text-color)]/80">Call Goal</Label>{" "}
-                            <p className="text-[var(--dashboard-text-color)] mt-1 text-sm bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap">
-                              {selectedCall.goal}
-                            </p>{" "}
-                          </div>
-                        )}
-                        <div className="space-y-1">
-                          <Label className="text-[var(--dashboard-text-color)]/80">Resulted in Meeting?</Label>
-                          <p
-                            className={`text-base font-medium ${selectedCall.resulted_in_meeting ? "text-green-500" : "text-yellow-500"}`}
-                          >
-                            {selectedCall.resulted_in_meeting ? "Yes" : "No"}
-                          </p>
-                        </div>
-                        {selectedCall.disqualification_reason && (
-                          <div>
-                            {" "}
-                            <Label className="text-[var(--dashboard-text-color)]/80">Disqualification Reason</Label>{" "}
-                            <p className="text-[var(--dashboard-text-color)] mt-1 text-sm bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap">
-                              {selectedCall.disqualification_reason}
-                            </p>{" "}
-                          </div>
-                        )}
-                        {/* Notes (client-side only) */}
-                        <div>
-                          {" "}
-                          <Label htmlFor="notes" className="text-[var(--dashboard-text-color)]/80">
-                            Notes (Not Saved)
-                          </Label>{" "}
-                          <Textarea
-                            id="notes"
-                            value={currentNotes}
-                            onChange={(e) => setCurrentNotes(e.target.value)}
-                            placeholder="Add temporary notes here..."
-                            className="mt-1 bg-[#0A0A0A] border-[#2A2A2A] text-[var(--dashboard-text-color)]"
-                            rows={3}
-                          />{" "}
-                          <p className="text-xs text-[var(--dashboard-text-color)]/50 mt-1">Notes are for temporary reference only.</p>{" "}
-                        </div>
-                      </div>
-                    )}
-                  </DialogContent>
-                </Dialog>
               </div>
-            ))
-          )}
-        </div>
+            ) : filteredCalls.length === 0 ? (
+              <div className="flex items-center justify-center py-12 min-h-[200px]">
+                <div className="text-center px-4">
+                  <Search className="h-12 w-12 text-[var(--dashboard-text-color)]/20 mx-auto mb-3" />
+                  <p className="text-base text-[var(--dashboard-text-color)]/60">No calls match your current filters.</p>
+                </div>
+              </div>
+            ) : (
+              filteredCalls.map((call) => (
+                <div
+                  key={call.id}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-lg bg-[#0A0A0A] border border-[#2A2A2A]"
+                >
+                  {/* Call Row Display */}
+                  <div className="flex-1 space-y-2">
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <p className="font-medium text-[var(--dashboard-text-color)]">{call.full_name || "N/A"}</p>
+                      {call.resulted_in_meeting === true && (
+                        <Badge className="bg-green-500/10 text-green-500 border-green-500/20">
+                          <ThumbsUp className="h-3 w-3 mr-1" /> Meeting
+                        </Badge>
+                      )}
+                      {call.resulted_in_meeting === false && !call.disqualification_reason && (
+                        <Badge className="bg-yellow-500/10 text-yellow-500 border-yellow-500/20">
+                          <ThumbsDown className="h-3 w-3 mr-1" /> No Meeting
+                        </Badge>
+                      )}
+                      {call.disqualification_reason && (
+                        <Badge className="bg-red-500/10 text-red-500 border-red-500/20">
+                          <ThumbsDown className="h-3 w-3 mr-1" /> Disqualified
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="text-sm text-[var(--dashboard-text-color)]/60 space-y-1">
+                      <p className="flex items-center gap-1.5">
+                        <Mail className="h-3 w-3 flex-shrink-0" /> {call.email || "N/A"}
+                      </p>
+                      {call.company_name && (
+                        <p className="flex items-center gap-1.5">
+                          <User className="h-3 w-3 flex-shrink-0" /> {call.company_name}
+                        </p>
+                      )}
+                    </div>
+                    <p className="text-xs text-[var(--dashboard-text-color)]/40">
+                      {format(parseISO(call.created_at), "MMM d, yyyy h:mm a")}
+                    </p>
+                  </div>
+                  {/* View Details Button */}
+                  <Dialog onOpenChange={(open) => setSelectedCall(open ? call : null)}>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="bg-[var(--dashboard-text-color)]/5 border-[var(--dashboard-text-color)]/20 text-[var(--dashboard-text-color)] hover:bg-[var(--dashboard-text-color)]/10"
+                      >
+                        {" "}
+                        <Eye className="h-4 w-4 mr-2" /> View Details{" "}
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="bg-[#1A1A1A] border-[#2A2A2A] max-w-lg">
+                      <DialogHeader>
+                        {" "}
+                        <DialogTitle className="text-[var(--dashboard-text-color)]">Call Details</DialogTitle>{" "}
+                        <DialogDescription className="text-[var(--dashboard-text-color)]/60">
+                          Detailed information about the call.
+                        </DialogDescription>{" "}
+                      </DialogHeader>
+                      {selectedCall && (
+                        <div className="space-y-6 pt-4 text-sm">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                              {" "}
+                              <Label className="text-[var(--dashboard-text-color)]/80">Caller Name</Label>{" "}
+                              <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
+                                <User className="h-4 w-4" /> {selectedCall.full_name || "N/A"}
+                              </p>{" "}
+                            </div>
+                            <div className="space-y-1">
+                              {" "}
+                              <Label className="text-[var(--dashboard-text-color)]/80">Caller Email</Label>{" "}
+                              <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
+                                <Mail className="h-4 w-4" /> {selectedCall.email || "N/A"}
+                              </p>{" "}
+                            </div>
+                            {selectedCall.company_name && (
+                              <div className="space-y-1">
+                                {" "}
+                                <Label className="text-[var(--dashboard-text-color)]/80">Company</Label>{" "}
+                                <p className="text-[var(--dashboard-text-color)]">{selectedCall.company_name}</p>{" "}
+                              </div>
+                            )}
+                            <div className="space-y-1">
+                              {" "}
+                              <Label className="text-[var(--dashboard-text-color)]/80">Call Time</Label>{" "}
+                              <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
+                                <Clock className="h-4 w-4" />{" "}
+                                {format(parseISO(selectedCall.created_at), "MMM d, yyyy h:mm a")}
+                              </p>{" "}
+                            </div>
+                            {selectedCall.call_duration_seconds !== null && (
+                              <div className="space-y-1">
+                                {" "}
+                                <Label className="text-[var(--dashboard-text-color)]/80">Call Duration</Label>{" "}
+                                <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
+                                  <Clock className="h-4 w-4" /> {formatDuration(selectedCall.call_duration_seconds)}
+                                </p>{" "}
+                              </div>
+                            )}
+                            {selectedCall.monthly_budget !== null && (
+                              <div className="space-y-1">
+                                {" "}
+                                <Label className="text-[var(--dashboard-text-color)]/80">Monthly Budget</Label>{" "}
+                                <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
+                                  <DollarSign className="h-4 w-4" /> {formatBudget(selectedCall.monthly_budget)}
+                                </p>{" "}
+                              </div>
+                            )}
+                          </div>
+                          {selectedCall.goal && (
+                            <div>
+                              {" "}
+                              <Label className="text-[var(--dashboard-text-color)]/80">Call Goal</Label>{" "}
+                              <p className="text-[var(--dashboard-text-color)] mt-1 text-sm bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap">
+                                {selectedCall.goal}
+                              </p>{" "}
+                            </div>
+                          )}
+                          <div className="space-y-1 border-t border-[#2A2A2A] pt-4">
+                            <Label className="text-[var(--dashboard-text-color)]/80">Resulted in Meeting?</Label>
+                            <p
+                              className={`text-base font-medium ${selectedCall.resulted_in_meeting ? "text-green-500" : selectedCall.disqualification_reason ? "text-red-500" : "text-yellow-500"}`}
+                            >
+                              {selectedCall.resulted_in_meeting ? "Yes" : "No"}
+                            </p>
+                          </div>
+                          {selectedCall.disqualification_reason && (
+                            <div>
+                              {" "}
+                              <Label className="text-[var(--dashboard-text-color)]/80">Disqualification Reason</Label>{" "}
+                              <p className="text-[var(--dashboard-text-color)] mt-1 text-sm bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap">
+                                {selectedCall.disqualification_reason}
+                              </p>{" "}
+                            </div>
+                          )}
+                          <div>
+                            {" "}
+                            <Label htmlFor="notes" className="text-[var(--dashboard-text-color)]/80">
+                              Notes (Not Saved)
+                            </Label>{" "}
+                            <Textarea
+                              id="notes"
+                              value={currentNotes}
+                              onChange={(e) => setCurrentNotes(e.target.value)}
+                              placeholder="Add temporary notes here..."
+                              className="mt-1 bg-[#0A0A0A] border-[#2A2A2A] text-[var(--dashboard-text-color)]"
+                              rows={3}
+                            />{" "}
+                            <p className="text-xs text-[var(--dashboard-text-color)]/50 mt-1">
+                              Notes are for temporary reference only.
+                            </p>{" "}
+                          </div>
+                        </div>
+                      )}
+                    </DialogContent>
+                  </DialogContent>
+                </div>
+              ))
+            )}
+          </div>
+        </ScrollArea>
       </CardContent>
     </Card>
+    // --- MODIFICATION END ---
   )
 }

@@ -193,15 +193,16 @@ export default function CallsPage() {
       </div>
       {/* --- END MODIFICATION --- */}
 
-      {/* --- MODIFIED: Added Animation & Delay --- */}
+      {/* --- MODIFIED: Fixed Scroll Issue (Bug #5) --- */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
         {/* Call Logs List Card */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col h-[500px] lg:h-[600px] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20">
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 lg:h-full">
+        {/* REMOVED fixed height h-[500px] lg:h-[600px] */}
           <CardHeader>
             {" "}
             <CardTitle className="text-[var(--dashboard-text-color)]">Call History ({filteredCalls.length})</CardTitle>{" "}
           </CardHeader>
-          <CardContent className="p-0 flex-1">
+          <CardContent className="p-0 flex-1 overflow-hidden">
             <ScrollArea className="h-full">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full min-h-[200px]">
@@ -276,11 +277,13 @@ export default function CallsPage() {
         </Card>
 
         {/* Call Details Panel Card */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] flex flex-col h-[500px] lg:h-[600px] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20">
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] flex flex-col transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 lg:h-full">
+        {/* REMOVED fixed height h-[500px] lg:h-[600px] */}
           <CardHeader>
             {" "}
             <CardTitle className="text-[var(--dashboard-text-color)]">Call Details</CardTitle>{" "}
           </CardHeader>
+          {/* Enabled overflow-y-auto for the content area for internal scrolling */}
           <CardContent className="flex-1 overflow-y-auto">
             {selectedCall ? (
               <div className="space-y-6 text-sm">

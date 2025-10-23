@@ -132,10 +132,11 @@ export default function ConversationsPage() {
         {/* --- END MODIFICATION --- */}
       </div>
 
-      {/* --- MODIFIED: Added Animation & Delay --- */}
+      {/* --- MODIFIED: Added Animation & Delay and Fixed Scroll Issues (Bug #3 & #4) --- */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
-        {/* Chat List Card */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-1 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 h-[400px] lg:h-full">
+        {/* Chat List Card (Left) */}
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-1 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 lg:h-full">
+        {/* REMOVED fixed height h-[400px] */}
           <CardHeader className="flex-shrink-0 pb-4">
             <CardTitle className="text-xl font-semibold text-[var(--dashboard-text-color)]">Chats</CardTitle>
             <div className="relative mt-4">
@@ -189,8 +190,9 @@ export default function ConversationsPage() {
           </CardContent>
         </Card>
 
-        {/* Message View Card */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 h-[500px] lg:h-full">
+        {/* Message View Card (Right) */}
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 lg:h-full">
+        {/* REMOVED fixed height h-[500px] */}
           {selectedConversation ? (
             <>
               <CardHeader className="border-b border-[#2A2A2A] flex-shrink-0 pb-4">
