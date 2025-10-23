@@ -145,7 +145,7 @@ export default function ConversationsPage() {
         style={{ animationDelay: "200ms", animationFillMode: "backwards" }}
       >
         {/* Chat List Card (Left) */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-1 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 max-h-[calc(100vh-240px)]">
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-1 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 max-h-[calc(100vh-140px)]">
           <CardHeader className="flex-shrink-0 pb-4">
             <CardTitle className="text-xl font-semibold text-[var(--dashboard-text-color)]">Chats</CardTitle>
             <div className="relative mt-4">
@@ -206,7 +206,7 @@ export default function ConversationsPage() {
         </Card>
 
         {/* Message View Card (Right) */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 max-h-[calc(100vh-240px)]">
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 max-h-[calc(100vh-140px)]">
           {selectedConversation ? (
             <>
               <CardHeader className="border-b border-[#2A2A2A] flex-shrink-0 pb-4">
