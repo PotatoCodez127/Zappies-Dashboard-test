@@ -29,12 +29,8 @@ function DropdownMenuContent({
         data-slot="dropdown-menu-content"
         sideOffset={sideOffset}
         className={cn(
-          // --- CORRECTED CLASSNAME ---
-          // Changes made:
-          // 1. Removed: bg-popover/70 backdrop-blur-md (now solid bg-popover)
-          // 2. Corrected: origin-[var(--radix-dropdown-menu-content-transform-origin)] for valid Tailwind JIT parsing
-          // 3. Removed: max-h property (was using incorrect syntax and causing clipping)
-          "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] origin-[var(--radix-dropdown-menu-content-transform-origin)] overflow-x-hidden overflow-y-auto rounded-md border border-primary/20 p-1 shadow-lg",
+          // **FIXED:** Removed transparent/blur backgrounds and the problematic 'origin' property.
+          "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] overflow-x-hidden overflow-y-auto rounded-md border border-primary/20 p-1 shadow-lg",
           className,
         )}
         {...props}

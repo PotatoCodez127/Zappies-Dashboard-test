@@ -265,7 +265,7 @@ export default function ConversationsPage() {
                         <MoreVertical className="h-5 w-5 text-[var(--dashboard-text-color)]/60" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-56 bg-[#1A1A1A] border-[#2A2A2A]">
+                    <DropdownMenuContent align="end" className="w-56">
                       <DropdownMenuItem onClick={() => handleStatusChange("resolved")} className="cursor-pointer text-[var(--dashboard-text-color)]/80 focus:text-[var(--dashboard-text-color)] focus:bg-[#2A2A2A]/50">
                         <CheckCircle className="mr-2 h-4 w-4 text-green-500" />
                         Mark as Resolved
