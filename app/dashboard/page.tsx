@@ -222,7 +222,8 @@ export default function DashboardPage() {
             className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out"
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2 min-h-[72px]">
-              <CardTitle className="text-sm font-medium text-muted-foreground leading-snug">{stat.title}</CardTitle>
+              {/* Removed specific text classes from CardTitle */}
+              <CardTitle className="text-muted-foreground">{stat.title}</CardTitle>
               <stat.icon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
             </CardHeader>
             <CardContent className="pt-0">
@@ -243,12 +244,13 @@ export default function DashboardPage() {
         style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}
        >
         <CardHeader>
-           <CardTitle className="text-lg sm:text-xl text-[var(--dashboard-text-color)] flex items-center gap-2">
-            <LineChartIcon className="h-5 w-5 flex-shrink-0" />
-            <span className="truncate">
-              Daily Meetings Overview {chartDaysCount > 0 ? `(Last ${chartDaysCount} Days)` : ""}
-            </span>
-          </CardTitle>
+           {/* Removed specific text classes from CardTitle */}
+           <CardTitle className="flex items-center gap-2">
+             <LineChartIcon className="h-5 w-5 flex-shrink-0" />
+             <span className="truncate">
+               Daily Meetings Overview {chartDaysCount > 0 ? `(Last ${chartDaysCount} Days)` : ""}
+             </span>
+           </CardTitle>
         </CardHeader>
         <CardContent className="pl-2 pr-4">
           {isLoading ? (
@@ -267,15 +269,14 @@ export default function DashboardPage() {
               ) : (
                 <LineChart data={chartData} margin={{ top: 5, right: 10, bottom: 5, left: 0 }}>
                   <defs>
-                     {/* Updated gradient for "Total Booked" to use primary purple */}
+                     {/* Updated gradient colors */}
                     <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                       <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.6} /> {/* WAS #8884d8 */}
-                       <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} /> {/* WAS #8884d8 */}
+                       <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.6} />
+                       <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
                     </linearGradient>
-                    {/* Updated gradient for "Confirmed" to use bright teal */}
                     <linearGradient id="colorConfirmed" x1="0" y1="0" x2="0" y2="1">
-                       <stop offset="5%" stopColor="#00e0c6" stopOpacity={0.6} /> {/* WAS #82ca9d */}
-                       <stop offset="95%" stopColor="#00e0c6" stopOpacity={0} /> {/* WAS #82ca9d */}
+                       <stop offset="5%" stopColor="#00e0c6" stopOpacity={0.6} />
+                       <stop offset="95%" stopColor="#00e0c6" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid stroke="#2A2A2A" strokeDasharray="5 5" vertical={false} />
@@ -298,19 +299,17 @@ export default function DashboardPage() {
                     width={30}
                   />
                   <Tooltip
-                    content={<CustomTooltip />} // Keep custom tooltip
-                    cursor={{ stroke: "var(--primary)", strokeWidth: 1.5, strokeDasharray: "3 3" }} // Use primary for cursor
+                    content={<CustomTooltip />}
+                    cursor={{ stroke: "var(--primary)", strokeWidth: 1.5, strokeDasharray: "3 3" }} // Updated cursor
                   />
                   <Legend wrapperStyle={{ color: "var(--dashboard-text-color)", fontSize: "12px", paddingTop: "10px" }} />
-                  {/* Area fills using updated gradients */}
                   <Area type="monotone" dataKey="total" stroke="none" fillOpacity={0.2} fill="url(#colorTotal)" />
                   <Area type="monotone" dataKey="confirmed" stroke="none" fillOpacity={0.2} fill="url(#colorConfirmed)" />
-                  {/* Lines using updated colors and activeDot */}
                   <Line
                     type="monotone"
                     dataKey="total"
                     name="Total Booked"
-                    stroke="var(--primary)" // Use primary purple
+                    stroke="var(--primary)" // Updated color
                     dot={false}
                     activeDot={{ r: 6, strokeWidth: 0, fill: 'var(--primary)' }} // Updated activeDot
                     strokeWidth={2}
@@ -319,7 +318,7 @@ export default function DashboardPage() {
                     type="monotone"
                     dataKey="confirmed"
                     name="Confirmed"
-                    stroke="#00e0c6" // Use bright teal
+                    stroke="#00e0c6" // Updated color
                     dot={false}
                     activeDot={{ r: 6, strokeWidth: 0, fill: '#00e0c6' }} // Updated activeDot
                     strokeWidth={2}

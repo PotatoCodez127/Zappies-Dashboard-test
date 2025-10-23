@@ -147,22 +147,20 @@ export default function AnalyticsPage() {
 
   return (
     <div className="space-y-6 sm:space-y-8">
-      {/* --- MODIFIED: Added Animation --- */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
         <h2 className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)]">Analytics</h2>
         <p className="text-sm sm:text-base text-[var(--dashboard-text-color)]/60 mt-2">Performance and engagement metrics from your bot.</p>
       </div>
-      {/* --- END MODIFICATION --- */}
 
       {isLoading ? (
         <div className="text-center py-12 text-sm sm:text-base text-muted-foreground">Loading analytics...</div>
       ) : (
         <>
-          {/* --- MODIFIED: Added Animation & Delay --- */}
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
              <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                 <CardTitle className="text-sm font-medium text-muted-foreground">Total Conversations</CardTitle>
+                 {/* Removed specific text classes from CardTitle */}
+                 <CardTitle className="text-muted-foreground">Total Conversations</CardTitle>
                  <MessageSquare className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                </CardHeader>
                <CardContent>
@@ -170,36 +168,37 @@ export default function AnalyticsPage() {
                </CardContent>
              </Card>
              <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
-               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                 <CardTitle className="text-sm font-medium text-muted-foreground">Total Meetings Booked</CardTitle>
-                 <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-               </CardHeader>
-               <CardContent>
-                 <div className="text-2xl font-bold text-[var(--dashboard-text-color)]">{metrics.totalMeetings}</div>
-               </CardContent>
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                   {/* Removed specific text classes from CardTitle */}
+                   <CardTitle className="text-muted-foreground">Total Meetings Booked</CardTitle>
+                   <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-[var(--dashboard-text-color)]">{metrics.totalMeetings}</div>
+                </CardContent>
              </Card>
-             <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '300ms', animationFillMode: 'backwards' }}>
-               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                 <CardTitle className="text-sm font-medium text-muted-foreground">Confirmation Rate</CardTitle>
-                 <TrendingUp className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-               </CardHeader>
-               <CardContent>
-                 <div className="text-2xl font-bold text-[var(--dashboard-text-color)]">{metrics.confirmationRate}%</div>
-                 <p className="text-xs text-muted-foreground mt-1">
-                   {metrics.totalMeetings > 0
-                     ? `${metrics.totalMeetings - (meetingStatusData.find((s) => s.name === "Pending")?.value || 0) - (meetingStatusData.find((s) => s.name === "Cancelled")?.value || 0)} confirmed`
-                     : "No meetings yet"}
-                 </p>
-               </CardContent>
+              <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '300ms', animationFillMode: 'backwards' }}>
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                   {/* Removed specific text classes from CardTitle */}
+                   <CardTitle className="text-muted-foreground">Confirmation Rate</CardTitle>
+                   <TrendingUp className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-[var(--dashboard-text-color)]">{metrics.confirmationRate}%</div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {metrics.totalMeetings > 0
+                      ? `${metrics.totalMeetings - (meetingStatusData.find((s) => s.name === "Pending")?.value || 0) - (meetingStatusData.find((s) => s.name === "Cancelled")?.value || 0)} confirmed`
+                      : "No meetings yet"}
+                  </p>
+                </CardContent>
              </Card>
           </div>
-          {/* --- END MODIFICATION --- */}
 
-          {/* --- MODIFIED: Added Animation & Delay --- */}
           <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
              <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '400ms', animationFillMode: 'backwards' }}>
                <CardHeader>
-                 <CardTitle className="text-base sm:text-lg text-[var(--dashboard-text-color)] flex items-center gap-2">
+                 {/* Removed specific text classes from CardTitle */}
+                 <CardTitle className="flex items-center gap-2">
                    <PieChartIcon className="h-5 w-5 flex-shrink-0" />
                    <span>Meeting Status Breakdown</span>
                  </CardTitle>
@@ -277,7 +276,8 @@ export default function AnalyticsPage() {
 
              <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}>
                <CardHeader>
-                 <CardTitle className="text-base sm:text-lg text-[var(--dashboard-text-color)] flex items-center gap-2">
+                 {/* Removed specific text classes from CardTitle */}
+                 <CardTitle className="flex items-center gap-2">
                    <BarChartHorizontal className="h-5 w-5 flex-shrink-0" />
                    <span className="truncate">Meetings by Hour (SAST)</span>
                  </CardTitle>
@@ -331,7 +331,6 @@ export default function AnalyticsPage() {
                </CardContent>
              </Card>
           </div>
-          {/* --- END MODIFICATION --- */}
         </>
       )}
     </div>

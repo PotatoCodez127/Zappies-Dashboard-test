@@ -8,9 +8,8 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="card"
       className={cn(
         "text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-card relative overflow-hidden",
-        // REMOVED: "border border-primary/80 shadow-[0_0_8px_0px_var(--primary)]", // <<< REMOVED DEFAULT PURPLE BORDER/SHADOW
         "transition-colors duration-200 ease-in-out", // Added transition for smooth hover
-        "hover:border-primary/80 hover:shadow-[0_0_15px_-3px_var(--primary)]", // <<< ADDED HOVER EFFECT BORDER/SHADOW
+        "hover:border-primary/80 hover:shadow-[0_0_15px_-3px_var(--primary)]", // Added hover effect
         "animate-in fade-in duration-500", // Keep fade-in animation
         className,
       )}
@@ -33,7 +32,14 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
-  return <div data-slot="card-title" className={cn("leading-none font-semibold", className)} {...props} />
+  return (
+    <div
+      data-slot="card-title"
+      // Define base style here
+      className={cn("text-base font-semibold leading-none tracking-tight text-card-foreground", className)} // Added text-base, tracking-tight, text-card-foreground
+      {...props}
+    />
+  )
 }
 
 function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
