@@ -139,9 +139,11 @@ export function ProfileSettings({ user, profile }: ProfileSettingsProps) {
       </Card>
       
       <div className="flex justify-end">
-        <Button type="submit" disabled={isUpdating} className="bg-[var(--dashboard-text-color)] text-[#0A0A0A] hover:bg-[var(--dashboard-text-color)]/90">
-          {isUpdating ? "Saving..." : "Save Settings"}
-        </Button>
+        <Button
+          type="submit"
+          disabled={isUpdating}
+          className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:shadow-[0_0_0_3px_theme(colors.ring/0.4)] transition-all" // Added focus glow and transition
+        >
       </div>
     </form>
   )
