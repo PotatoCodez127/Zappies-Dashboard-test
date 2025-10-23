@@ -1,16 +1,19 @@
 "use client"
 
 import { useState, useEffect } from "react"
+// --- MODIFIED IMPORTS ---
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Search, MessageSquare, MoreVertical, AlertTriangle, RefreshCw } from "lucide-react" // Removed Send icon
+import { Search, MessageSquare, MoreVertical, AlertTriangle, RefreshCw, CheckCircle, Hand, Archive } from "lucide-react" // Added CheckCircle, Hand, Archive icons
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useCompanySupabase } from "@/lib/supabase/company-client"
 import { useToast } from "@/hooks/use-toast"
 import Link from "next/link"
-import { ScrollArea } from "@/components/ui/scroll-area" // Use ScrollArea for better scrolling
+import { ScrollArea } from "@/components/ui/scroll-area" 
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu" // Added Dropdown Menu components
+// --- END MODIFIED IMPORTS ---
 
 interface Message {
   type: "human" | "ai"
@@ -38,6 +41,33 @@ export default function ConversationsPage() {
   const [searchQuery, setSearchQuery] = useState("")
   // Removed messageInput state
   const [isLoading, setIsLoading] = useState(true)
+
+  const handleStatusChange = async (newStatus: string) => {
+    if (!companySupabase || !selectedConversation) return
+
+    const { error } = await companySupabase
+      .from("conversation_history")
+      .update({ status: newStatus })
+      .eq("conversation_id", selectedConversation.conversation_id)
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: `Failed to update status to ${newStatus}.`,
+        variant: "destructive",
+      })
+      console.error(error)
+    } else {
+      toast({
+        title: "Success",
+        description: `Conversation marked as ${newStatus}. Refreshing data...`,
+      })
+      // Update local state immediately and re-fetch for list update
+      setSelectedConversation((prev) => (prev ? { ...prev, status: newStatus } : null))
+      fetchConversations() 
+    }
+  }
+// --- END NEW FUNCTION ---
 
   const fetchConversations = async () => {
     if (!companySupabase) {
@@ -229,10 +259,28 @@ export default function ConversationsPage() {
                       </Badge>
                     </div>
                   </div>
-                  {/* Keep MoreVertical button for future actions */}
-                  <Button variant="ghost" size="icon">
-                    <MoreVertical className="h-5 w-5 text-[var(--dashboard-text-color)]/60" />
-                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreVertical className="h-5 w-5 text-[var(--dashboard-text-color)]/60" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56 bg-[#1A1A1A] border-[#2A2A2A]">
+                      <DropdownMenuItem onClick={() => handleStatusChange("resolved")} className="cursor-pointer text-[var(--dashboard-text-color)]/80 focus:text-[var(--dashboard-text-color)] focus:bg-[#2A2A2A]/50">
+                        <CheckCircle className="mr-2 h-4 w-4 text-green-500" />
+                        Mark as Resolved
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleStatusChange("handover")} className="cursor-pointer text-[var(--dashboard-text-color)]/80 focus:text-[var(--dashboard-text-color)] focus:bg-[#2A2A2A]/50">
+                        <Hand className="mr-2 h-4 w-4 text-orange-500" />
+                        Handoff to Human
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator className="bg-[#2A2A2A]" />
+                      <DropdownMenuItem onClick={() => toast({title: "Archive Action", description: "Archive functionality is a placeholder. Status: 'archived'"})} className="cursor-pointer text-red-500 focus:bg-red-500/10">
+                        <Archive className="mr-2 h-4 w-4" />
+                        Archive Conversation
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </CardHeader>
               <CardContent className="flex-1 p-6 overflow-hidden min-h-0">
