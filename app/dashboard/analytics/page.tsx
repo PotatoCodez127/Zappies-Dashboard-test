@@ -128,7 +128,6 @@ export default function AnalyticsPage() {
   // --- Render logic ---
   if (!companySupabase && !isLoading) {
     return (
-      /* ... Database not connected message ... */
       <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
         <CardContent className="pt-6">
           <div className="text-center py-12">
@@ -148,185 +147,191 @@ export default function AnalyticsPage() {
 
   return (
     <div className="space-y-6 sm:space-y-8">
-      <div>
+      {/* --- MODIFIED: Added Animation --- */}
+      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
         <h2 className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)]">Analytics</h2>
         <p className="text-sm sm:text-base text-[var(--dashboard-text-color)]/60 mt-2">Performance and engagement metrics from your bot.</p>
       </div>
+      {/* --- END MODIFICATION --- */}
 
       {isLoading ? (
         <div className="text-center py-12 text-sm sm:text-base text-muted-foreground">Loading analytics...</div>
       ) : (
         <>
+          {/* --- MODIFIED: Added Animation & Delay --- */}
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-            <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Total Conversations</CardTitle>
-                <MessageSquare className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-[var(--dashboard-text-color)]">{metrics.totalConversations}</div>
-              </CardContent>
-            </Card>
-            <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Total Meetings Booked</CardTitle>
-                <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-[var(--dashboard-text-color)]">{metrics.totalMeetings}</div>
-              </CardContent>
-            </Card>
-            <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Confirmation Rate</CardTitle>
-                <TrendingUp className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-[var(--dashboard-text-color)]">{metrics.confirmationRate}%</div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {metrics.totalMeetings > 0
-                    ? `${metrics.totalMeetings - (meetingStatusData.find((s) => s.name === "Pending")?.value || 0) - (meetingStatusData.find((s) => s.name === "Cancelled")?.value || 0)} confirmed`
-                    : "No meetings yet"}
-                </p>
-              </CardContent>
-            </Card>
+             <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
+               <CardHeader className="flex flex-row items-center justify-between pb-2">
+                 <CardTitle className="text-sm font-medium text-muted-foreground">Total Conversations</CardTitle>
+                 <MessageSquare className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+               </CardHeader>
+               <CardContent>
+                 <div className="text-2xl font-bold text-[var(--dashboard-text-color)]">{metrics.totalConversations}</div>
+               </CardContent>
+             </Card>
+             <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
+               <CardHeader className="flex flex-row items-center justify-between pb-2">
+                 <CardTitle className="text-sm font-medium text-muted-foreground">Total Meetings Booked</CardTitle>
+                 <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+               </CardHeader>
+               <CardContent>
+                 <div className="text-2xl font-bold text-[var(--dashboard-text-color)]">{metrics.totalMeetings}</div>
+               </CardContent>
+             </Card>
+             <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '300ms', animationFillMode: 'backwards' }}>
+               <CardHeader className="flex flex-row items-center justify-between pb-2">
+                 <CardTitle className="text-sm font-medium text-muted-foreground">Confirmation Rate</CardTitle>
+                 <TrendingUp className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+               </CardHeader>
+               <CardContent>
+                 <div className="text-2xl font-bold text-[var(--dashboard-text-color)]">{metrics.confirmationRate}%</div>
+                 <p className="text-xs text-muted-foreground mt-1">
+                   {metrics.totalMeetings > 0
+                     ? `${metrics.totalMeetings - (meetingStatusData.find((s) => s.name === "Pending")?.value || 0) - (meetingStatusData.find((s) => s.name === "Cancelled")?.value || 0)} confirmed`
+                     : "No meetings yet"}
+                 </p>
+               </CardContent>
+             </Card>
           </div>
+          {/* --- END MODIFICATION --- */}
 
+          {/* --- MODIFIED: Added Animation & Delay --- */}
           <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
-            <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20">
-              <CardHeader>
-                <CardTitle className="text-base sm:text-lg text-[var(--dashboard-text-color)] flex items-center gap-2">
-                  <PieChartIcon className="h-5 w-5 flex-shrink-0" />
-                  <span>Meeting Status Breakdown</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-4">
-                <ResponsiveContainer width="100%" height={250}>
-                  {meetingStatusData.length === 0 ? (
-                    <div className="flex items-center justify-center h-full">
-                      <div className="text-center px-4">
-                        <PieChartIcon className="h-12 w-12 text-[var(--dashboard-text-color)]/20 mx-auto mb-3" />
-                        <p className="text-sm text-[var(--dashboard-text-color)]/60">No meeting data available.</p>
-                      </div>
-                    </div>
-                  ) : (
-                    <PieChart>
-                      <Pie
-                        data={meetingStatusData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        outerRadius={80}
-                        innerRadius={50}
-                        fill="#8884d8"
-                        dataKey="value"
-                        label={({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
-                          const RADIAN = Math.PI / 180
-                          const radius = innerRadius + (outerRadius - innerRadius) * 0.5
-                          const x = cx + radius * Math.cos(-midAngle * RADIAN)
-                          const y = cy + radius * Math.sin(-midAngle * RADIAN)
-                          return percent > 0.05 ? (
-                            <text
-                              x={x}
-                              y={y}
-                              fill="var(--dashboard-text-color)"
-                              textAnchor={x > cx ? "start" : "end"}
-                              dominantBaseline="central"
-                              fontSize={12}
-                            >
-                              {`${(percent * 100).toFixed(0)}%`}
-                            </text>
-                          ) : null
-                        }}
-                      >
-                        {meetingStatusData.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={
-                              COLORS[entry.name.toLowerCase().replace(/ /g, "_") as keyof typeof COLORS] ||
-                              COLORS.default
-                            }
-                            stroke={
-                              COLORS[entry.name.toLowerCase().replace(/ /g, "_") as keyof typeof COLORS] ||
-                              COLORS.default
-                            }
-                          />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        cursor={{ fill: "rgba(42, 42, 42, 0.3)" }}
-                        contentStyle={{
-                          backgroundColor: "rgba(26, 26, 26, 0.9)",
-                          border: "1px solid #2A2A2A",
-                          color: "var(--dashboard-text-color)",
-                          borderRadius: "0.5rem",
-                        }}
-                        itemStyle={{ color: "var(--dashboard-text-color)" }}
-                        formatter={(value: number, name: string) => [`${value} meetings`, name]}
-                      />
-                      <Legend wrapperStyle={{ color: "var(--dashboard-text-color)", fontSize: "12px" }} />
-                    </PieChart>
-                  )}
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+             <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '400ms', animationFillMode: 'backwards' }}>
+               <CardHeader>
+                 <CardTitle className="text-base sm:text-lg text-[var(--dashboard-text-color)] flex items-center gap-2">
+                   <PieChartIcon className="h-5 w-5 flex-shrink-0" />
+                   <span>Meeting Status Breakdown</span>
+                 </CardTitle>
+               </CardHeader>
+               <CardContent className="pt-4">
+                 <ResponsiveContainer width="100%" height={250}>
+                   {meetingStatusData.length === 0 ? (
+                     <div className="flex items-center justify-center h-full">
+                       <div className="text-center px-4">
+                         <PieChartIcon className="h-12 w-12 text-[var(--dashboard-text-color)]/20 mx-auto mb-3" />
+                         <p className="text-sm text-[var(--dashboard-text-color)]/60">No meeting data available.</p>
+                       </div>
+                     </div>
+                   ) : (
+                     <PieChart>
+                       <Pie
+                         data={meetingStatusData}
+                         cx="50%"
+                         cy="50%"
+                         labelLine={false}
+                         outerRadius={80}
+                         innerRadius={50}
+                         fill="#8884d8"
+                         dataKey="value"
+                         label={({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+                           const RADIAN = Math.PI / 180
+                           const radius = innerRadius + (outerRadius - innerRadius) * 0.5
+                           const x = cx + radius * Math.cos(-midAngle * RADIAN)
+                           const y = cy + radius * Math.sin(-midAngle * RADIAN)
+                           return percent > 0.05 ? (
+                             <text
+                               x={x}
+                               y={y}
+                               fill="var(--dashboard-text-color)"
+                               textAnchor={x > cx ? "start" : "end"}
+                               dominantBaseline="central"
+                               fontSize={12}
+                             >
+                               {`${(percent * 100).toFixed(0)}%`}
+                             </text>
+                           ) : null
+                         }}
+                       >
+                         {meetingStatusData.map((entry, index) => (
+                           <Cell
+                             key={`cell-${index}`}
+                             fill={
+                               COLORS[entry.name.toLowerCase().replace(/ /g, "_") as keyof typeof COLORS] ||
+                               COLORS.default
+                             }
+                             stroke={
+                               COLORS[entry.name.toLowerCase().replace(/ /g, "_") as keyof typeof COLORS] ||
+                               COLORS.default
+                             }
+                           />
+                         ))}
+                       </Pie>
+                       <Tooltip
+                         cursor={{ fill: "rgba(42, 42, 42, 0.3)" }}
+                         contentStyle={{
+                           backgroundColor: "rgba(26, 26, 26, 0.9)",
+                           border: "1px solid #2A2A2A",
+                           color: "var(--dashboard-text-color)",
+                           borderRadius: "0.5rem",
+                         }}
+                         itemStyle={{ color: "var(--dashboard-text-color)" }}
+                         formatter={(value: number, name: string) => [`${value} meetings`, name]}
+                       />
+                       <Legend wrapperStyle={{ color: "var(--dashboard-text-color)", fontSize: "12px" }} />
+                     </PieChart>
+                   )}
+                 </ResponsiveContainer>
+               </CardContent>
+             </Card>
 
-            <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20">
-              <CardHeader>
-                <CardTitle className="text-base sm:text-lg text-[var(--dashboard-text-color)] flex items-center gap-2">
-                  <BarChartHorizontal className="h-5 w-5 flex-shrink-0" />
-                  <span className="truncate">Meetings by Hour (SAST)</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-4 pl-0 sm:pl-2">
-                <ResponsiveContainer width="100%" height={250}>
-                  {hourlyActivityData.reduce((sum, d) => sum + d.meetings, 0) === 0 ? (
-                    <div className="flex items-center justify-center h-full">
-                      <div className="text-center px-4">
-                        <BarChartHorizontal className="h-12 w-12 text-[var(--dashboard-text-color)]/20 mx-auto mb-3" />
-                        <p className="text-sm text-[var(--dashboard-text-color)]/60">No meeting data available for hourly breakdown.</p>
-                      </div>
-                    </div>
-                  ) : (
-                    <BarChart data={hourlyActivityData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-                      <CartesianGrid stroke="#2A2A2A" strokeDasharray="3 3" vertical={false} />
-                      <XAxis
-                        dataKey="hour"
-                        stroke="var(--dashboard-text-color)"
-                        fontSize={10}
-                        tickLine={false}
-                        axisLine={false}
-                        tickFormatter={(value) => `${value}:00`} // Format hour label
-                        interval={2} // Show every 3rd hour label
-                        tick={{ fill: "var(--dashboard-text-color)" }}
-                      />
-                      <YAxis
-                        stroke="var(--dashboard-text-color)"
-                        fontSize={12}
-                        tickLine={false}
-                        axisLine={false}
-                        allowDecimals={false}
-                        tick={{ fill: "var(--dashboard-text-color)" }}
-                        width={30}
-                      />
-                      <Tooltip
-                        cursor={{ fill: "rgba(42, 42, 42, 0.3)" }}
-                        contentStyle={{
-                          backgroundColor: "rgba(26, 26, 26, 0.9)",
-                          border: "1px solid #2A2A2A",
-                          color: "var(--dashboard-text-color)",
-                          borderRadius: "0.5rem",
-                        }}
-                        labelFormatter={(label) => `Hour: ${label}:00 - ${Number.parseInt(label) + 1}:00`}
-                        formatter={(value: number) => [`${value} meetings`, "Meetings Booked"]}
-                      />
-                      <Bar dataKey="meetings" name="Meetings Booked" fill="#8884d8" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  )}
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+             <Card className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}>
+               <CardHeader>
+                 <CardTitle className="text-base sm:text-lg text-[var(--dashboard-text-color)] flex items-center gap-2">
+                   <BarChartHorizontal className="h-5 w-5 flex-shrink-0" />
+                   <span className="truncate">Meetings by Hour (SAST)</span>
+                 </CardTitle>
+               </CardHeader>
+               <CardContent className="pt-4 pl-0 sm:pl-2">
+                 <ResponsiveContainer width="100%" height={250}>
+                   {hourlyActivityData.reduce((sum, d) => sum + d.meetings, 0) === 0 ? (
+                     <div className="flex items-center justify-center h-full">
+                       <div className="text-center px-4">
+                         <BarChartHorizontal className="h-12 w-12 text-[var(--dashboard-text-color)]/20 mx-auto mb-3" />
+                         <p className="text-sm text-[var(--dashboard-text-color)]/60">No meeting data available for hourly breakdown.</p>
+                       </div>
+                     </div>
+                   ) : (
+                     <BarChart data={hourlyActivityData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                       <CartesianGrid stroke="#2A2A2A" strokeDasharray="3 3" vertical={false} />
+                       <XAxis
+                         dataKey="hour"
+                         stroke="var(--dashboard-text-color)"
+                         fontSize={10}
+                         tickLine={false}
+                         axisLine={false}
+                         tickFormatter={(value) => `${value}:00`} // Format hour label
+                         interval={2} // Show every 3rd hour label
+                         tick={{ fill: "var(--dashboard-text-color)" }}
+                       />
+                       <YAxis
+                         stroke="var(--dashboard-text-color)"
+                         fontSize={12}
+                         tickLine={false}
+                         axisLine={false}
+                         allowDecimals={false}
+                         tick={{ fill: "var(--dashboard-text-color)" }}
+                         width={30}
+                       />
+                       <Tooltip
+                         cursor={{ fill: "rgba(42, 42, 42, 0.3)" }}
+                         contentStyle={{
+                           backgroundColor: "rgba(26, 26, 26, 0.9)",
+                           border: "1px solid #2A2A2A",
+                           color: "var(--dashboard-text-color)",
+                           borderRadius: "0.5rem",
+                         }}
+                         labelFormatter={(label) => `Hour: ${label}:00 - ${Number.parseInt(label) + 1}:00`}
+                         formatter={(value: number) => [`${value} meetings`, "Meetings Booked"]}
+                       />
+                       <Bar dataKey="meetings" name="Meetings Booked" fill="var(--primary)" radius={[4, 4, 0, 0]} /> {/* Use primary color */}
+                     </BarChart>
+                   )}
+                 </ResponsiveContainer>
+               </CardContent>
+             </Card>
           </div>
+          {/* --- END MODIFICATION --- */}
         </>
       )}
     </div>

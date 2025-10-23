@@ -89,8 +89,6 @@ export default function ConversationsPage() {
     conv.customerName.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
-  // Removed handleSendMessage function
-
   // Render message if Supabase is not connected
   if (!companySupabase && !isLoading) {
     return (
@@ -114,22 +112,29 @@ export default function ConversationsPage() {
   return (
     <div className="space-y-4 sm:space-y-6 h-full flex flex-col">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4 flex-shrink-0">
-        <div>
+         {/* --- MODIFIED: Added Animation --- */}
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
           <h1 className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)] tracking-tight">Conversations</h1>
           <p className="text-sm text-[var(--dashboard-text-color)]/70 mt-1.5">View your chatbot conversations.</p>
         </div>
+        {/* --- END MODIFICATION --- */}
+        {/* --- MODIFIED: Added Animation & Delay --- */}
         <Button
           variant="outline"
           size="icon"
           onClick={fetchConversations}
           disabled={isLoading}
-          className="border-[#2A2A2A] text-[var(--dashboard-text-color)]/60 hover:text-[var(--dashboard-text-color)] hover:bg-[#2A2A2A]/50 bg-transparent transition-all duration-200 self-start sm:self-auto flex-shrink-0"
+          className="border-[#2A2A2A] text-[var(--dashboard-text-color)]/60 hover:text-[var(--dashboard-text-color)] hover:bg-[#2A2A2A]/50 bg-transparent transition-all duration-200 self-start sm:self-auto flex-shrink-0 animate-in fade-in duration-500 ease-out"
+          style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}
         >
           <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
         </Button>
+        {/* --- END MODIFICATION --- */}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0">
+      {/* --- MODIFIED: Added Animation & Delay --- */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
+        {/* Chat List Card */}
         <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-1 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 h-[400px] lg:h-full">
           <CardHeader className="flex-shrink-0 pb-4">
             <CardTitle className="text-xl font-semibold text-[var(--dashboard-text-color)]">Chats</CardTitle>
@@ -184,6 +189,7 @@ export default function ConversationsPage() {
           </CardContent>
         </Card>
 
+        {/* Message View Card */}
         <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 h-[500px] lg:h-full">
           {selectedConversation ? (
             <>
@@ -242,6 +248,7 @@ export default function ConversationsPage() {
           )}
         </Card>
       </div>
+      {/* --- END MODIFICATION --- */}
     </div>
   )
 }

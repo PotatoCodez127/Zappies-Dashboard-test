@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Search, Phone, Clock, AlertTriangle, PhoneIncoming } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Label } from "@/components/ui/label" // <<<--- ADDED IMPORT
-import { Textarea } from "@/components/ui/textarea" // <<<--- ADDED IMPORT (for notes)
+import { Label } from "@/components/ui/label" // <<<--- IMPORTED
+import { Textarea } from "@/components/ui/textarea" // <<<--- IMPORTED
 import { useCompanySupabase } from "@/lib/supabase/company-client"
 import { useToast } from "@/hooks/use-toast"
 import { format, parseISO } from "date-fns"
@@ -158,12 +158,16 @@ export default function CallsPage() {
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      <div>
+      {/* --- MODIFIED: Added Animation --- */}
+      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
         <h2 className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)] tracking-tight">Voice Calls</h2>
         <p className="text-sm text-[var(--dashboard-text-color)]/60 mt-1.5">Review your bot's call history log.</p>
       </div>
+       {/* --- END MODIFICATION --- */}
 
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+      {/* --- MODIFIED: Added Animation & Delay --- */}
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
+        {/* Search Input */}
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--dashboard-text-color)]/40" />
           <Input
@@ -173,6 +177,7 @@ export default function CallsPage() {
             className="pl-9 bg-[#1A1A1A] border-[#2A2A2A] text-[var(--dashboard-text-color)] h-10 text-sm"
           />
         </div>
+        {/* Filter Dropdown */}
         <Select value={filterOption} onValueChange={setFilterOption}>
           <SelectTrigger className="w-full sm:w-[220px] bg-[#1A1A1A] border-[#2A2A2A] text-[var(--dashboard-text-color)] h-10 text-sm">
             {" "}
@@ -186,9 +191,11 @@ export default function CallsPage() {
           </SelectContent>
         </Select>
       </div>
+      {/* --- END MODIFICATION --- */}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-        {/* Call Logs List */}
+      {/* --- MODIFIED: Added Animation & Delay --- */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
+        {/* Call Logs List Card */}
         <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col h-[500px] lg:h-[600px] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20">
           <CardHeader>
             {" "}
@@ -268,7 +275,7 @@ export default function CallsPage() {
           </CardContent>
         </Card>
 
-        {/* Call Details Panel */}
+        {/* Call Details Panel Card */}
         <Card className="bg-[#1A1A1A] border-[#2A2A2A] flex flex-col h-[500px] lg:h-[600px] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20">
           <CardHeader>
             {" "}
@@ -386,6 +393,7 @@ export default function CallsPage() {
           </CardContent>
         </Card>
       </div>
+       {/* --- END MODIFICATION --- */}
     </div>
   )
 }
