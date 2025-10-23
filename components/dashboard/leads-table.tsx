@@ -21,9 +21,8 @@ import Link from "next/link"
 import { useCompanySupabase } from "@/lib/supabase/company-client"
 import { useToast } from "@/hooks/use-toast"
 import { format, parseISO } from "date-fns"
-import { ScrollArea } from "@/components/ui/scroll-area" // <<< Import ScrollArea
+import { ScrollArea } from "@/components/ui/scroll-area"
 
-// Interface matching the 'call_history' table schema
 interface CallHistoryEntry {
   id: number
   created_at: string
@@ -38,16 +37,15 @@ interface CallHistoryEntry {
   call_duration_seconds: number | null
 }
 
-// Renaming component conceptually, filename stays for now
 export function LeadsTable() {
   const companySupabase = useCompanySupabase()
   const { toast } = useToast()
   const [callHistory, setCallHistory] = useState<CallHistoryEntry[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
-  const [filterOption, setFilterOption] = useState("all") // Filter state
+  const [filterOption, setFilterOption] = useState("all")
   const [selectedCall, setSelectedCall] = useState<CallHistoryEntry | null>(null)
-  const [currentNotes, setCurrentNotes] = useState<string>("") // Client-side only notes
+  const [currentNotes, setCurrentNotes] = useState<string>("")
 
   useEffect(() => {
     async function fetchCallHistory() {
@@ -94,7 +92,6 @@ export function LeadsTable() {
     fetchCallHistory()
   }, [companySupabase, toast])
 
-  // Filter logic
   const filteredCalls = callHistory.filter((call) => {
     const searchLower = searchTerm.toLowerCase()
     const matchesSearch =
@@ -110,7 +107,6 @@ export function LeadsTable() {
     return matchesSearch && matchesFilter
   })
 
-  // Helper to format duration
   const formatDuration = (seconds: number | null): string => {
     if (seconds === null || seconds === undefined) return "N/A"
     const minutes = Math.floor(seconds / 60)
@@ -118,13 +114,11 @@ export function LeadsTable() {
     return `${minutes}m ${remainingSeconds}s`
   }
 
-  // Helper to format currency (assuming ZAR)
   const formatBudget = (budget: number | null): string => {
     if (budget === null || budget === undefined) return "N/A"
-    return `R ${budget.toLocaleString("en-ZA")}` // Format for South Africa
+    return `R ${budget.toLocaleString("en-ZA")}`
   }
 
-  // --- RENDER LOGIC ---
   if (!companySupabase && !isLoading) {
     return (
       <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
@@ -135,7 +129,10 @@ export function LeadsTable() {
             <p className="text-[var(--dashboard-text-color)]/60 mt-2 max-w-md mx-auto">
               Please go to the settings page to connect your bot's database.
             </p>
-            <Button asChild className="mt-6 bg-[var(--dashboard-text-color)] text-[#0A0A0A] hover:bg-[var(--dashboard-text-color)]/90">
+            <Button
+              asChild
+              className="mt-6 bg-[var(--dashboard-text-color)] text-[#0A0A0A] hover:bg-[var(--dashboard-text-color)]/90"
+            >
               <Link href="/dashboard/settings">Go to Settings</Link>
             </Button>
           </div>
@@ -160,39 +157,31 @@ export function LeadsTable() {
   }
 
   return (
-    // --- MODIFICATION START (Fixed Scroll Issue - Bug #6) ---
-    // Make Card a flex container with constrained height
     <Card className="bg-[#1A1A1A] border-[#2A2A2A] flex flex-col lg:h-[80vh]">
       <CardHeader className="flex-shrink-0">
         <CardTitle className="text-[var(--dashboard-text-color)]">Call History ({filteredCalls.length})</CardTitle>
         <div className="flex flex-col sm:flex-row gap-4 mt-4">
-          {/* Search */}
           <div className="relative flex-1">
-            {" "}
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--dashboard-text-color)]/40" />{" "}
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--dashboard-text-color)]/40" />
             <Input
               placeholder="Search name, email, company..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 bg-[#0A0A0A] border-[#2A2A2A] text-[var(--dashboard-text-color)]"
-            />{" "}
+            />
           </div>
-          {/* Filter Dropdown */}
           <Select value={filterOption} onValueChange={setFilterOption}>
             <SelectTrigger className="w-full sm:w-[220px] bg-[#0A0A0A] border-[#2A2A2A] text-[var(--dashboard-text-color)]">
-              {" "}
-              <SelectValue placeholder="Filter call results" />{" "}
+              <SelectValue placeholder="Filter call results" />
             </SelectTrigger>
             <SelectContent className="bg-[#1A1A1A] border-[#2A2A2A]">
               <SelectItem value="all">All Calls</SelectItem>
               <SelectItem value="meeting_yes">Resulted in Meeting</SelectItem>
               <SelectItem value="meeting_no">Did Not Result in Meeting</SelectItem>
-              {/* Add more filters later if needed, e.g., disqualification */}
             </SelectContent>
           </Select>
         </div>
       </CardHeader>
-      {/* Make CardContent take remaining height and enable internal scrolling */}
       <CardContent className="flex-1 overflow-hidden p-0">
         <ScrollArea className="h-full px-6 pb-6">
           <div className="space-y-4">
@@ -207,7 +196,9 @@ export function LeadsTable() {
               <div className="flex items-center justify-center py-12 min-h-[200px]">
                 <div className="text-center px-4">
                   <Search className="h-12 w-12 text-[var(--dashboard-text-color)]/20 mx-auto mb-3" />
-                  <p className="text-base text-[var(--dashboard-text-color)]/60">No calls match your current filters.</p>
+                  <p className="text-base text-[var(--dashboard-text-color)]/60">
+                    No calls match your current filters.
+                  </p>
                 </div>
               </div>
             ) : (
@@ -216,7 +207,6 @@ export function LeadsTable() {
                   key={call.id}
                   className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-lg bg-[#0A0A0A] border border-[#2A2A2A]"
                 >
-                  {/* Call Row Display */}
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-3 flex-wrap">
                       <p className="font-medium text-[var(--dashboard-text-color)]">{call.full_name || "N/A"}</p>
@@ -250,7 +240,6 @@ export function LeadsTable() {
                       {format(parseISO(call.created_at), "MMM d, yyyy h:mm a")}
                     </p>
                   </div>
-                  {/* View Details Button */}
                   <Dialog onOpenChange={(open) => setSelectedCall(open ? call : null)}>
                     <DialogTrigger asChild>
                       <Button
@@ -258,76 +247,67 @@ export function LeadsTable() {
                         size="sm"
                         className="bg-[var(--dashboard-text-color)]/5 border-[var(--dashboard-text-color)]/20 text-[var(--dashboard-text-color)] hover:bg-[var(--dashboard-text-color)]/10"
                       >
-                        {" "}
-                        <Eye className="h-4 w-4 mr-2" /> View Details{" "}
+                        <Eye className="h-4 w-4 mr-2" /> View Details
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="bg-[#1A1A1A] border-[#2A2A2A] max-w-lg">
                       <DialogHeader>
-                        {" "}
-                        <DialogTitle className="text-[var(--dashboard-text-color)]">Call Details</DialogTitle>{" "}
+                        <DialogTitle className="text-[var(--dashboard-text-color)]">Call Details</DialogTitle>
                         <DialogDescription className="text-[var(--dashboard-text-color)]/60">
                           Detailed information about the call.
-                        </DialogDescription>{" "}
+                        </DialogDescription>
                       </DialogHeader>
                       {selectedCall && (
                         <div className="space-y-6 pt-4 text-sm">
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-1">
-                              {" "}
-                              <Label className="text-[var(--dashboard-text-color)]/80">Caller Name</Label>{" "}
+                              <Label className="text-[var(--dashboard-text-color)]/80">Caller Name</Label>
                               <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
                                 <User className="h-4 w-4" /> {selectedCall.full_name || "N/A"}
-                              </p>{" "}
+                              </p>
                             </div>
                             <div className="space-y-1">
-                              {" "}
-                              <Label className="text-[var(--dashboard-text-color)]/80">Caller Email</Label>{" "}
+                              <Label className="text-[var(--dashboard-text-color)]/80">Caller Email</Label>
                               <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
                                 <Mail className="h-4 w-4" /> {selectedCall.email || "N/A"}
-                              </p>{" "}
+                              </p>
                             </div>
                             {selectedCall.company_name && (
                               <div className="space-y-1">
-                                {" "}
-                                <Label className="text-[var(--dashboard-text-color)]/80">Company</Label>{" "}
-                                <p className="text-[var(--dashboard-text-color)]">{selectedCall.company_name}</p>{" "}
+                                <Label className="text-[var(--dashboard-text-color)]/80">Company</Label>
+                                <p className="text-[var(--dashboard-text-color)]">{selectedCall.company_name}</p>
                               </div>
                             )}
                             <div className="space-y-1">
-                              {" "}
-                              <Label className="text-[var(--dashboard-text-color)]/80">Call Time</Label>{" "}
+                              <Label className="text-[var(--dashboard-text-color)]/80">Call Time</Label>
                               <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
-                                <Clock className="h-4 w-4" />{" "}
+                                <Clock className="h-4 w-4" />
                                 {format(parseISO(selectedCall.created_at), "MMM d, yyyy h:mm a")}
-                              </p>{" "}
+                              </p>
                             </div>
                             {selectedCall.call_duration_seconds !== null && (
                               <div className="space-y-1">
-                                {" "}
-                                <Label className="text-[var(--dashboard-text-color)]/80">Call Duration</Label>{" "}
+                                <Label className="text-[var(--dashboard-text-color)]/80">Call Duration</Label>
                                 <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
                                   <Clock className="h-4 w-4" /> {formatDuration(selectedCall.call_duration_seconds)}
-                                </p>{" "}
+                                </p>
                               </div>
                             )}
                             {selectedCall.monthly_budget !== null && (
                               <div className="space-y-1">
-                                {" "}
-                                <Label className="text-[var(--dashboard-text-color)]/80">Monthly Budget</Label>{" "}
+                                <Label className="text-[var(--dashboard-text-color)]/80">Monthly Budget</Label>
                                 <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
                                   <DollarSign className="h-4 w-4" /> {formatBudget(selectedCall.monthly_budget)}
-                                </p>{" "}
+                                </p>
                               </div>
                             )}
                           </div>
                           {selectedCall.goal && (
                             <div>
-                              {" "}
-                              <Label className="text-[var(--dashboard-text-color)]/80">Call Goal</Label>{" "}
+                              <Label className="text-[var(--dashboard-text-color)]/80">Call Goal</Label>
                               <p className="text-[var(--dashboard-text-color)] mt-1 text-sm bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap">
                                 {selectedCall.goal}
-                              </p>{" "}
+                              </p>
                             </div>
                           )}
                           <div className="space-y-1 border-t border-[#2A2A2A] pt-4">
@@ -340,18 +320,16 @@ export function LeadsTable() {
                           </div>
                           {selectedCall.disqualification_reason && (
                             <div>
-                              {" "}
-                              <Label className="text-[var(--dashboard-text-color)]/80">Disqualification Reason</Label>{" "}
+                              <Label className="text-[var(--dashboard-text-color)]/80">Disqualification Reason</Label>
                               <p className="text-[var(--dashboard-text-color)] mt-1 text-sm bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap">
                                 {selectedCall.disqualification_reason}
-                              </p>{" "}
+                              </p>
                             </div>
                           )}
                           <div>
-                            {" "}
                             <Label htmlFor="notes" className="text-[var(--dashboard-text-color)]/80">
                               Notes (Not Saved)
-                            </Label>{" "}
+                            </Label>
                             <Textarea
                               id="notes"
                               value={currentNotes}
@@ -359,15 +337,15 @@ export function LeadsTable() {
                               placeholder="Add temporary notes here..."
                               className="mt-1 bg-[#0A0A0A] border-[#2A2A2A] text-[var(--dashboard-text-color)]"
                               rows={3}
-                            />{" "}
+                            />
                             <p className="text-xs text-[var(--dashboard-text-color)]/50 mt-1">
                               Notes are for temporary reference only.
-                            </p>{" "}
+                            </p>
                           </div>
                         </div>
                       )}
                     </DialogContent>
-                  </DialogContent>
+                  </Dialog>
                 </div>
               ))
             )}
@@ -375,6 +353,5 @@ export function LeadsTable() {
         </ScrollArea>
       </CardContent>
     </Card>
-    // --- MODIFICATION END ---
   )
 }
