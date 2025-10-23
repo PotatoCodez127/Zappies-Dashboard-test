@@ -32,13 +32,12 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
 
   return (
     <>
-      {/* --- MODIFICATION START --- */}
-      {/* Remove shadow utility, add inline style */}
+      {/* Add relative positioning and z-index */}
       <header
-        className="h-14 sm:h-16 border-b border-border bg-card flex items-center justify-between px-4 sm:px-6 flex-shrink-0"
-        // REMOVED: shadow-[0_4px_12px_0px_theme(colors.primary/0.3)]
+        className="relative z-10 h-14 sm:h-16 border-b border-border bg-card flex items-center justify-between px-4 sm:px-6 flex-shrink-0" // Added relative z-10
+        // Keep the inline style for now to test direct application
         style={{
-          boxShadow: '0 4px 12px 0px oklch(0.6 0.25 300 / 0.5)' // Apply directly
+          boxShadow: '0 4px 12px 0px oklch(0.6 0.25 300 / 0.3)'
         }}
       >
       {/* --- MODIFICATION END --- */}
@@ -51,7 +50,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
           >
             <Menu className="h-5 w-5 text-[var(--dashboard-text-color)]" />
           </Button>
-          <h1 className="text-base sm:text-lg font-semibold text-[var(--dashboard-text-color)]">Dashboard</h1>
+          <h1 className="text-base sm:text-lg font-semibold text-[var(--dashboard-text-color)]">Dashboardd</h1>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
