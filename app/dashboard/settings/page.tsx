@@ -23,7 +23,7 @@ export default async function SettingsPage() {
        {/* --- MODIFIED: Added Animation --- */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
         <h2 className="text-3xl font-bold text-[var(--dashboard-text-color)]">Settings</h2>
-        <p className="text-[var(--dashboard-text-color)]/60 mt-2">Manage your account and company settings.</p>
+        <p className="text-sm text-[var(--dashboard-text-color)]/60 mt-2">Manage your account and company settings.</p>
       </div>
       {/* --- END MODIFICATION --- */}
 

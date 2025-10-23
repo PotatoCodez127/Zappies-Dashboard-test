@@ -149,7 +149,7 @@ export default function AnalyticsPage() {
     <div className="space-y-6 sm:space-y-8">
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
         <h2 className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)]">Analytics</h2>
-        <p className="text-sm sm:text-base text-[var(--dashboard-text-color)]/60 mt-2">Performance and engagement metrics from your bot.</p>
+        <p className="text-sm text-[var(--dashboard-text-color)]/60 mt-2">Performance and engagement metrics from your bot.</p>
       </div>
 
       {isLoading ? (

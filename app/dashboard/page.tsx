@@ -210,7 +210,7 @@ export default function DashboardPage() {
       {/* Animated Title/Description */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
         <h2 className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)] tracking-tight">Overview</h2>
-        <p className="text-sm sm:text-base text-muted-foreground mt-2">Here's your bot's performance summary.</p>
+        <p className="text-sm text-muted-foreground mt-2">Here's your bot's performance summary.</p>
       </div>
 
       {/* Animated Stat Cards */}

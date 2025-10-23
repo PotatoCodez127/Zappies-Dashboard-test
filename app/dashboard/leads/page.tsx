@@ -23,7 +23,7 @@ export default async function LeadsPage() {
       {/* --- MODIFIED: Added Animation --- */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
         <h2 className="text-3xl font-bold text-[var(--dashboard-text-color)]">Leads Management</h2>
-        <p className="text-[var(--dashboard-text-color)]/60 mt-2">View and manage all your leads in one place.</p>
+        <p className="text-sm text-[var(--dashboard-text-color)]/60 mt-2">View and manage all your leads in one place.</p>
       </div>
       {/* --- END MODIFICATION --- */}
 
