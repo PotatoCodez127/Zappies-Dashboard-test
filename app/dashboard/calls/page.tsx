@@ -15,7 +15,6 @@ import { useToast } from "@/hooks/use-toast"
 import { format, parseISO } from "date-fns"
 import Link from "next/link"
 import { ScrollArea } from "@/components/ui/scroll-area" // Added ScrollArea
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog" // Added Dialog components
 
 // Interface matching the 'call_history' table schema
 interface CallHistoryEntry {
@@ -158,13 +157,16 @@ export default function CallsPage() {
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6 h-full flex flex-col">
-      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out flex-shrink-0">
+    <div className="space-y-4 sm:space-y-6">
+      {/* --- MODIFIED: Added Animation --- */}
+      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
         <h2 className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)] tracking-tight">Voice Calls</h2>
         <p className="text-sm text-[var(--dashboard-text-color)]/60 mt-1.5">Review your bot's call history log.</p>
       </div>
+       {/* --- END MODIFICATION --- */}
 
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 flex-shrink-0 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
+      {/* --- MODIFIED: Added Animation & Delay --- */}
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
         {/* Search Input */}
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--dashboard-text-color)]/40" />
@@ -189,18 +191,18 @@ export default function CallsPage() {
           </SelectContent>
         </Select>
       </div>
+      {/* --- END MODIFICATION --- */}
 
-      {/* --- MODIFIED: Fixed Scroll Issue (Bug #1) --- */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
+      {/* --- MODIFIED: Fixed Scroll Issue (Bug #5) --- */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
         {/* Call Logs List Card */}
         <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 lg:h-full">
-        {/* Added flex flex-col and lg:h-full */}
+        {/* REMOVED fixed height h-[500px] lg:h-[600px] */}
           <CardHeader>
             {" "}
             <CardTitle className="text-[var(--dashboard-text-color)]">Call History ({filteredCalls.length})</CardTitle>{" "}
           </CardHeader>
           <CardContent className="p-0 flex-1 overflow-hidden">
-          {/* CardContent is flex-1 and overflow-hidden */}
             <ScrollArea className="h-full">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full min-h-[200px]">
@@ -276,13 +278,13 @@ export default function CallsPage() {
 
         {/* Call Details Panel Card */}
         <Card className="bg-[#1A1A1A] border-[#2A2A2A] flex flex-col transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 lg:h-full">
-        {/* Added flex flex-col and lg:h-full */}
+        {/* REMOVED fixed height h-[500px] lg:h-[600px] */}
           <CardHeader>
             {" "}
             <CardTitle className="text-[var(--dashboard-text-color)]">Call Details</CardTitle>{" "}
           </CardHeader>
+          {/* Enabled overflow-y-auto for the content area for internal scrolling */}
           <CardContent className="flex-1 overflow-y-auto">
-          {/* CardContent is flex-1 and overflow-y-auto */}
             {selectedCall ? (
               <div className="space-y-6 text-sm">
                 <div className="flex items-center gap-3">
