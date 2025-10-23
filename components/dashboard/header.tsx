@@ -32,7 +32,16 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
 
   return (
     <>
-      <header className="h-14 sm:h-16 border-b border-border bg-card flex items-center justify-between px-4 sm:px-6 flex-shrink-0 shadow-[0_4px_15px_0px_theme(colors.primary/0.5)]">
+      {/* --- MODIFICATION START --- */}
+      {/* Remove shadow utility, add inline style */}
+      <header
+        className="h-14 sm:h-16 border-b border-border bg-card flex items-center justify-between px-4 sm:px-6 flex-shrink-0"
+        // REMOVED: shadow-[0_4px_12px_0px_theme(colors.primary/0.3)]
+        style={{
+          boxShadow: '0 4px 12px 0px oklch(0.6 0.25 300 / 0.5)' // Apply directly
+        }}
+      >
+      {/* --- MODIFICATION END --- */}
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
