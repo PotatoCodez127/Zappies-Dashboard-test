@@ -96,11 +96,16 @@ export default function ConversationsPage() {
         <CardContent className="pt-6">
           <div className="text-center py-12">
             <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-[var(--dashboard-text-color)] tracking-tight">Database Not Connected</h3>
+            <h3 className="text-xl font-bold text-[var(--dashboard-text-color)] tracking-tight">
+              Database Not Connected
+            </h3>
             <p className="text-[var(--dashboard-text-color)]/60 mt-2 max-w-md mx-auto">
               Please go to the settings page to connect your bot's database.
             </p>
-            <Button asChild className="mt-6 bg-[var(--dashboard-text-color)] text-[#0A0A0A] hover:bg-[var(--dashboard-text-color)]/90">
+            <Button
+              asChild
+              className="mt-6 bg-[var(--dashboard-text-color)] text-[#0A0A0A] hover:bg-[var(--dashboard-text-color)]/90"
+            >
               <Link href="/dashboard/settings">Go to Settings</Link>
             </Button>
           </div>
@@ -112,9 +117,11 @@ export default function ConversationsPage() {
   return (
     <div className="space-y-4 sm:space-y-6 h-full flex flex-col">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4 flex-shrink-0">
-         {/* --- MODIFIED: Added Animation --- */}
+        {/* --- MODIFIED: Added Animation --- */}
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)] tracking-tight">Conversations</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)] tracking-tight">
+            Conversations
+          </h1>
           <p className="text-sm text-[var(--dashboard-text-color)]/70 mt-1.5">View your chatbot conversations.</p>
         </div>
         {/* --- END MODIFICATION --- */}
@@ -125,7 +132,7 @@ export default function ConversationsPage() {
           onClick={fetchConversations}
           disabled={isLoading}
           className="border-[#2A2A2A] text-[var(--dashboard-text-color)]/60 hover:text-[var(--dashboard-text-color)] hover:bg-[#2A2A2A]/50 bg-transparent transition-all duration-200 self-start sm:self-auto flex-shrink-0 animate-in fade-in duration-500 ease-out"
-          style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}
+          style={{ animationDelay: "100ms", animationFillMode: "backwards" }}
         >
           <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
         </Button>
@@ -133,10 +140,12 @@ export default function ConversationsPage() {
       </div>
 
       {/* --- MODIFIED: Added Animation & Delay and Fixed Scroll Issues (Bug #3 & #4) --- */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
+      <div
+        className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out"
+        style={{ animationDelay: "200ms", animationFillMode: "backwards" }}
+      >
         {/* Chat List Card (Left) */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-1 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 lg:h-full">
-        {/* REMOVED fixed height h-[400px] */}
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-1 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 max-h-[600px]">
           <CardHeader className="flex-shrink-0 pb-4">
             <CardTitle className="text-xl font-semibold text-[var(--dashboard-text-color)]">Chats</CardTitle>
             <div className="relative mt-4">
@@ -149,7 +158,7 @@ export default function ConversationsPage() {
               />
             </div>
           </CardHeader>
-          <CardContent className="p-0 flex-1 overflow-hidden">
+          <CardContent className="p-0 flex-1 overflow-hidden min-h-0">
             <ScrollArea className="h-full">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full min-h-[200px]">
@@ -177,10 +186,16 @@ export default function ConversationsPage() {
                       </Avatar>
                       <div className="flex-1 text-left overflow-hidden min-w-0">
                         <div className="flex items-center justify-between mb-1.5 gap-2">
-                          <p className="text-sm font-semibold text-[var(--dashboard-text-color)] truncate">{conv.customerName}</p>
-                          <span className="text-xs text-[var(--dashboard-text-color)]/40 flex-shrink-0">{conv.lastMessageTime}</span>
+                          <p className="text-sm font-semibold text-[var(--dashboard-text-color)] truncate">
+                            {conv.customerName}
+                          </p>
+                          <span className="text-xs text-[var(--dashboard-text-color)]/40 flex-shrink-0">
+                            {conv.lastMessageTime}
+                          </span>
                         </div>
-                        <p className="text-sm text-[var(--dashboard-text-color)]/60 truncate leading-relaxed">{conv.lastMessage}</p>
+                        <p className="text-sm text-[var(--dashboard-text-color)]/60 truncate leading-relaxed">
+                          {conv.lastMessage}
+                        </p>
                       </div>
                     </button>
                   ))}
@@ -191,8 +206,7 @@ export default function ConversationsPage() {
         </Card>
 
         {/* Message View Card (Right) */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 lg:h-full">
-        {/* REMOVED fixed height h-[500px] */}
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col overflow-hidden transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 max-h-[600px]">
           {selectedConversation ? (
             <>
               <CardHeader className="border-b border-[#2A2A2A] flex-shrink-0 pb-4">
@@ -221,7 +235,7 @@ export default function ConversationsPage() {
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent className="flex-1 p-6 overflow-hidden">
+              <CardContent className="flex-1 p-6 overflow-hidden min-h-0">
                 <ScrollArea className="h-full pr-4">
                   <div className="space-y-4">
                     {selectedConversation.history?.map((message, index) => (
@@ -236,7 +250,6 @@ export default function ConversationsPage() {
                   </div>
                 </ScrollArea>
               </CardContent>
-              {/* Removed the message input and send button section */}
             </>
           ) : (
             <div className="flex items-center justify-center h-full">

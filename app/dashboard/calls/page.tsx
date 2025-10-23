@@ -143,11 +143,16 @@ export default function CallsPage() {
         <CardContent className="pt-6">
           <div className="text-center py-12">
             <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-[var(--dashboard-text-color)] tracking-tight">Database Not Connected</h3>
+            <h3 className="text-xl font-bold text-[var(--dashboard-text-color)] tracking-tight">
+              Database Not Connected
+            </h3>
             <p className="text-[var(--dashboard-text-color)]/60 mt-2 max-w-md mx-auto">
               Please go to the settings page to connect your bot's database.
             </p>
-            <Button asChild className="mt-6 bg-[var(--dashboard-text-color)] text-[#0A0A0A] hover:bg-[var(--dashboard-text-color)]/90">
+            <Button
+              asChild
+              className="mt-6 bg-[var(--dashboard-text-color)] text-[#0A0A0A] hover:bg-[var(--dashboard-text-color)]/90"
+            >
               <Link href="/dashboard/settings">Go to Settings</Link>
             </Button>
           </div>
@@ -160,13 +165,18 @@ export default function CallsPage() {
     <div className="space-y-4 sm:space-y-6">
       {/* --- MODIFIED: Added Animation --- */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
-        <h2 className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)] tracking-tight">Voice Calls</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)] tracking-tight">
+          Voice Calls
+        </h2>
         <p className="text-sm text-[var(--dashboard-text-color)]/60 mt-1.5">Review your bot's call history log.</p>
       </div>
-       {/* --- END MODIFICATION --- */}
+      {/* --- END MODIFICATION --- */}
 
       {/* --- MODIFIED: Added Animation & Delay --- */}
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
+      <div
+        className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out"
+        style={{ animationDelay: "100ms", animationFillMode: "backwards" }}
+      >
         {/* Search Input */}
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--dashboard-text-color)]/40" />
@@ -194,15 +204,16 @@ export default function CallsPage() {
       {/* --- END MODIFICATION --- */}
 
       {/* --- MODIFIED: Fixed Scroll Issue (Bug #5) --- */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
+      <div
+        className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out"
+        style={{ animationDelay: "200ms", animationFillMode: "backwards" }}
+      >
         {/* Call Logs List Card */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 lg:h-full">
-        {/* REMOVED fixed height h-[500px] lg:h-[600px] */}
-          <CardHeader>
-            {" "}
-            <CardTitle className="text-[var(--dashboard-text-color)]">Call History ({filteredCalls.length})</CardTitle>{" "}
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] lg:col-span-2 flex flex-col transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 max-h-[600px]">
+          <CardHeader className="flex-shrink-0">
+            <CardTitle className="text-[var(--dashboard-text-color)]">Call History ({filteredCalls.length})</CardTitle>
           </CardHeader>
-          <CardContent className="p-0 flex-1 overflow-hidden">
+          <CardContent className="p-0 flex-1 overflow-hidden min-h-0">
             <ScrollArea className="h-full">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full min-h-[200px]">
@@ -219,7 +230,9 @@ export default function CallsPage() {
                 <div className="flex items-center justify-center h-full min-h-[200px]">
                   <div className="text-center px-4">
                     <Search className="h-12 w-12 text-[var(--dashboard-text-color)]/20 mx-auto mb-3" />
-                    <p className="text-base text-[var(--dashboard-text-color)]/60">No calls match your current filters.</p>
+                    <p className="text-base text-[var(--dashboard-text-color)]/60">
+                      No calls match your current filters.
+                    </p>
                   </div>
                 </div>
               ) : (
@@ -246,7 +259,9 @@ export default function CallsPage() {
                         <div className="flex-1 overflow-hidden">
                           <div className="flex items-center justify-between mb-1 flex-wrap gap-2">
                             {" "}
-                            <p className="font-medium text-[var(--dashboard-text-color)] truncate">{call.full_name || "Unknown Caller"}</p>{" "}
+                            <p className="font-medium text-[var(--dashboard-text-color)] truncate">
+                              {call.full_name || "Unknown Caller"}
+                            </p>{" "}
                             {getOutcomeBadge(call)}{" "}
                           </div>
                           <p className="text-sm text-[var(--dashboard-text-color)]/60 mb-2 truncate">
@@ -277,14 +292,11 @@ export default function CallsPage() {
         </Card>
 
         {/* Call Details Panel Card */}
-        <Card className="bg-[#1A1A1A] border-[#2A2A2A] flex flex-col transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 lg:h-full">
-        {/* REMOVED fixed height h-[500px] lg:h-[600px] */}
-          <CardHeader>
-            {" "}
-            <CardTitle className="text-[var(--dashboard-text-color)]">Call Details</CardTitle>{" "}
+        <Card className="bg-[#1A1A1A] border-[#2A2A2A] flex flex-col transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 max-h-[600px]">
+          <CardHeader className="flex-shrink-0">
+            <CardTitle className="text-[var(--dashboard-text-color)]">Call Details</CardTitle>
           </CardHeader>
-          {/* Enabled overflow-y-auto for the content area for internal scrolling */}
-          <CardContent className="flex-1 overflow-y-auto">
+          <CardContent className="flex-1 overflow-y-auto min-h-0">
             {selectedCall ? (
               <div className="space-y-6 text-sm">
                 <div className="flex items-center gap-3">
@@ -302,7 +314,9 @@ export default function CallsPage() {
                   </Avatar>
                   <div>
                     {" "}
-                    <p className="font-medium text-[var(--dashboard-text-color)] text-base">{selectedCall.full_name || "Unknown Caller"}</p>{" "}
+                    <p className="font-medium text-[var(--dashboard-text-color)] text-base">
+                      {selectedCall.full_name || "Unknown Caller"}
+                    </p>{" "}
                     <p className="text-[var(--dashboard-text-color)]/60">{selectedCall.client_number || "No phone"}</p>{" "}
                     <p className="text-[var(--dashboard-text-color)]/60">{selectedCall.email || "No email"}</p>{" "}
                   </div>
@@ -396,7 +410,7 @@ export default function CallsPage() {
           </CardContent>
         </Card>
       </div>
-       {/* --- END MODIFICATION --- */}
+      {/* --- END MODIFICATION --- */}
     </div>
   )
 }
