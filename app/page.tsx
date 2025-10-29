@@ -16,7 +16,7 @@ export default function Home() {
     <main className="min-h-screen bg-black">
       <Navigation />
       <HeroSection />
-      <VideoSection />
+      {/* <VideoSection />  */}
       <ProblemPainSection />
       <ChannelsFeatureSection />
       <CombinedScrollSection />
