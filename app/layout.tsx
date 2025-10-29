@@ -1,22 +1,37 @@
 import type React from "react"
+import { Toaster } from "@/components/ui/toaster"
 import type { Metadata } from "next"
-import { GeistSans } from "geist/font/sans"
-import { GeistMono } from "geist/font/mono"
+
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
-import { Suspense } from "react"
-// --- CORRECTED: Ensure this import is present ---
-import { ThemeProvider } from "@/components/theme-provider"
-// --- END CORRECTION ---
+import { ThemeProvider } from "next-themes"
+
+import { Inter, Geist, Geist_Mono, Source_Serif_4, Geist as V0_Font_Geist, Geist_Mono as V0_Font_Geist_Mono, Source_Serif_4 as V0_Font_Source_Serif_4 } from 'next/font/google'
+
+// Initialize fonts
+const _geist = V0_Font_Geist({ subsets: ['latin'], weight: ["100","200","300","400","500","600","700","800","900"] })
+const _geistMono = V0_Font_Geist_Mono({ subsets: ['latin'], weight: ["100","200","300","400","500","600","700","800","900"] })
+const _sourceSerif_4 = V0_Font_Source_Serif_4({ subsets: ['latin'], weight: ["200","300","400","500","600","700","800","900"] })
+
+const inter = Inter({ subsets: ["latin"] })
+const geist = Geist({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+})
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+})
+const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
+})
 
 export const metadata: Metadata = {
-  title: "Zappies AI - Custom AI Agents for Premium Home Builders",
+  title: "Zappies AI - The Project Pipeline AI",
   description:
-    "Transform your custom home building operations with exclusive AI agents designed for South Africa's most prestigious builders.",
+    "Automate lead qualification for elite renovators. 24/7 AI assistant that captures and qualifies high-budget clients instantly.",
   generator: "v0.app",
-  icons: {
-    icon: '/favicon.png', // Or '/favicon.png'
-  },
 }
 
 export default function RootLayout({
@@ -25,17 +40,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning> {/* Add suppressHydrationWarning for next-themes */}
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
-        {/* Wrap children with ThemeProvider and apply necessary props */}
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false} // Optional: Disable system theme preference override
-        >
-          <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
-          <Analytics />
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className={`${inter.className} font-sans antialiased`}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          {children}
         </ThemeProvider>
+        <Analytics />
+        <Toaster />
       </body>
     </html>
   )

@@ -36,7 +36,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
       <header
         className="relative z-10 h-14 sm:h-16 border-b border-border bg-card flex items-center justify-between px-4 sm:px-6 flex-shrink-0" // Added relative z-10
         style={{
-          boxShadow: '0 4px 12px 0px oklch(0.6 0.25 300 / 0.3)' // Purple glow via inline style
+          boxShadow: "0 4px 12px 0px oklch(0.6 0.25 300 / 0.3)", // Purple glow via inline style
         }}
       >
         <div className="flex items-center gap-3">
@@ -103,3 +103,5 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
     </>
   )
 }
+
+export { DashboardHeader as Header }

@@ -105,3 +105,5 @@ export function DashboardSidebar({ mobileMenuOpen, onClose }: DashboardSidebarPr
     </>
   )
 }
+
+export { DashboardSidebar as Sidebar }

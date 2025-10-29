@@ -1,15 +1,30 @@
-// File: app/dashboard/layout.tsx
 import type React from "react"
 import { createClient } from "@/lib/supabase/server"
-import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import { DashboardSidebar } from "@/components/dashboard/sidebar"
-import { DashboardHeader } from "@/components/dashboard/header"
+import { cookies } from "next/headers"
+import { Sidebar } from "@/components/dashboard/sidebar"
+import { Header } from "@/components/dashboard/header"
 import { CompanyProvider } from "@/components/dashboard/company-provider"
-import { Toaster } from "@/components/ui/toaster"
+
+// NOTE: This interface must match the expected structure in company-provider.tsx
+interface Company {
+  id: string
+  name: string
+  owner_id: string
+  supabase_url: string | null
+  supabase_anon_key: string | null
+}
+
+export const dynamic = "force-dynamic"
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const cookieStore = cookies()
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    // Basic safety check for environment variables
+    console.error("Missing Supabase environment variables.")
+    return redirect("/auth/login")
+  }
+
+  const cookieStore = await cookies()
   const supabase = createClient(cookieStore)
 
   const {
@@ -17,64 +32,53 @@ export default async function DashboardLayout({ children }: { children: React.Re
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect("/auth/login")
+    return redirect("/auth/login")
   }
 
-  // --- User/Company Fetching Logic ---
+  // 1. FIX: Fetch the user's company_id from the CORRECT table: company_users
   const { data: companyUser, error: companyUserError } = await supabase
-    .from("company_users")
+    .from("company_users") // <-- FIX: Changed from 'profiles'
     .select("company_id")
-    .eq("user_id", user.id)
-    .single()
+    .eq("user_id", user.id) // <-- FIX: Changed from 'id' to 'user_id'
+    .maybeSingle() 
 
-  if (companyUserError || !companyUser) {
-    console.error("Dashboard Layout Error: Could not find company link for user.", companyUserError)
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background text-foreground p-4">
-        <p className="text-center">Error: Could not verify your company membership. Please contact support.</p>
-      </div>
-    )
+  if (companyUserError) {
+     console.error("Dashboard Layout Error: Error fetching company link:", companyUserError)
   }
 
-  const { data: company, error: companyError } = await supabase
-    .from("companies")
-    .select("*")
-    .eq("id", companyUser.company_id)
-    .single()
+  const companyId = companyUser?.company_id ?? null
 
-  if (companyError || !company) {
-    console.error("Dashboard Layout Error: Could not fetch company details.", companyError)
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background text-foreground p-4">
-        <p className="text-center">Error: Could not load company data. Please check permissions and contact support.</p>
-      </div>
-    )
+  // 2. Fetch the full company object if an ID exists
+  let company: Company | null = null
+  if (companyId) {
+    // Select all fields required by the Company interface
+    const { data: companyData, error: companyDataError } = await supabase
+      .from("companies")
+      .select("id, name, owner_id, supabase_url, supabase_anon_key")
+      .eq("id", companyId)
+      .maybeSingle()
+
+    if (companyDataError) {
+        console.error("Dashboard Layout Error: Error fetching company data:", companyDataError)
+    }
+
+    // Assign the fetched data (type casting for convenience)
+    company = companyData as Company | null
+  } else {
+    // Log why company is null (user is not linked to a company yet)
+    console.log("LOG: User is authenticated but not linked to a company (company_id is null).")
   }
-  // --- End User/Company Fetching Logic ---
 
+  // 3. Pass the full company object to the Client Component Provider
   return (
     <CompanyProvider company={company}>
-      {/* Outer div has bg-background */}
-      <div className="flex h-screen bg-background overflow-hidden relative">
-        {/* Subtle background gradient overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none z-0"
-          style={{
-            background: "radial-gradient(ellipse at center, rgba(160, 0, 160, 0.5) 0%, transparent 60%)",
-          }}
-        />
-
-        <DashboardSidebar />
-        {/* Main content area wrapper */}
-        <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10">
-          <DashboardHeader user={user} />
-          {/* Scrollable main content area with explicit background */}
-          <main className="flex-1 overflow-y-auto bg-background">
-            <div className="p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto w-full">{children}</div>
-          </main>
+      <div className="flex h-screen bg-background text-[var(--dashboard-text-color)]">
+        <Sidebar />
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <Header user={user} />
+          <main className="flex-1 overflow-x-hidden overflow-y-auto bg-[#0A0A0A] p-4 sm:p-6 lg:p-8">{children}</main>
         </div>
       </div>
-      <Toaster />
     </CompanyProvider>
   )
 }

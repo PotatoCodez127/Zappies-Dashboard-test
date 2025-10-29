@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -16,15 +16,13 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Search, Eye, AlertTriangle, Clock, User, Mail, ThumbsUp, ThumbsDown, DollarSign, Phone } from "lucide-react"
-import Link from "next/link"
-import { useCompanySupabase } from "@/lib/supabase/company-client"
-import { useToast } from "@/hooks/use-toast"
+import { Search, Eye, Clock, User, Mail, ThumbsUp, ThumbsDown, DollarSign, Phone, MessageSquare } from "lucide-react"
 import { format, parseISO } from "date-fns"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
-interface CallHistoryEntry {
-  id: number
+// Define the 'Lead' interface based on the combined data from the parent page
+interface Lead {
+  id: number | string
   created_at: string
   full_name: string | null
   email: string | null
@@ -33,76 +31,34 @@ interface CallHistoryEntry {
   monthly_budget: number | null
   resulted_in_meeting: boolean | null
   disqualification_reason: string | null
-  client_number: string | null
   call_duration_seconds: number | null
+  lead_type: 'conversation' | 'call'
 }
 
-export function LeadsTable() {
-  const companySupabase = useCompanySupabase()
-  const { toast } = useToast()
-  const [callHistory, setCallHistory] = useState<CallHistoryEntry[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+interface LeadsTableProps {
+  leads: Lead[] // Component accepts 'leads' as a prop
+}
+
+export function LeadsTable({ leads }: LeadsTableProps) {
   const [searchTerm, setSearchTerm] = useState("")
   const [filterOption, setFilterOption] = useState("all")
-  const [selectedCall, setSelectedCall] = useState<CallHistoryEntry | null>(null)
-  const [currentNotes, setCurrentNotes] = useState<string>("")
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null)
+  const [currentNotes, setCurrentNotes] = useState<string>("") // Temporary notes state
 
-  useEffect(() => {
-    async function fetchCallHistory() {
-      if (!companySupabase) {
-        setIsLoading(false)
-        console.log("CallHistoryTable: Company Supabase client is null.")
-        return
-      }
-      console.log("CallHistoryTable: Fetching data from 'call_history'...")
-      setIsLoading(true)
-      try {
-        const { data, error, count } = await companySupabase
-          .from("call_history")
-          .select(
-            "id, created_at, full_name, email, company_name, goal, monthly_budget, resulted_in_meeting, disqualification_reason, client_number, call_duration_seconds",
-            { count: "exact" },
-          )
-          .order("created_at", { ascending: false })
-
-        if (error) {
-          console.error("CallHistoryTable: Error fetching call history:", error)
-          toast({
-            title: "Error",
-            description: `Failed to fetch call history: ${error.message}`,
-            variant: "destructive",
-          })
-          setCallHistory([])
-        } else {
-          console.log(`CallHistoryTable: Successfully fetched ${count ?? "unknown"} calls.`)
-          setCallHistory(data || [])
-        }
-      } catch (catchError) {
-        console.error("CallHistoryTable: Unexpected error during fetchCallHistory:", catchError)
-        toast({
-          title: "Fetch Error",
-          description: "An unexpected error occurred while fetching call history.",
-          variant: "destructive",
-        })
-        setCallHistory([])
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    fetchCallHistory()
-  }, [companySupabase, toast])
-
-  const filteredCalls = callHistory.filter((call) => {
+  const filteredLeads = leads.filter((lead) => {
     const searchLower = searchTerm.toLowerCase()
     const matchesSearch =
-      call.full_name?.toLowerCase().includes(searchLower) ||
-      call.email?.toLowerCase().includes(searchLower) ||
-      call.company_name?.toLowerCase().includes(searchLower)
+      lead.full_name?.toLowerCase().includes(searchLower) ||
+      lead.email?.toLowerCase().includes(searchLower) ||
+      lead.company_name?.toLowerCase().includes(searchLower) ||
+      lead.lead_type.includes(searchLower)
 
     const matchesFilter =
       filterOption === "all" ||
-      (filterOption === "meeting_yes" && call.resulted_in_meeting === true) ||
-      (filterOption === "meeting_no" && call.resulted_in_meeting === false)
+      (filterOption === "meeting_yes" && lead.resulted_in_meeting === true) ||
+      (filterOption === "meeting_no" && lead.resulted_in_meeting === false) ||
+      (filterOption === "call" && lead.lead_type === 'call') ||
+      (filterOption === "conversation" && lead.lead_type === 'conversation')
 
     return matchesSearch && matchesFilter
   })
@@ -118,48 +74,20 @@ export function LeadsTable() {
     if (budget === null || budget === undefined) return "N/A"
     return `R ${budget.toLocaleString("en-ZA")}`
   }
-
-  if (!companySupabase && !isLoading) {
-    return (
-      <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
-        <CardContent className="pt-6">
-          <div className="text-center py-12">
-            <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-[var(--dashboard-text-color)]">Database Not Connected</h3>
-            <p className="text-[var(--dashboard-text-color)]/60 mt-2 max-w-md mx-auto">
-              Please go to the settings page to connect your bot's database.
-            </p>
-            <Button
-              asChild
-              className="mt-6 bg-[var(--dashboard-text-color)] text-[#0A0A0A] hover:bg-[var(--dashboard-text-color)]/90"
-            >
-              <Link href="/dashboard/settings">Go to Settings</Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
-
-  if (isLoading) {
-    return (
-      <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
-        <CardHeader>
-          <CardTitle className="text-[var(--dashboard-text-color)]">Call History</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-center py-12 min-h-[200px]">
-            <p className="text-base text-[var(--dashboard-text-color)]/60">Loading call history...</p>
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
+  
+  // Custom filter options for the combined data
+  const filterOptions = [
+    { value: "all", label: "All Leads" },
+    { value: "meeting_yes", label: "Resulted in Meeting" },
+    { value: "meeting_no", label: "Did Not Result in Meeting" },
+    { value: "call", label: "Filter: Voice Calls" },
+    { value: "conversation", label: "Filter: Conversations" },
+  ];
 
   return (
     <Card className="bg-[#1A1A1A] border-[#2A2A2A] flex flex-col lg:h-[80vh]">
       <CardHeader className="flex-shrink-0">
-        <CardTitle className="text-[var(--dashboard-text-color)]">Call History ({filteredCalls.length})</CardTitle>
+        <CardTitle className="text-[var(--dashboard-text-color)]">Leads History ({filteredLeads.length})</CardTitle>
         <div className="flex flex-col sm:flex-row gap-4 mt-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--dashboard-text-color)]/40" />
@@ -172,12 +100,14 @@ export function LeadsTable() {
           </div>
           <Select value={filterOption} onValueChange={setFilterOption}>
             <SelectTrigger className="w-full sm:w-[220px] bg-[#0A0A0A] border-[#2A2A2A] text-[var(--dashboard-text-color)]">
-              <SelectValue placeholder="Filter call results" />
+              <SelectValue placeholder="Filter results" />
             </SelectTrigger>
             <SelectContent className="bg-[#1A1A1A] border-[#2A2A2A]">
-              <SelectItem value="all">All Calls</SelectItem>
-              <SelectItem value="meeting_yes">Resulted in Meeting</SelectItem>
-              <SelectItem value="meeting_no">Did Not Result in Meeting</SelectItem>
+              {filterOptions.map(option => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -185,42 +115,48 @@ export function LeadsTable() {
       <CardContent className="flex-1 overflow-hidden p-0">
         <ScrollArea className="h-full px-6 pb-6">
           <div className="space-y-4">
-            {callHistory.length === 0 ? (
+            {leads.length === 0 ? (
               <div className="flex items-center justify-center py-12 min-h-[200px]">
                 <div className="text-center px-4">
                   <Phone className="h-12 w-12 text-[var(--dashboard-text-color)]/20 mx-auto mb-3" />
-                  <p className="text-base text-[var(--dashboard-text-color)]/60">No call history found.</p>
+                  <p className="text-base text-[var(--dashboard-text-color)]/60">No lead history found.</p>
                 </div>
               </div>
-            ) : filteredCalls.length === 0 ? (
+            ) : filteredLeads.length === 0 ? (
               <div className="flex items-center justify-center py-12 min-h-[200px]">
                 <div className="text-center px-4">
                   <Search className="h-12 w-12 text-[var(--dashboard-text-color)]/20 mx-auto mb-3" />
-                  <p className="text-base text-[var(--dashboard-text-color)]/60">
-                    No calls match your current filters.
-                  </p>
+                  <p className="text-base text-[var(--dashboard-text-color)]/60">No leads match your current filters.</p>
                 </div>
               </div>
             ) : (
-              filteredCalls.map((call) => (
+              filteredLeads.map((lead) => (
                 <div
-                  key={call.id}
+                  key={lead.id}
                   className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-lg bg-[#0A0A0A] border border-[#2A2A2A]"
                 >
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-3 flex-wrap">
-                      <p className="font-medium text-[var(--dashboard-text-color)]">{call.full_name || "N/A"}</p>
-                      {call.resulted_in_meeting === true && (
+                      <p className="font-medium text-[var(--dashboard-text-color)]">{lead.full_name || "N/A"}</p>
+                      
+                      {/* Lead Type Badge */}
+                      <Badge className={lead.lead_type === 'call' ? "bg-purple-500/10 text-purple-400 border-purple-500/20" : "bg-blue-500/10 text-blue-400 border-blue-500/20"}>
+                        {lead.lead_type === 'call' ? <Phone className="h-3 w-3 mr-1" /> : <MessageSquare className="h-3 w-3 mr-1" />}
+                        {lead.lead_type === 'call' ? 'Voice Call' : 'Conversation'}
+                      </Badge>
+
+                      {/* Meeting Status Badge */}
+                      {lead.resulted_in_meeting === true && (
                         <Badge className="bg-green-500/10 text-green-500 border-green-500/20">
                           <ThumbsUp className="h-3 w-3 mr-1" /> Meeting
                         </Badge>
                       )}
-                      {call.resulted_in_meeting === false && !call.disqualification_reason && (
+                      {lead.resulted_in_meeting === false && !lead.disqualification_reason && (
                         <Badge className="bg-yellow-500/10 text-yellow-500 border-yellow-500/20">
                           <ThumbsDown className="h-3 w-3 mr-1" /> No Meeting
                         </Badge>
                       )}
-                      {call.disqualification_reason && (
+                      {lead.disqualification_reason && (
                         <Badge className="bg-red-500/10 text-red-500 border-red-500/20">
                           <ThumbsDown className="h-3 w-3 mr-1" /> Disqualified
                         </Badge>
@@ -228,19 +164,19 @@ export function LeadsTable() {
                     </div>
                     <div className="text-sm text-[var(--dashboard-text-color)]/60 space-y-1">
                       <p className="flex items-center gap-1.5">
-                        <Mail className="h-3 w-3 flex-shrink-0" /> {call.email || "N/A"}
+                        <Mail className="h-3 w-3 flex-shrink-0" /> {lead.email || "N/A"}
                       </p>
-                      {call.company_name && (
+                      {lead.company_name && (
                         <p className="flex items-center gap-1.5">
-                          <User className="h-3 w-3 flex-shrink-0" /> {call.company_name}
+                          <User className="h-3 w-3 flex-shrink-0" /> {lead.company_name}
                         </p>
                       )}
                     </div>
                     <p className="text-xs text-[var(--dashboard-text-color)]/40">
-                      {format(parseISO(call.created_at), "MMM d, yyyy h:mm a")}
+                      {format(parseISO(lead.created_at), "MMM d, yyyy h:mm a")}
                     </p>
                   </div>
-                  <Dialog onOpenChange={(open) => setSelectedCall(open ? call : null)}>
+                  <Dialog onOpenChange={(open) => setSelectedLead(open ? lead : null)}>
                     <DialogTrigger asChild>
                       <Button
                         variant="outline"
@@ -252,77 +188,78 @@ export function LeadsTable() {
                     </DialogTrigger>
                     <DialogContent className="bg-[#1A1A1A] border-[#2A2A2A] max-w-lg">
                       <DialogHeader>
-                        <DialogTitle className="text-[var(--dashboard-text-color)]">Call Details</DialogTitle>
+                        <DialogTitle className="text-[var(--dashboard-text-color)]">Lead Details</DialogTitle>
                         <DialogDescription className="text-[var(--dashboard-text-color)]/60">
-                          Detailed information about the call.
+                          Detailed information about the lead.
                         </DialogDescription>
                       </DialogHeader>
-                      {selectedCall && (
+                      {selectedLead && (
                         <div className="space-y-6 pt-4 text-sm">
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="space-y-1">
-                              <Label className="text-[var(--dashboard-text-color)]/80">Caller Name</Label>
+                              <Label className="text-[var(--dashboard-text-color)]/80">Lead Type</Label>
                               <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
-                                <User className="h-4 w-4" /> {selectedCall.full_name || "N/A"}
+                                {selectedLead.lead_type === 'call' ? <Phone className="h-4 w-4" /> : <MessageSquare className="h-4 w-4" />}
+                                {selectedLead.lead_type === 'call' ? 'Voice Call' : 'Conversation'}
                               </p>
                             </div>
                             <div className="space-y-1">
-                              <Label className="text-[var(--dashboard-text-color)]/80">Caller Email</Label>
-                              <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
-                                <Mail className="h-4 w-4" /> {selectedCall.email || "N/A"}
-                              </p>
-                            </div>
-                            {selectedCall.company_name && (
-                              <div className="space-y-1">
-                                <Label className="text-[var(--dashboard-text-color)]/80">Company</Label>
-                                <p className="text-[var(--dashboard-text-color)]">{selectedCall.company_name}</p>
-                              </div>
-                            )}
-                            <div className="space-y-1">
-                              <Label className="text-[var(--dashboard-text-color)]/80">Call Time</Label>
+                              <Label className="text-[var(--dashboard-text-color)]/80">Date</Label>
                               <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
                                 <Clock className="h-4 w-4" />
-                                {format(parseISO(selectedCall.created_at), "MMM d, yyyy h:mm a")}
+                                {format(parseISO(selectedLead.created_at), "MMM d, yyyy h:mm a")}
                               </p>
                             </div>
-                            {selectedCall.call_duration_seconds !== null && (
+                            <div className="space-y-1">
+                              <Label className="text-[var(--dashboard-text-color)]/80">Lead Name</Label>
+                              <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
+                                <User className="h-4 w-4" /> {selectedLead.full_name || "N/A"}
+                              </p>
+                            </div>
+                            <div className="space-y-1">
+                              <Label className="text-[var(--dashboard-text-color)]/80">Lead Email</Label>
+                              <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
+                                <Mail className="h-4 w-4" /> {selectedLead.email || "N/A"}
+                              </p>
+                            </div>
+                            {selectedLead.call_duration_seconds !== null && (
                               <div className="space-y-1">
                                 <Label className="text-[var(--dashboard-text-color)]/80">Call Duration</Label>
                                 <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
-                                  <Clock className="h-4 w-4" /> {formatDuration(selectedCall.call_duration_seconds)}
+                                  <Clock className="h-4 w-4" /> {formatDuration(selectedLead.call_duration_seconds)}
                                 </p>
                               </div>
                             )}
-                            {selectedCall.monthly_budget !== null && (
+                            {selectedLead.monthly_budget !== null && (
                               <div className="space-y-1">
-                                <Label className="text-[var(--dashboard-text-color)]/80">Monthly Budget</Label>
+                                <Label className="text-[var(--dashboard-text-color)]/80">Budget Stated</Label>
                                 <p className="text-[var(--dashboard-text-color)] flex items-center gap-2">
-                                  <DollarSign className="h-4 w-4" /> {formatBudget(selectedCall.monthly_budget)}
+                                  <DollarSign className="h-4 w-4" /> {formatBudget(selectedLead.monthly_budget)}
                                 </p>
                               </div>
                             )}
                           </div>
-                          {selectedCall.goal && (
+                          {selectedLead.goal && (
                             <div>
-                              <Label className="text-[var(--dashboard-text-color)]/80">Call Goal</Label>
+                              <Label className="text-[var(--dashboard-text-color)]/80">Goal/Summary</Label>
                               <p className="text-[var(--dashboard-text-color)] mt-1 text-sm bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap">
-                                {selectedCall.goal}
+                                {selectedLead.goal}
                               </p>
                             </div>
                           )}
                           <div className="space-y-1 border-t border-[#2A2A2A] pt-4">
                             <Label className="text-[var(--dashboard-text-color)]/80">Resulted in Meeting?</Label>
                             <p
-                              className={`text-base font-medium ${selectedCall.resulted_in_meeting ? "text-green-500" : selectedCall.disqualification_reason ? "text-red-500" : "text-yellow-500"}`}
+                              className={`text-base font-medium ${selectedLead.resulted_in_meeting ? "text-green-500" : selectedLead.disqualification_reason ? "text-red-500" : "text-yellow-500"}`}
                             >
-                              {selectedCall.resulted_in_meeting ? "Yes" : "No"}
+                              {selectedLead.resulted_in_meeting ? "Yes" : "No"}
                             </p>
                           </div>
-                          {selectedCall.disqualification_reason && (
+                          {selectedLead.disqualification_reason && (
                             <div>
                               <Label className="text-[var(--dashboard-text-color)]/80">Disqualification Reason</Label>
                               <p className="text-[var(--dashboard-text-color)] mt-1 text-sm bg-[#0A0A0A] p-3 rounded border border-[#2A2A2A] whitespace-pre-wrap">
-                                {selectedCall.disqualification_reason}
+                                {selectedLead.disqualification_reason}
                               </p>
                             </div>
                           )}

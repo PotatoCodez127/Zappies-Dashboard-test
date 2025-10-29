@@ -4,7 +4,7 @@ import { redirect } from "next/navigation"
 import { ProfileSettings } from "@/components/dashboard/profile-settings"
 
 export default async function SettingsPage() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const supabase = createClient(cookieStore)
 
   const {
@@ -20,7 +20,7 @@ export default async function SettingsPage() {
 
   return (
     <div className="space-y-6">
-       {/* --- MODIFIED: Added Animation --- */}
+      {/* --- MODIFIED: Added Animation --- */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
         <h2 className="text-3xl font-bold text-[var(--dashboard-text-color)]">Settings</h2>
         <p className="text-sm text-[var(--dashboard-text-color)]/60 mt-2">Manage your account and company settings.</p>
@@ -28,10 +28,13 @@ export default async function SettingsPage() {
       {/* --- END MODIFICATION --- */}
 
       {/* --- MODIFIED: Added Animation & Delay --- */}
-      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
+      <div
+        className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out"
+        style={{ animationDelay: "100ms", animationFillMode: "backwards" }}
+      >
         <ProfileSettings user={user} profile={profile} />
       </div>
-       {/* --- END MODIFICATION --- */}
+      {/* --- END MODIFICATION --- */}
     </div>
   )
 }

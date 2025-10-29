@@ -1,109 +1,44 @@
 "use client"
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { createClient } from "@/lib/supabase/client"
-import type { User } from "@supabase/supabase-js"
 
 export function Navigation() {
-  const pathname = usePathname()
-  const [scrolled, setScrolled] = useState(false)
-  const [user, setUser] = useState<User | null>(null)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  useEffect(() => {
-    const supabase = createClient()
-
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user)
-    })
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
-
   return (
-    <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? "py-3 bg-[#200E01]/95 backdrop-blur-md" : "py-5 bg-[#200E01]/80 backdrop-blur-md"
-      }`}
-    >
-      <div className="max-w-[1400px] mx-auto px-[5%] flex items-center justify-between">
-        <Link
-          href="/"
-          className="text-2xl font-extrabold bg-gradient-to-r from-[#ede7c7] to-[#8B0000] bg-clip-text text-transparent cursor-pointer"
-        >
-          Zappies AI
-        </Link>
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-lg">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div className="flex items-center gap-12">
+          <a href="/" className="text-xl font-bold transition-opacity hover:opacity-80">
+            <span className="bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">
+              Zappies AI
+            </span>
+          </a>
 
-        <div className="hidden md:flex items-center gap-10">
-          <Link
-            href="/solutions"
-            className={`text-[#ede7c7] text-base font-medium relative transition-colors hover:text-[#ede7c7]/80 after:absolute after:bottom-[-5px] after:left-0 after:w-0 after:h-[2px] after:bg-[#8B0000] after:transition-all hover:after:w-full ${
-              pathname === "/solutions" ? "after:w-full" : ""
-            }`}
+          <div className="hidden items-center gap-8 md:flex">
+            <a href="/features" className="text-sm text-gray-300 transition-colors hover:text-white">
+              Features
+            </a>
+            <a href="/how-it-works" className="text-sm text-gray-300 transition-colors hover:text-white">
+              How It Works
+            </a>
+            <a href="/contact" className="text-sm text-gray-300 transition-colors hover:text-white">
+              Contact
+            </a>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <Button asChild variant="ghost" className="text-sm text-gray-300 hover:text-white">
+            <a href="/auth/login">Sign In</a>
+          </Button>
+          <Button asChild variant="ghost" className="text-sm text-gray-300 hover:text-white">
+            <a href="/contact">Book Demo</a>
+          </Button>
+          <Button
+            asChild
+            className="bg-gradient-to-r from-violet-600 to-blue-600 text-sm text-white hover:from-violet-700 hover:to-blue-700"
           >
-            Solutions
-          </Link>
-          <Link
-            href="/#features"
-            className="text-[#ede7c7] text-base font-medium relative transition-colors hover:text-[#ede7c7]/80 after:absolute after:bottom-[-5px] after:left-0 after:w-0 after:h-[2px] after:bg-[#8B0000] after:transition-all hover:after:w-full"
-          >
-            Features
-          </Link>
-          <Link
-            href="/case-studies"
-            className={`text-[#ede7c7] text-base font-medium relative transition-colors hover:text-[#ede7c7]/80 after:absolute after:bottom-[-5px] after:left-0 after:w-0 after:h-[2px] after:bg-[#8B0000] after:transition-all hover:after:w-full ${
-              pathname === "/case-studies" ? "after:w-full" : ""
-            }`}
-          >
-            Case Studies
-          </Link>
-          <Link
-            href="/pricing"
-            className={`text-[#ede7c7] text-base font-medium relative transition-colors hover:text-[#ede7c7]/80 after:absolute after:bottom-[-5px] after:left-0 after:w-0 after:h-[2px] after:bg-[#8B0000] after:transition-all hover:after:w-full ${
-              pathname === "/pricing" ? "after:w-full" : ""
-            }`}
-          >
-            Pricing
-          </Link>
-          {user && (
-            <Link
-              href="/dashboard"
-              className={`text-[#ede7c7] text-base font-medium relative transition-colors hover:text-[#ede7c7]/80 after:absolute after:bottom-[-5px] after:left-0 after:w-0 after:h-[2px] after:bg-[#8B0000] after:transition-all hover:after:w-full ${
-                pathname.startsWith("/dashboard") ? "after:w-full" : ""
-              }`}
-            >
-              Dashboard
-            </Link>
-          )}
-          {user ? (
-            <Link href="/demo">
-              <Button className="px-7 py-3 bg-gradient-to-r from-[#8B0000] to-[#5B0202] text-[#ede7c7] rounded-full font-semibold hover:scale-105 hover:shadow-lg hover:shadow-[#8B0000]/30 transition-all">
-                Book Demo
-              </Button>
-            </Link>
-          ) : (
-            <Link href="/auth/login">
-              <Button className="px-7 py-3 bg-gradient-to-r from-[#8B0000] to-[#5B0202] text-[#ede7c7] rounded-full font-semibold hover:scale-105 hover:shadow-lg hover:shadow-[#8B0000]/30 transition-all">
-                Login
-              </Button>
-            </Link>
-          )}
+            <a href="/free-bot">Get Free Bot</a>
+          </Button>
         </div>
       </div>
     </nav>

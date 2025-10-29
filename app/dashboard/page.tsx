@@ -16,10 +16,8 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { LineChart, Line, CartesianGrid, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, Area } from "recharts"
-import { differenceInDays, format, eachDayOfInterval, startOfDay, parseISO } from "date-fns" // Added parseISO
-// --- ENSURE THIS IMPORT IS PRESENT AND CORRECT ---
+import { differenceInDays, format, eachDayOfInterval, startOfDay, parseISO } from "date-fns"
 import { RecentActivity } from "@/components/dashboard/recent-activity"
-// --- END IMPORT CHECK ---
 
 // Interface for daily chart data
 interface DailyMeetingData {
@@ -45,15 +43,12 @@ interface DashboardStats {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload as DailyMeetingData
-    // Use parseISO to handle the 'yyyy-MM-dd' format correctly
     const formattedDate = data.fullDate ? format(parseISO(data.fullDate), "MMM d, yyyy") : label
     return (
       <div className="bg-[#1A1A1A] p-3 border border-[#2A2A2A] rounded-md shadow-lg text-xs">
         <p className="label text-[var(--dashboard-text-color)]/80">{`${formattedDate}`}</p>
-        {/* Use CSS variable for primary color in tooltip */}
-        <p className="intro" style={{ color: 'var(--primary)' }}>{`Total Booked : ${data.total}`}</p>
-        {/* Use the teal color directly */}
-        <p className="intro" style={{ color: '#00e0c6' }}>{`Confirmed : ${data.confirmed}`}</p>
+        <p className="intro" style={{ color: "var(--primary)" }}>{`Total Booked : ${data.total}`}</p>
+        <p className="intro" style={{ color: "#00e0c6" }}>{`Confirmed : ${data.confirmed}`}</p>
       </div>
     )
   }
@@ -116,13 +111,11 @@ export default function DashboardPage() {
 
         if (meetings.length > 0) {
           const dailyData: { [key: string]: { total: number; confirmed: number } } = {}
-          // Ensure the first date is valid before proceeding
           const firstValidMeeting = meetings.find((m) => m.created_at && !isNaN(new Date(m.created_at).getTime()))
           if (!firstValidMeeting) {
             console.warn("Overview: No valid meeting dates found for chart.")
             setChartData([])
             setChartDaysCount(0)
-            // Skip chart processing if no valid dates
           } else {
             const firstMeetingDate = startOfDay(new Date(firstValidMeeting.created_at))
             const today = startOfDay(new Date())
@@ -146,12 +139,10 @@ export default function DashboardPage() {
               return { day: displayDay, fullDate: dayKey, total: data.total, confirmed: data.confirmed }
             })
             setChartData(finalChartData)
-            console.log(`Overview: Processed chart data for ${daysCount} days.`)
           }
         } else {
           setChartData([])
           setChartDaysCount(0)
-          console.log("Overview: No meeting data found.")
         }
       } catch (error) {
         console.error("Error fetching dashboard data:", error)
@@ -160,10 +151,11 @@ export default function DashboardPage() {
       }
     }
     fetchStatsAndChartData()
-  }, [companySupabase]) // Re-run effect if company client changes
+  }, [companySupabase])
 
   const renderTrend = (trendValue: number | null) => {
-    if (trendValue === null || trendValue === 0) return <span className="text-xs text-[var(--dashboard-text-color)]/50">--</span>
+    if (trendValue === null || trendValue === 0)
+      return <span className="text-xs text-[var(--dashboard-text-color)]/50">--</span>
     const isPositive = trendValue > 0
     return (
       <span className={`flex items-center text-xs ${isPositive ? "text-green-500" : "text-red-500"}`}>
@@ -176,7 +168,7 @@ export default function DashboardPage() {
 
   if (!companySupabase && !isLoading) {
     return (
-      <Card className="bg-[#1A1A1A] border-[#2A2A2A]">
+      <Card className="bg-[#1A1A1A] border-[#2A2A1A]">
         <CardContent className="pt-6">
           <div className="text-center py-12">
             <AlertTriangle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
@@ -184,7 +176,10 @@ export default function DashboardPage() {
             <p className="text-[var(--dashboard-text-color)]/60 mt-2 max-w-md mx-auto">
               Please go to the settings page to connect your bot's database.
             </p>
-            <Button asChild className="mt-6 bg-[var(--dashboard-text-color)] text-[#0A0A0A] hover:bg-[var(--dashboard-text-color)]/90">
+            <Button
+              asChild
+              className="mt-6 bg-[var(--dashboard-text-color)] text-[#0A0A0A] hover:bg-[var(--dashboard-text-color)]/90"
+            >
               <Link href="/dashboard/settings">Go to Settings</Link>
             </Button>
           </div>
@@ -218,11 +213,10 @@ export default function DashboardPage() {
         {statCards.map((stat, index) => (
           <Card
             key={stat.title}
-            style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'backwards' }}
+            style={{ animationDelay: `${index * 100}ms`, animationFillMode: "backwards" }}
             className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out"
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2 min-h-[72px]">
-              {/* Removed specific text classes from CardTitle */}
               <CardTitle className="text-muted-foreground">{stat.title}</CardTitle>
               <stat.icon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
             </CardHeader>
@@ -230,7 +224,9 @@ export default function DashboardPage() {
               {isLoading ? (
                 <div className="h-8 w-1/2 bg-[#2A2A2A] rounded-md animate-pulse mb-1" />
               ) : (
-                <div className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)] leading-none">{stat.value}</div>
+                <div className="text-2xl sm:text-3xl font-bold text-[var(--dashboard-text-color)] leading-none">
+                  {stat.value}
+                </div>
               )}
               <div className="h-4 mt-2">{!isLoading && renderTrend(stat.trend)}</div>
             </CardContent>
@@ -241,16 +237,15 @@ export default function DashboardPage() {
       {/* Animated Chart Card */}
       <Card
         className="bg-[#1A1A1A] border-[#2A2A2A] transition-all duration-200 hover:border-[var(--dashboard-text-color)]/20 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out"
-        style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}
-       >
+        style={{ animationDelay: "500ms", animationFillMode: "backwards" }}
+      >
         <CardHeader>
-           {/* Removed specific text classes from CardTitle */}
-           <CardTitle className="flex items-center gap-2">
-             <LineChartIcon className="h-5 w-5 flex-shrink-0" />
-             <span className="truncate">
-               Daily Meetings Overview {chartDaysCount > 0 ? `(Last ${chartDaysCount} Days)` : ""}
-             </span>
-           </CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <LineChartIcon className="h-5 w-5 flex-shrink-0" />
+            <span className="truncate">
+              Daily Meetings Overview {chartDaysCount > 0 ? `(Last ${chartDaysCount} Days)` : ""}
+            </span>
+          </CardTitle>
         </CardHeader>
         <CardContent className="pl-2 pr-4">
           {isLoading ? (
@@ -263,20 +258,19 @@ export default function DashboardPage() {
               height={window.innerWidth < 640 ? 250 : window.innerWidth < 1024 ? 300 : 350}
             >
               {!chartData || chartData.length === 0 ? (
-                 <div className="flex items-center justify-center h-full text-[var(--dashboard-text-color)]/60 text-sm">
+                <div className="flex items-center justify-center h-full text-[var(--dashboard-text-color)]/60 text-sm">
                   No meeting data available yet.
                 </div>
               ) : (
                 <LineChart data={chartData} margin={{ top: 5, right: 10, bottom: 5, left: 0 }}>
                   <defs>
-                     {/* Updated gradient colors */}
                     <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                       <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.6} />
-                       <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
+                      <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.6} />
+                      <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="colorConfirmed" x1="0" y1="0" x2="0" y2="1">
-                       <stop offset="5%" stopColor="#00e0c6" stopOpacity={0.6} />
-                       <stop offset="95%" stopColor="#00e0c6" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#00e0c6" stopOpacity={0.6} />
+                      <stop offset="95%" stopColor="#00e0c6" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid stroke="#2A2A2A" strokeDasharray="5 5" vertical={false} />
@@ -300,27 +294,35 @@ export default function DashboardPage() {
                   />
                   <Tooltip
                     content={<CustomTooltip />}
-                    cursor={{ stroke: "var(--primary)", strokeWidth: 1.5, strokeDasharray: "3 3" }} // Updated cursor
+                    cursor={{ stroke: "var(--primary)", strokeWidth: 1.5, strokeDasharray: "3 3" }}
                   />
-                  <Legend wrapperStyle={{ color: "var(--dashboard-text-color)", fontSize: "12px", paddingTop: "10px" }} />
+                  <Legend
+                    wrapperStyle={{ color: "var(--dashboard-text-color)", fontSize: "12px", paddingTop: "10px" }}
+                  />
                   <Area type="monotone" dataKey="total" stroke="none" fillOpacity={0.2} fill="url(#colorTotal)" />
-                  <Area type="monotone" dataKey="confirmed" stroke="none" fillOpacity={0.2} fill="url(#colorConfirmed)" />
+                  <Area
+                    type="monotone"
+                    dataKey="confirmed"
+                    stroke="none"
+                    fillOpacity={0.2}
+                    fill="url(#colorConfirmed)"
+                  />
                   <Line
                     type="monotone"
                     dataKey="total"
                     name="Total Booked"
-                    stroke="var(--primary)" // Updated color
+                    stroke="var(--primary)"
                     dot={false}
-                    activeDot={{ r: 6, strokeWidth: 0, fill: 'var(--primary)' }} // Updated activeDot
+                    activeDot={{ r: 6, strokeWidth: 0, fill: "var(--primary)" }}
                     strokeWidth={2}
                   />
                   <Line
                     type="monotone"
                     dataKey="confirmed"
                     name="Confirmed"
-                    stroke="#00e0c6" // Updated color
+                    stroke="#00e0c6"
                     dot={false}
-                    activeDot={{ r: 6, strokeWidth: 0, fill: '#00e0c6' }} // Updated activeDot
+                    activeDot={{ r: 6, strokeWidth: 0, fill: "#00e0c6" }}
                     strokeWidth={2}
                   />
                 </LineChart>
@@ -331,12 +333,12 @@ export default function DashboardPage() {
       </Card>
 
       {/* Animated Recent Activity */}
-       <div
-          className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out"
-          style={{ animationDelay: '600ms', animationFillMode: 'backwards' }}
-        >
-          <RecentActivity />
-       </div>
+      <div
+        className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out"
+        style={{ animationDelay: "600ms", animationFillMode: "backwards" }}
+      >
+        <RecentActivity />
+      </div>
     </div>
   )
 }
