@@ -1,5 +1,6 @@
 // Supabase Edge Function: provision-free-bot
 // This function automates deploying a new Python bot to Railway.
+// redeploy plz 
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
