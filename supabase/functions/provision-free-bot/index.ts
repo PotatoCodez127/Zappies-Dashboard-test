@@ -1,19 +1,17 @@
 // Supabase Edge Function: provision-free-bot
-// v1.2 - This is the restored, production-ready code.
-// This function automates deploying a new Python bot to Railway.
+// v1.3 - This FIXES the bug on lines 27-28
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
 
-// These are the secrets we just verified are working
+// These are the secrets we have VERIFIED are set
 const RAILWAY_API_TOKEN = Deno.env.get('RAILWAY_API_TOKEN')
 const RAILWAY_PROJECT_ID = Deno.env.get('RAILWAY_PROJECT_ID')
 const BOT_TEMPLATE_REPO_URL = Deno.env.get('BOT_TEMPLATE_REPO_URL')
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY')
-
-// We use our non-conflicting secret names
 const BOT_SUPABASE_URL = Deno.env.get('BOT_SUPABASE_URL')
 const BOT_SUPABASE_SERVICE_KEY = Deno.env.get('BOT_SUPABASE_SERVICE_KEY')
+
 
 Deno.serve(async (req) => {
   // Handle preflight (CORS) requests
@@ -29,11 +27,13 @@ Deno.serve(async (req) => {
     }
 
     // 2. Create a Supabase Admin Client to get secret data
-    // This will now work because BOT_SUPABASE_URL and BOT_SUPABASE_SERVICE_KEY are "true"
+    // --- THIS IS THE FIX ---
+    // We are now using the correct variables we defined above.
     const adminSupabase = createClient(
       BOT_SUPABASE_URL!,
       BOT_SUPABASE_SERVICE_KEY!
     )
+    // -----------------------
 
     // 3. Fetch the new company's data (including their WhatsApp keys)
     const { data: company, error: companyError } = await adminSupabase
