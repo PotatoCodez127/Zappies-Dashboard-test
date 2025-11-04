@@ -1,5 +1,5 @@
 // Supabase Edge Function: provision-free-bot
-// v2.2 - Added detailed logging for GraphQL mutations
+// v2.3 - FIX: Added isPrivate: true to serviceCreate mutation payload.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
@@ -91,6 +91,7 @@ Deno.serve(async (req) => {
         repo: BOT_TEMPLATE_REPO_URL,
         branch: 'main', // Or your default branch
         projectId: RAILWAY_PROJECT_ID,
+        isPrivate: true, // <-- THE FIX: Explicitly mark the repository as private
       },
     }
     
@@ -186,4 +187,3 @@ Deno.serve(async (req) => {
     )
   }
 })
-
