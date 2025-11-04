@@ -1,5 +1,5 @@
 // Supabase Edge Function: provision-free-bot
-// v2.1 - Switched from REST to GraphQL API for Railway
+// v2.2 - Added detailed logging for GraphQL mutations
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
@@ -17,6 +17,7 @@ const RAILWAY_GRAPHQL_URL = 'https://api.railway.app/graphql/v2'
 
 // Helper function to make GraphQL requests
 async function fetchRailway(query: string, variables: object) {
+  console.log(`Sending GraphQL query: ${query.substring(0, 40)}...`); // Log which query is being sent
   const response = await fetch(RAILWAY_GRAPHQL_URL, {
     method: 'POST',
     headers: {
@@ -28,12 +29,15 @@ async function fetchRailway(query: string, variables: object) {
 
   if (!response.ok) {
     const errorBody = await response.text()
+    console.error(`Railway API request failed with status ${response.status}: ${errorBody}`)
     throw new Error(`Railway API request failed: ${response.status} ${errorBody}`)
   }
 
   const json = await response.json()
   if (json.errors) {
-    throw new Error(`Railway API Error: ${JSON.stringify(json.errors)}`)
+    console.error('Railway API returned GraphQL errors:', json.errors)
+    // Throw the first, most specific error message
+    throw new Error(`Railway API Error: ${json.errors[0].message}`)
   }
   
   return json.data
@@ -59,6 +63,7 @@ Deno.serve(async (req) => {
     )
 
     // 3. Fetch the new company's data
+    console.log(`Step 3: Fetching company data for ID: ${company_id}`)
     const { data: company, error: companyError } = await adminSupabase
       .from('companies')
       .select('id, owner_id, name, whatsapp_api_token, whatsapp_phone_id, whatsapp_verify_token')
@@ -68,9 +73,10 @@ Deno.serve(async (req) => {
     if (companyError || !company) {
       throw new Error(`Failed to fetch company: ${companyError?.message}`)
     }
-    console.log(`Starting deployment for company: ${company.name}`)
+    console.log(`Successfully fetched data for company: ${company.name}`)
 
     // 4. --- Call Railway API to Create the Service (GraphQL Mutation) ---
+    console.log(`Step 4: Creating Railway service with repo: ${BOT_TEMPLATE_REPO_URL}`)
     const createServiceMutation = `
       mutation serviceCreate($input: ServiceCreateInput!) {
         serviceCreate(input: $input) {
@@ -91,9 +97,10 @@ Deno.serve(async (req) => {
     const createData = await fetchRailway(createServiceMutation, createServiceVars)
     const serviceId = createData.serviceCreate.id
     const serviceDomains = createData.serviceCreate.serviceDomains
-    console.log(`Railway service created with ID: ${serviceId}`)
+    console.log(`Step 4b: Service created with ID: ${serviceId}`)
 
     // 5. --- Call Railway API to Set Environment Variables (GraphQL Mutation) ---
+    console.log(`Step 5: Setting variables for service ID: ${serviceId}`)
     const setVarsMutation = `
       mutation variableCollectionUpsert($input: VariableCollectionUpsertInput!) {
         variableCollectionUpsert(input: $input)
@@ -126,9 +133,10 @@ Deno.serve(async (req) => {
     }
 
     await fetchRailway(setVarsMutation, setVarsVars)
-    console.log(`All environment variables set for service: ${serviceId}`)
+    console.log(`Step 5b: Environment variables set.`)
 
     // 6. --- Trigger the first deployment (GraphQL Mutation) ---
+    console.log(`Step 6: Triggering deployment for service ID: ${serviceId}`)
     const deployMutation = `
       mutation serviceDeploy($input: ServiceDeployInput!) {
         serviceDeploy(input: $input)
@@ -141,10 +149,10 @@ Deno.serve(async (req) => {
     }
 
     await fetchRailway(deployMutation, deployVars)
-    console.log('Initial deployment triggered.')
+    console.log('Step 6b: Deployment triggered.')
 
     // 7. --- Get the new Service URL and save it to our database ---
-    // We already got the domain from the 'serviceCreate' mutation
+    console.log(`Step 7: Saving service URL to database...`)
     const serviceUrl = serviceDomains?.[0]?.name || `${serviceId}.up.railway.app`
     const fullWebhookUrl = `https://${serviceUrl}/webhook`
 
@@ -158,6 +166,7 @@ Deno.serve(async (req) => {
     }
 
     // 8. Return a success response
+    console.log('Step 8: All steps complete. Returning success.')
     return new Response(
       JSON.stringify({
         message: 'Deployment started successfully!',
@@ -167,7 +176,7 @@ Deno.serve(async (req) => {
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   } catch (error) {
-    console.error('Error in Edge Function:', error.message)
+    console.error(`Error in Edge Function (catch block): ${error.message}`)
     return new Response(
       JSON.stringify({ error: error.message }),
       {
