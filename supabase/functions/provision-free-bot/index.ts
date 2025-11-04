@@ -4,17 +4,15 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
 
-// These are the secrets we just set
+// These are the secrets we set in GitHub
 const RAILWAY_API_TOKEN = Deno.env.get('RAILWAY_API_TOKEN')
 const RAILWAY_PROJECT_ID = Deno.env.get('RAILWAY_PROJECT_ID')
 const BOT_TEMPLATE_REPO_URL = Deno.env.get('BOT_TEMPLATE_REPO_URL')
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY')
 
-// --- THIS IS THE FIX ---
 // We use our new, non-conflicting secret names
 const BOT_SUPABASE_URL = Deno.env.get('BOT_SUPABASE_URL')
 const BOT_SUPABASE_SERVICE_KEY = Deno.env.get('BOT_SUPABASE_SERVICE_KEY')
-// -----------------------
 
 Deno.serve(async (req) => {
   // Handle preflight (CORS) requests
@@ -30,11 +28,13 @@ Deno.serve(async (req) => {
     }
 
     // 2. Create a Supabase Admin Client to get secret data
-    // This client MUST use the function-specific env vars, not the default ones.
+    // --- THIS IS THE FIX ---
+    // We must use the 'BOT_' prefixed variables we defined in our secrets.
     const adminSupabase = createClient(
-      Deno.env.get('SUPABASE_URL')!, // This gets the function's own URL
-      Deno.env.get('SUPABASE_SERVICE_KEY')! // This gets the function's own Service Key
+      BOT_SUPABASE_URL!,
+      BOT_SUPABASE_SERVICE_KEY!
     )
+    // -----------------------
 
     // 3. Fetch the new company's data (including their WhatsApp keys)
     const { data: company, error: companyError } = await adminSupabase
