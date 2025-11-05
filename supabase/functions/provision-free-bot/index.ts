@@ -1,5 +1,5 @@
 // Supabase Edge Function: provision-free-bot
-// v2.6 - DEBUGGING: Logging the ENTIRE request payload before sending it.
+// v2.7 - FINAL FIX: Correcting GraphQL structure to nest repo details under 'source'.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
@@ -101,10 +101,14 @@ Deno.serve(async (req) => {
     const createServiceVars = {
       input: {
         name: `zappybot${serviceNameSlug}`, // New simplified name
-        repo: repoPath, // <-- USING SIMPLIFIED PATH
-        branch: 'main', // Or your default branch
         projectId: RAILWAY_PROJECT_ID,
-        isPrivate: true, // This is already correctly set to true
+        // --- THE STRUCTURAL FIX: Nesting under 'source' object ---
+        source: {
+            type: "GITHUB_REPO", // Must be explicitly defined
+            repo: repoPath,
+            branch: 'main', 
+            isPrivate: true,
+        }
       },
     }
     
