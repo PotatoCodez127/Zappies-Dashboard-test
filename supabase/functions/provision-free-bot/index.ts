@@ -1,5 +1,5 @@
 // Supabase Edge Function: provision-free-bot
-// v2.5 - FINAL FIX ATTEMPT: Simplifies repo URL to GitHub path (no .git suffix)
+// v2.6 - DEBUGGING: Logging the ENTIRE request payload before sending it.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
@@ -17,14 +17,19 @@ const RAILWAY_GRAPHQL_URL = 'https://api.railway.app/graphql/v2'
 
 // Helper function to make GraphQL requests
 async function fetchRailway(query: string, variables: object) {
-  console.log(`Sending GraphQL query: ${query.substring(0, 40)}...`); // Log which query is being sent
+  const requestBody = JSON.stringify({ query, variables });
+  
+  // --- DEBUG LOGGING ADDED HERE ---
+  console.log(`Sending request body: ${requestBody}`);
+  // --- END DEBUG LOGGING ---
+
   const response = await fetch(RAILWAY_GRAPHQL_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${RAILWAY_API_TOKEN}`,
     },
-    body: JSON.stringify({ query, variables }),
+    body: requestBody, // Use the pre-stringified body
   })
 
   if (!response.ok) {
