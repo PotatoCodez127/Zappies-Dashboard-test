@@ -1,5 +1,5 @@
 // Supabase Edge Function: provision-free-bot
-// v2.4 - FIX: Simplified service name generation to remove all special characters and hyphens.
+// v2.5 - FINAL FIX ATTEMPT: Simplifies repo URL to GitHub path (no .git suffix)
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
@@ -81,6 +81,10 @@ Deno.serve(async (req) => {
     // --- FIX: Simplify name slug for Railway to ensure compliance ---
     const serviceNameSlug = company.name.toLowerCase().replace(/[^a-z0-9]/g, '');
     
+    // --- NEW FIX: Tweak repository path to be simple owner/repo format ---
+    const repoPath = BOT_TEMPLATE_REPO_URL!.replace('https://github.com/', '').replace('.git', '');
+    console.log(`Step 4a: Using simplified repo path: ${repoPath}`);
+    
     const createServiceMutation = `
       mutation serviceCreate($input: ServiceCreateInput!) {
         serviceCreate(input: $input) {
@@ -92,7 +96,7 @@ Deno.serve(async (req) => {
     const createServiceVars = {
       input: {
         name: `zappybot${serviceNameSlug}`, // New simplified name
-        repo: BOT_TEMPLATE_REPO_URL,
+        repo: repoPath, // <-- USING SIMPLIFIED PATH
         branch: 'main', // Or your default branch
         projectId: RAILWAY_PROJECT_ID,
         isPrivate: true, // This is already correctly set to true
