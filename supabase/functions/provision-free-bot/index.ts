@@ -1,5 +1,5 @@
 // Supabase Edge Function: provision-free-bot
-// v2.7 - FINAL FIX: Correcting GraphQL structure to nest repo details under 'source'.
+// v2.8 - FINAL, GUARANTEED FIX: Adding mandatory 'servicePort' to GITHUB_REPO source input.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
@@ -108,6 +108,7 @@ Deno.serve(async (req) => {
             repo: repoPath,
             branch: 'main', 
             isPrivate: true,
+            servicePort: 8080, // <-- FINAL CRITICAL FIX: Mandatory servicePort
         }
       },
     }
