@@ -1,5 +1,5 @@
 // Supabase Edge Function: provision-free-bot
-// v2.3 - FIX: Added isPrivate: true to serviceCreate mutation payload.
+// v2.4 - FIX: Simplified service name generation to remove all special characters and hyphens.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
@@ -77,6 +77,10 @@ Deno.serve(async (req) => {
 
     // 4. --- Call Railway API to Create the Service (GraphQL Mutation) ---
     console.log(`Step 4: Creating Railway service with repo: ${BOT_TEMPLATE_REPO_URL}`)
+    
+    // --- FIX: Simplify name slug for Railway to ensure compliance ---
+    const serviceNameSlug = company.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    
     const createServiceMutation = `
       mutation serviceCreate($input: ServiceCreateInput!) {
         serviceCreate(input: $input) {
@@ -87,11 +91,11 @@ Deno.serve(async (req) => {
     `
     const createServiceVars = {
       input: {
-        name: `zappy-bot-${company.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`,
+        name: `zappybot${serviceNameSlug}`, // New simplified name
         repo: BOT_TEMPLATE_REPO_URL,
         branch: 'main', // Or your default branch
         projectId: RAILWAY_PROJECT_ID,
-        isPrivate: true, // <-- THE FIX: Explicitly mark the repository as private
+        isPrivate: true, // This is already correctly set to true
       },
     }
     
