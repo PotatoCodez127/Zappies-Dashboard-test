@@ -1,5 +1,5 @@
 // Supabase Edge Function: provision-free-bot
-// v2.8 - FINAL, GUARANTEED FIX: Adding mandatory 'servicePort' to GITHUB_REPO source input.
+// v2.9 - Removing 'servicePort' which is conflicting with the GITHUB_REPO source type
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders } from '../_shared/cors.ts'
@@ -17,9 +17,14 @@ const RAILWAY_GRAPHQL_URL = 'https://api.railway.app/graphql/v2'
 
 // Helper function to make GraphQL requests
 async function fetchRailway(query: string, variables: object) {
+  // Ensure the token is valid before proceeding
+  if (!RAILWAY_API_TOKEN) {
+    throw new Error('RAILWAY_API_TOKEN is not set!')
+  }
+
   const requestBody = JSON.stringify({ query, variables });
   
-  // --- DEBUG LOGGING ADDED HERE ---
+  // --- DEBUG LOGGING ---
   console.log(`Sending request body: ${requestBody}`);
   // --- END DEBUG LOGGING ---
 
@@ -108,7 +113,8 @@ Deno.serve(async (req) => {
             repo: repoPath,
             branch: 'main', 
             isPrivate: true,
-            servicePort: 8080, // <-- FINAL CRITICAL FIX: Mandatory servicePort
+            // --- FINAL FIX: Removing 'servicePort' ---
+            // 'servicePort' was conflicting with the PORT env var.
         }
       },
     }
@@ -140,7 +146,7 @@ Deno.serve(async (req) => {
       COMPANY_NAME: company.name,
       // Railway/Python Config
       FLASK_ENV: 'production',
-      PORT: '8080', 
+      PORT: '8080', // Railway will read this and assign the port.
       PYTHONUNBUFFERED: '1',
     }
     
